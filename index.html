@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee — Design Prototypes</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
+  background:#0C0C0C;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 20px;
+}
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.logo-k{width:44px;height:44px;background:#C45C1A;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:24px;font-weight:700;color:#FBF7F2}
+.logo-name{font-size:28px;font-weight:700;color:#F5E0C3;letter-spacing:-0.5px}
+.tagline{font-size:13px;color:#3A3A3A;margin-bottom:48px;letter-spacing:1px;text-transform:uppercase}
+.cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:680px}
+.card{
+  flex:1;min-width:260px;max-width:320px;
+  background:#161616;border:0.5px solid #2A2A2A;
+  border-radius:20px;padding:28px 24px;
+  text-decoration:none;transition:all 0.2s;
+  display:flex;flex-direction:column;
+}
+.card:hover{border-color:#C45C1A;background:#1C1412;transform:translateY(-2px)}
+.card-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.card-icon svg{width:22px;height:22px;stroke:#FBF7F2;stroke-width:1.8;fill:none;stroke-linecap:round}
+.card-label{font-size:10px;color:#3A3A3A;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:6px}
+.card-title{font-size:20px;font-weight:700;color:#F5E0C3;letter-spacing:-0.3px;margin-bottom:8px}
+.card-desc{font-size:12px;color:#444;line-height:1.6;flex:1}
+.card-screens{display:flex;flex-wrap:wrap;gap:5px;margin-top:16px}
+.screen-tag{background:#1F1F1F;border:0.5px solid #2A2A2A;border-radius:20px;padding:3px 9px;font-size:10px;color:#555;font-weight:500}
+.card-arrow{display:flex;align-items:center;justify-content:flex-end;margin-top:18px;font-size:12px;font-weight:600;color:#C45C1A;gap:5px}
+.card-arrow svg{width:14px;height:14px;stroke:#C45C1A;stroke-width:2.5;fill:none}
+.footer{margin-top:48px;font-size:11px;color:#2A2A2A;text-align:center;line-height:1.8}
+.footer a{color:#3A3A3A;text-decoration:none}
+.footer a:hover{color:#C45C1A}
+.divider{width:40px;height:1px;background:#1E1E1E;margin:32px auto}
+</style>
+</head>
+<body>
+
+<div class="logo-row">
+  <div class="logo-k">K</div>
+  <div class="logo-name">Kooee</div>
+</div>
+<div class="tagline">Design prototypes · Confidential</div>
+
+<div class="cards">
+
+  <a class="card" href="kooee_app_v2.html">
+    <div class="card-icon" style="background:#1A2E1A">
+      <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M9 10h6M9 14h4"/></svg>
+    </div>
+    <div class="card-label">Portal 1</div>
+    <div class="card-title">Instructor app</div>
+    <div class="card-desc">Mobile app prototype for outdoor instructors. Find programs, manage availability, connect with providers and track your field record.</div>
+    <div class="card-screens">
+      <span class="screen-tag">Home</span>
+      <span class="screen-tag">Programs</span>
+      <span class="screen-tag">Availability</span>
+      <span class="screen-tag">Providers</span>
+      <span class="screen-tag">Field record</span>
+      <span class="screen-tag">Profile</span>
+    </div>
+    <div class="card-arrow">Open prototype <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+  </a>
+
+  <a class="card" href="kooee_business_app.html">
+    <div class="card-icon" style="background:#2E1A0A">
+      <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/></svg>
+    </div>
+    <div class="card-label">Portal 2</div>
+    <div class="card-title">Business app</div>
+    <div class="card-desc">Mobile app prototype for outdoor education businesses. Staff programs, manage your roster, send bulk Kooees and track spend.</div>
+    <div class="card-screens">
+      <span class="screen-tag">Overview</span>
+      <span class="screen-tag">Staff search</span>
+      <span class="screen-tag">Roster</span>
+      <span class="screen-tag">Inbox</span>
+      <span class="screen-tag">Programs</span>
+      <span class="screen-tag">Reports</span>
+    </div>
+    <div class="card-arrow">Open prototype <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+  </a>
+
+</div>
+
+<div class="divider"></div>
+<div class="footer">
+  Kooee · Internal design prototype · Not for distribution<br>
+  <a href="https://github.com/dennisrudman/k-pt">github.com/dennisrudman/k-pt</a>
+</div>
+
+</body>
+</html>
