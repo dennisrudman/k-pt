@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kooee — Business Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --ochre:#C45C1A;--bark:#2C1A0E;--dusk:#4A3728;--sand:#E8A265;--dry:#F5E0C3;--paper:#FBF7F2;
+  --card:#FFFFFF;--bg:#ECEAE5;
+  --text:#2C1A0E;--text2:#5A4030;--text3:#8A7060;
+  --border:rgba(196,92,26,0.12);--borderM:rgba(196,92,26,0.22);
+  --wb:rgba(196,92,26,0.08);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --card:#1E1410;--bg:#130D08;
+    --text:#F5E0C3;--text2:#C0A080;--text3:#806050;
+    --border:rgba(196,92,26,0.18);--borderM:rgba(196,92,26,0.3);
+    --wb:rgba(196,92,26,0.1);
+  }
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  max-width:430px;margin:0 auto;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+
+/* ── TOP NAV ── */
+.topnav{
+  background:var(--bark);padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;flex-shrink:0;
+  position:relative;z-index:50;
+}
+.nav-logo{display:flex;align-items:center;gap:9px}
+.nav-k{width:30px;height:30px;background:var(--ochre);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:17px;color:var(--paper)}
+.nav-wordmark{font-size:16px;font-weight:700;color:var(--dry);letter-spacing:-0.3px}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.nav-btn{width:36px;height:36px;border-radius:50%;background:rgba(245,224,195,0.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background 0.15s}
+.nav-btn:active{background:rgba(245,224,195,0.2)}
+.nav-btn svg{width:18px;height:18px;stroke:var(--dry);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ndot{width:8px;height:8px;border-radius:50%;background:var(--ochre);border:2px solid var(--bark);position:absolute;top:4px;right:4px}
+.nav-menu-btn{width:36px;height:36px;border-radius:9px;background:rgba(245,224,195,0.1);border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background 0.15s}
+.nav-menu-btn:active{background:rgba(245,224,195,0.2)}
+.nav-menu-btn span{width:15px;height:1.5px;background:var(--dry);border-radius:1px;display:block;transition:width 0.2s}
+.nav-menu-btn span:last-child{width:9px}
+
+/* ── MAIN SCROLL ── */
+.main-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.main-scroll::-webkit-scrollbar{display:none}
+
+/* ── PAGES ── */
+.page{display:none;animation:fadeIn 0.22s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{background:var(--bark);padding:20px 20px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(196,92,26,0.08);pointer-events:none}
+.hero::after{content:'';position:absolute;right:40px;bottom:-50px;width:100px;height:100px;border-radius:50%;background:rgba(196,92,26,0.05);pointer-events:none}
+.hero-date{font-size:11px;color:rgba(245,224,195,0.4);font-weight:500;margin-bottom:4px;letter-spacing:0.3px}
+.hero-name{font-family:'DM Serif Display',serif;font-size:28px;color:var(--dry);letter-spacing:-0.5px;line-height:1.1;margin-bottom:5px}
+.hero-sub{font-size:12px;color:rgba(245,224,195,0.35)}
+
+/* ── METRICS ── */
+.metrics-wrap{padding:16px 20px 4px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.metrics-wrap::-webkit-scrollbar{display:none}
+.met{flex-shrink:0;background:var(--card);border-radius:16px;padding:14px 16px;min-width:118px;box-shadow:0 1px 8px rgba(0,0,0,0.08);cursor:pointer;position:relative;overflow:hidden;border:0.5px solid var(--border);transition:transform 0.12s}
+.met:active{transform:scale(0.96)}
+.met-bar{position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.met-bar.warn{background:linear-gradient(90deg,var(--sand),var(--ochre))}
+.met-bar.danger{background:linear-gradient(90deg,var(--ochre),#A32D2D)}
+.met-bar.ok{background:linear-gradient(90deg,#7AC255,#3B6D11)}
+.met-bar.neutral{background:var(--border)}
+.met-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 6px}
+.met-val{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-0.5px;line-height:1}
+.met-val.warn{color:var(--ochre)}
+.met-val.danger{color:#A32D2D}
+.met-val.ok{color:#3B6D11}
+.met-sub{font-size:10px;color:var(--text3);margin-top:4px}
+.met-cta{font-size:10px;color:var(--ochre);font-weight:600;margin-top:4px}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px}
+.sec-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.sec-link{font-size:13px;color:var(--ochre);font-weight:600;border:none;background:none;cursor:pointer;font-family:inherit}
+
+/* ── ALERT ── */
+.alert-bar{
+  margin:0 20px 4px;background:var(--card);
+  border:1px solid rgba(232,162,101,0.35);border-left:3px solid var(--sand);
+  border-radius:0 14px 14px 0;padding:12px 14px;
+  display:flex;align-items:center;gap:11px;cursor:pointer;
+  transition:opacity 0.15s;
+}
+.alert-bar:active{opacity:0.8}
+.alert-icon{width:34px;height:34px;border-radius:9px;background:rgba(232,162,101,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.alert-icon svg{width:15px;height:15px;stroke:#A06030;stroke-width:2;fill:none;stroke-linecap:round}
+.alert-info{flex:1}
+.alert-title{font-size:12px;font-weight:700;color:#7A3800}
+.alert-sub{font-size:11px;color:#A06030;margin-top:2px}
+@media(prefers-color-scheme:dark){
+  .alert-title{color:var(--sand)}
+  .alert-sub{color:rgba(232,162,101,0.6)}
+}
+.alert-chev{width:6px;height:6px;border-right:1.5px solid var(--text3);border-top:1.5px solid var(--text3);transform:rotate(45deg);flex-shrink:0}
+
+/* ── PROGRAM CARDS ── */
+.prog-cards{padding:0 20px}
+.prog-card{
+  background:var(--card);border-radius:18px;padding:15px 15px 15px 19px;
+  margin-bottom:10px;box-shadow:0 1px 8px rgba(0,0,0,0.07);
+  cursor:pointer;position:relative;overflow:hidden;
+  border:0.5px solid var(--border);transition:transform 0.12s;
+}
+.prog-card:active{transform:scale(0.98)}
+.prog-stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
+.prog-stripe.ready{background:linear-gradient(180deg,#7AC255,#3B6D11)}
+.prog-stripe.warn{background:linear-gradient(180deg,var(--sand),var(--ochre))}
+.prog-stripe.danger{background:linear-gradient(180deg,var(--ochre),#A32D2D)}
+.prog-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px}
+.prog-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.2px}
+.prog-date{font-size:11px;color:var(--text2);margin-top:2px}
+.prog-roles{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.role-chip{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
+.role-filled{background:#EAF3DE;color:#3B6D11}
+.role-needed{background:var(--dry);color:#7A3800}
+@media(prefers-color-scheme:dark){
+  .role-filled{background:rgba(59,109,17,0.2);color:#7AC255}
+  .role-needed{background:rgba(196,92,26,0.2);color:var(--sand)}
+}
+.prog-footer{display:flex;align-items:center;justify-content:space-between}
+.prog-loc{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px}
+.prog-loc svg{width:11px;height:11px;stroke:var(--text3);stroke-width:1.5;fill:none}
+.prog-btns{display:flex;gap:7px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.bok{background:#EAF3DE;color:#3B6D11}
+.bwarn{background:#FAEEDA;color:#7A3800}
+.bdanger{background:#FCEBEB;color:#A32D2D}
+.bgray{background:#F1EFE8;color:#5F5E5A}
+.bochre{background:var(--dry);color:#7A3800}
+@media(prefers-color-scheme:dark){
+  .bok{background:rgba(59,109,17,0.2);color:#7AC255}
+  .bwarn{background:rgba(232,162,101,0.15);color:var(--sand)}
+  .bdanger{background:rgba(163,45,45,0.2);color:#F08080}
+  .bgray{background:rgba(255,255,255,0.07);color:var(--text2)}
+  .bochre{background:rgba(196,92,26,0.2);color:var(--sand)}
+}
+
+/* ── BUTTONS ── */
+.btn-p{background:var(--ochre);color:var(--paper);border:none;border-radius:11px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.15s}
+.btn-p:active{opacity:0.82}
+.btn-s{background:var(--dusk);color:var(--dry);border:none;border-radius:11px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.15s}
+.btn-s:active{opacity:0.82}
+.btn-g{background:transparent;color:var(--text2);border:1px solid var(--borderM);border-radius:11px;padding:8px 13px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s}
+.btn-g:active{background:var(--wb)}
+.btn-sm-p{background:var(--ochre);color:var(--paper);border:none;border-radius:9px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-sm-g{background:transparent;color:var(--text2);border:1px solid var(--borderM);border-radius:9px;padding:6px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* ── INBOX ITEMS ── */
+.inbox-list{padding:0 20px}
+.inbox-item{background:var(--card);border-radius:16px;padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 6px rgba(0,0,0,0.07);cursor:pointer;border:0.5px solid var(--border);transition:transform 0.12s}
+.inbox-item:active{transform:scale(0.98)}
+.inbox-item.unread{border-left:3px solid var(--ochre);border-radius:0 16px 16px 0}
+.ia{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ii{flex:1;min-width:0}
+.ii-name{font-size:13px;font-weight:700;color:var(--text)}
+.ii-prev{font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ii-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.ii-time{font-size:10px;color:var(--text3)}
+.ii-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre)}
+
+/* ── ROSTER ── */
+.roster-list{padding:0 20px}
+.roster-card{background:var(--card);border-radius:16px;padding:13px 15px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;border:0.5px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.06)}
+.r-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.r-info{flex:1;min-width:0}
+.r-name{font-size:13px;font-weight:700;color:var(--text)}
+.r-loc{font-size:11px;color:var(--text2);margin-top:2px}
+.r-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.r-actions{flex-shrink:0;display:flex;flex-direction:column;gap:5px}
+
+/* ── STAFF SEARCH ── */
+.search-bar{margin:10px 20px 0;background:var(--card);border-radius:13px;padding:11px 14px;display:flex;align-items:center;gap:9px;border:0.5px solid var(--border)}
+.search-bar svg{width:16px;height:16px;stroke:var(--text3);stroke-width:2;fill:none;flex-shrink:0}
+.search-bar input{border:none;outline:none;font-size:13px;color:var(--text);flex:1;font-family:inherit;background:transparent}
+.search-bar input::placeholder{color:var(--text3)}
+.filter-chips{display:flex;gap:7px;padding:9px 20px 0;overflow-x:auto;scrollbar-width:none}
+.filter-chips::-webkit-scrollbar{display:none}
+.fchip{border:1px solid var(--borderM);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:600;color:var(--text2);background:var(--card);white-space:nowrap;cursor:pointer;flex-shrink:0;font-family:inherit;transition:all 0.12s}
+.fchip.on{background:var(--ochre);color:var(--paper);border-color:var(--ochre)}
+.context-banner{margin:12px 20px 0;background:var(--bark);border-radius:14px;padding:13px 15px}
+.ctx-label{font-size:9px;color:rgba(245,224,195,0.45);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.ctx-prog{font-size:13px;font-weight:700;color:var(--dry);letter-spacing:-0.1px}
+.ctx-detail{font-size:11px;color:rgba(245,224,195,0.45);margin-top:3px}
+.staff-card{background:var(--card);border-radius:16px;padding:13px 15px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;border:0.5px solid var(--border);cursor:pointer}
+.s-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--borderM);background:var(--card);flex-shrink:0;margin-top:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.12s}
+.s-check.on{background:var(--ochre);border-color:var(--ochre)}
+.s-check svg{display:none;width:10px;height:10px;stroke:white;stroke-width:3;fill:none}
+.s-check.on svg{display:block}
+.s-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.s-info{flex:1;min-width:0}
+.s-name{font-size:13px;font-weight:700;color:var(--text)}
+.s-loc{font-size:11px;color:var(--text2);margin-top:2px}
+.s-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.s-tag{background:var(--dry);color:#7A3800;border-radius:20px;padding:2px 8px;font-size:9px;font-weight:600}
+@media(prefers-color-scheme:dark){.s-tag{background:rgba(196,92,26,0.2);color:var(--sand)}}
+.avail-row{display:flex;align-items:center;gap:4px;margin-top:5px}
+.avail-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50}
+.avail-text{font-size:10px;font-weight:600;color:#3B6D11}
+@media(prefers-color-scheme:dark){.avail-text{color:#7AC255}}
+
+/* ── BULK BAR ── */
+.bulk-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:var(--card);border-top:0.5px solid var(--border);
+  padding:14px 20px 30px;display:flex;gap:10px;
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  z-index:60;
+}
+.bulk-bar.show{transform:translateX(-50%) translateY(0)}
+
+/* ── PROGRAMS PAGE ── */
+.prog-tabs{display:flex;gap:7px;padding:12px 20px 0;overflow-x:auto;scrollbar-width:none}
+.prog-tabs::-webkit-scrollbar{display:none}
+.ptab{border:1px solid var(--borderM);border-radius:20px;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text2);background:var(--card);white-space:nowrap;cursor:pointer;flex-shrink:0;font-family:inherit;transition:all 0.12s}
+.ptab.on{background:var(--ochre);color:var(--paper);border-color:var(--ochre)}
+.prog-cards-list{padding:10px 20px 0}
+
+/* ── REPORTS ── */
+.reports-wrap{padding:0 20px}
+.hero-stat{background:var(--ochre);border-radius:18px;padding:20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.hs-left{}
+.hs-label{font-size:9px;color:rgba(251,247,242,0.55);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:4px}
+.hs-val{font-size:34px;font-weight:700;color:var(--paper);letter-spacing:-0.7px;line-height:1}
+.hs-sub{font-size:11px;color:rgba(251,247,242,0.5);margin-top:4px}
+.hs-right{text-align:right}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.stat-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-tile{background:var(--card);border-radius:14px;padding:12px 11px;text-align:center;border:0.5px solid var(--border)}
+.st-val{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.st-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;margin-top:3px}
+.rep-card{background:var(--card);border-radius:16px;border:0.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.rep-card-hdr{padding:13px 15px;border-bottom:0.5px solid var(--border)}
+.rep-card-title{font-size:13px;font-weight:700;color:var(--text)}
+.rep-row{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;border-bottom:0.5px solid var(--border);font-size:13px}
+.rep-row:last-child{border-bottom:none}
+.rep-l{color:var(--text2);font-weight:500}
+.rep-v{font-weight:600;color:var(--text)}
+
+/* ── BOTTOM SPACER ── */
+.bottom-pad{height:30px}
+
+/* ── SHEET ── */
+.sheet-overlay{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.25s}
+.sheet-overlay.open{background:rgba(0,0,0,0.55);pointer-events:all}
+.sheet{background:var(--card);border-radius:24px 24px 0 0;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1)}
+.sheet-overlay.open .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:10px auto 0;flex-shrink:0}
+.sheet-hdr{padding:14px 20px 12px;border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.sheet-ttl{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.sheet-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.sheet-close{background:var(--wb);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sheet-close svg{width:13px;height:13px;stroke:var(--text2);stroke-width:2.5;fill:none}
+.sheet-body{padding:16px 20px;overflow-y:auto;flex:1}
+.sheet-body::-webkit-scrollbar{display:none}
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.s-row:last-child{border-bottom:none}
+.s-l{color:var(--text2);font-weight:500}
+.s-v{font-weight:600;color:var(--text);text-align:right;max-width:58%}
+.sheet-strip{background:var(--bark);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:18px;flex-wrap:wrap}
+.ss-item .ss-label{font-size:9px;color:rgba(245,224,195,0.45);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px}
+.ss-item .ss-val{font-size:12px;font-weight:700;color:var(--dry)}
+.sheet-sec{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin:14px 0 7px}
+.sheet-sec:first-child{margin-top:0}
+.sheet-foot{padding:14px 20px 30px;border-top:0.5px solid var(--border);display:flex;gap:10px;flex-shrink:0}
+.sheet-foot .btn-p{flex:1;padding:14px;font-size:13px}
+.sheet-foot .btn-s{flex:1;padding:14px;font-size:13px}
+.sheet-foot .btn-g{padding:14px 15px}
+
+/* ── DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;z-index:300;display:flex;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer-panel{width:280px;height:100%;background:var(--bark);display:flex;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);box-shadow:8px 0 40px rgba(0,0,0,0.4);overflow-y:auto}
+.drawer-overlay.open .drawer-panel{transform:translateX(0)}
+.drawer-dim{flex:1;cursor:pointer}
+.d-top{padding:52px 18px 16px;border-bottom:0.5px solid rgba(245,224,195,0.08);margin-bottom:6px}
+.d-biz{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.d-logo{width:38px;height:38px;border-radius:10px;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;color:var(--paper)}
+.d-biz-name{font-size:14px;font-weight:700;color:var(--dry)}
+.d-plan{font-size:10px;color:rgba(245,224,195,0.3);margin-top:1px}
+.d-sec-label{font-size:8px;color:rgba(245,224,195,0.22);letter-spacing:1.4px;text-transform:uppercase;padding:10px 18px 4px}
+.d-item{display:flex;align-items:center;gap:11px;padding:11px 14px;margin:1px 9px;border-radius:11px;font-size:13px;font-weight:500;color:rgba(245,224,195,0.5);border:none;background:transparent;cursor:pointer;width:calc(100% - 18px);text-align:left;font-family:inherit;transition:all 0.12s}
+.d-item:active{background:rgba(245,224,195,0.08)}
+.d-item.on{background:var(--ochre);color:var(--paper)}
+.d-item svg{width:17px;height:17px;flex-shrink:0;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0.75}
+.d-item.on svg{opacity:1}
+.d-badge{font-size:9px;background:var(--ochre);color:var(--paper);border-radius:20px;padding:1px 6px;margin-left:auto;font-weight:600}
+.d-item.on .d-badge{background:rgba(251,247,242,0.3)}
+.d-foot{margin-top:auto;padding:12px 10px 32px;border-top:0.5px solid rgba(245,224,195,0.07)}
+.d-user{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:11px;cursor:pointer}
+.d-av{width:30px;height:30px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--paper)}
+.d-un{font-size:11px;color:rgba(245,224,195,0.6);font-weight:500}
+.d-up{font-size:9px;color:rgba(245,224,195,0.28)}
+
+/* msg thread */
+.msg-bubble-out{align-self:flex-end;max-width:78%;margin-bottom:8px}
+.msg-bubble-in{align-self:flex-start;max-width:78%;margin-bottom:8px}
+.bubble{padding:10px 13px;font-size:12px;line-height:1.55}
+.bubble-out{background:var(--bark);color:var(--dry);border-radius:14px 14px 4px 14px}
+.bubble-in{background:var(--wb);border:0.5px solid var(--border);border-radius:14px 14px 14px 4px;color:var(--text)}
+.bubble-time{font-size:9px;color:var(--text3);margin-top:3px}
+.msg-input{border:1px solid var(--borderM);border-radius:12px;padding:11px 13px;font-size:12px;color:var(--text);background:var(--card);outline:none;font-family:inherit;width:100%;resize:none;min-height:72px;margin-top:4px}
+.msg-input:focus{border-color:var(--ochre)}
+.msg-qr{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.qr-chip{border:1px solid var(--borderM);border-radius:20px;padding:5px 11px;font-size:11px;font-weight:600;color:var(--text2);background:var(--card);white-space:nowrap;cursor:pointer;font-family:inherit}
+
+/* advert slot vis */
+.slot-bar{display:flex;gap:5px;margin:8px 0 4px}
+.slot{flex:1;height:6px;border-radius:3px;background:var(--border)}
+.slot.used{background:var(--ochre)}
+.adv-card{background:var(--card);border-radius:16px;padding:14px 15px;margin-bottom:10px;border:0.5px solid var(--border)}
+.adv-slot-row{display:flex;align-items:center;gap:8px;background:var(--wb);border-radius:9px;padding:8px 10px;margin-bottom:6px}
+.adv-slot-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.adv-slot-name{flex:1;font-size:11px;color:var(--text);font-weight:500}
+.adv-slot-open{display:flex;align-items:center;gap:8px;background:rgba(196,92,26,0.07);border:1px dashed rgba(196,92,26,0.25);border-radius:9px;padding:8px 10px;margin-bottom:6px}
+
+/* form inputs */
+.field{margin-bottom:12px}
+.field-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.field-input{width:100%;border:1px solid var(--borderM);border-radius:11px;padding:11px 13px;font-size:13px;color:var(--text);background:var(--card);outline:none;font-family:inherit}
+.field-input:focus{border-color:var(--ochre)}
+.step-bar{display:flex;gap:4px;margin-bottom:16px}
+.step-seg{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.step-seg.done{background:var(--ochre)}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <div class="nav-k">K</div>
+    <div class="nav-wordmark">Kooee</div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="openSheet('sh-notif')">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <div class="ndot"></div>
+    </button>
+    <button class="nav-menu-btn" onclick="openDrawer()">
+      <span></span><span></span><span style="width:9px"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN SCROLL AREA -->
+<div class="main-scroll" id="main-scroll">
+
+  <!-- ══ PAGE: OVERVIEW ══ -->
+  <div class="page active" id="pg-overview">
+    <div class="hero">
+      <div class="hero-date">Wednesday, 30 April 2026</div>
+      <div class="hero-name">Good morning,<br>Rachel</div>
+      <div class="hero-sub">Ridgeline Outdoor Ed · Growth plan</div>
+    </div>
+
+    <div class="metrics-wrap">
+      <div class="met" onclick="showPage('pg-programs')">
+        <div class="met-bar warn"></div>
+        <div class="met-label">Programs filled</div>
+        <div class="met-val warn">3<span style="font-size:14px;color:var(--text3)">/4</span></div>
+        <div class="met-sub">This month</div>
+      </div>
+      <div class="met" onclick="showPage('pg-inbox')">
+        <div class="met-bar danger"></div>
+        <div class="met-label">Kooees pending</div>
+        <div class="met-val danger">2</div>
+        <div class="met-cta">See details</div>
+      </div>
+      <div class="met" onclick="showPage('pg-staff')">
+        <div class="met-bar danger"></div>
+        <div class="met-label">Roles open</div>
+        <div class="met-val danger">4</div>
+        <div class="met-sub">Urgent</div>
+      </div>
+      <div class="met">
+        <div class="met-bar ok"></div>
+        <div class="met-label">PD contributed</div>
+        <div class="met-val ok">$96</div>
+        <div class="met-sub">48 days logged</div>
+      </div>
+    </div>
+
+    <div class="alert-bar" style="margin-top:14px" onclick="openSheet('sh-compliance')">
+      <div class="alert-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="alert-info">
+        <div class="alert-title">Compliance alert — 2 instructors</div>
+        <div class="alert-sub">Alex T. · First Aid expiring 28 May</div>
+      </div>
+      <div class="alert-chev"></div>
+    </div>
+
+    <div class="sec-hdr"><div class="sec-title">Program readiness</div><button class="sec-link" onclick="showPage('pg-programs')">All programs</button></div>
+    <div class="prog-cards">
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe ready"></div>
+        <div class="prog-top"><div><div class="prog-name">Grampians — Abseiling</div><div class="prog-date">28–30 Apr · 186 students</div></div><span class="badge bok">Ready</span></div>
+        <div class="prog-roles"><span class="role-chip role-filled">3×GL ✓</span><span class="role-chip role-filled">2×AI ✓</span><span class="role-chip role-filled">2×CI ✓</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Grampians NP</div><div class="prog-btns"><button class="btn-sm-g" onclick="event.stopPropagation();openSheet('sh-prog-detail')">Details</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe warn"></div>
+        <div class="prog-top"><div><div class="prog-name">Alpine Valley — MTB</div><div class="prog-date">12–15 May · 110 students</div></div><span class="badge bwarn">1 open</span></div>
+        <div class="prog-roles"><span class="role-chip role-filled">1×GL ✓</span><span class="role-chip role-needed">1×MTB needed</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Alpine Valley</div><div class="prog-btns"><button class="btn-sm-p" onclick="event.stopPropagation();showPage('pg-staff')">Find staff</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe danger"></div>
+        <div class="prog-top"><div><div class="prog-name">Wilsons Prom — Kayak</div><div class="prog-date">22 May · 65 students</div></div><span class="badge bdanger">Unstaffed</span></div>
+        <div class="prog-roles"><span class="role-chip role-needed">2×CI needed</span><span class="role-chip role-needed">1×GL needed</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Wilsons Prom</div><div class="prog-btns"><button class="btn-sm-p" onclick="event.stopPropagation();showPage('pg-staff')">Find staff</button></div></div>
+      </div>
+    </div>
+
+    <div class="sec-hdr"><div class="sec-title">Kooee inbox</div><button class="sec-link" onclick="showPage('pg-inbox')">All</button></div>
+    <div class="inbox-list">
+      <div class="inbox-item unread" onclick="openSheet('sh-msg')"><div class="ia" style="background:#E8A265;color:#4A3728">JM</div><div class="ii"><div class="ii-name">Jordan Mills</div><div class="ii-prev">Available for Alpine Valley 12–15 May...</div></div><div class="ii-meta"><div class="ii-time">3h</div><div class="ii-dot"></div></div></div>
+      <div class="inbox-item unread" onclick="openSheet('sh-msg')"><div class="ia" style="background:#F5E0C3;color:#7A3800">AT</div><div class="ii"><div class="ii-name">Alex Torres</div><div class="ii-prev">Accepted — Grampians 28 Apr...</div></div><div class="ii-meta"><div class="ii-time">1h</div><div class="ii-dot"></div></div></div>
+      <div class="inbox-item" onclick="openSheet('sh-msg')"><div class="ia" style="background:#D3D1C7;color:#5F5E5A">CL</div><div class="ii"><div class="ii-name">Casey Lowe</div><div class="ii-prev">Passed — prior booking. Available from 12...</div></div><div class="ii-meta"><div class="ii-time">1d</div></div></div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PAGE: STAFF SEARCH ══ -->
+  <div class="page" id="pg-staff">
+    <div class="hero" style="padding-bottom:20px">
+      <div class="hero-date">Staff search</div>
+      <div class="hero-name" style="font-size:22px">Find instructors</div>
+    </div>
+    <div class="context-banner">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+        <div class="ctx-label">Auto-loaded from program</div>
+        <button style="background:none;border:none;font-size:10px;color:rgba(245,224,195,0.4);cursor:pointer;font-family:inherit">Clear ✕</button>
+      </div>
+      <div class="ctx-prog">Alpine Valley — MTB · 12–15 May</div>
+      <div class="ctx-detail">Alpine Valley, VIC · 4 days · 110 students</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">
+        <span style="background:rgba(196,92,26,0.25);border:1px solid rgba(196,92,26,0.4);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--sand)">MTB needed ✕</span>
+        <span style="background:rgba(196,92,26,0.25);border:1px solid rgba(196,92,26,0.4);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--sand)">12–15 May ✕</span>
+        <span style="background:rgba(59,109,17,0.2);border:1px solid rgba(59,109,17,0.3);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:#7AC255">GL filled ✓</span>
+      </div>
+    </div>
+    <div class="search-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="Search by name..."></div>
+    <div style="padding:9px 20px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px">Filters</div>
+      <button onclick="openSheet('sh-filters')" style="font-size:11px;font-weight:600;color:var(--ochre);background:none;border:none;cursor:pointer;font-family:inherit">Edit all</button>
+    </div>
+    <div class="filter-chips">
+      <button class="fchip on">MTB</button>
+      <button class="fchip on">Available 12–15 May</button>
+      <button class="fchip on">VIC · 200km</button>
+      <button class="fchip">All clear</button>
+      <button class="fchip">GL</button>
+      <button class="fchip">AI</button>
+    </div>
+    <div style="padding:10px 20px 8px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:12px;color:var(--text2);font-weight:500" id="results-count">6 match · 2 selected</div>
+      <button class="btn-sm-p" onclick="openSheet('sh-bulk')">Send Kooee (2)</button>
+    </div>
+    <div style="padding:0 20px">
+      <div class="staff-card">
+        <div class="s-check on" onclick="toggleCheck(this)"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg></div>
+        <div class="s-av" style="background:#C0DD97;color:#27500A">NB</div>
+        <div class="s-info"><div class="s-name">Nat Brooks</div><div class="s-loc">Bright, VIC · Alpine & NE Victoria</div><div class="s-tags"><span class="s-tag">MTB</span><span class="s-tag">GL</span><span class="s-tag">ALP</span></div><div class="avail-row"><div class="avail-dot"></div><div class="avail-text">Available 12–15 May</div></div></div>
+        <button class="btn-sm-g" onclick="openSheet('sh-staff-profile')">Profile</button>
+      </div>
+      <div class="staff-card">
+        <div class="s-check on" onclick="toggleCheck(this)"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg></div>
+        <div class="s-av" style="background:#9FE1CB;color:#085041">RK</div>
+        <div class="s-info"><div class="s-name">Riley King</div><div class="s-loc">Wangaratta, VIC · Alpine & NE Victoria</div><div class="s-tags"><span class="s-tag">MTB</span><span class="s-tag">GL</span><span class="s-tag">RCI</span></div><div class="avail-row"><div class="avail-dot"></div><div class="avail-text">Available 12–15 May</div></div></div>
+        <button class="btn-sm-g" onclick="openSheet('sh-staff-profile')">Profile</button>
+      </div>
+      <div class="staff-card" style="opacity:0.75">
+        <div class="s-check" onclick="toggleCheck(this)"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg></div>
+        <div class="s-av" style="background:#F4C0D1;color:#4B1528">PM</div>
+        <div class="s-info"><div class="s-name">Priya Mehta</div><div class="s-loc">Melbourne, VIC · Greater Melbourne</div><div class="s-tags"><span class="s-tag">MTB</span><span class="s-tag">GL</span></div><div class="avail-row"><div class="avail-dot"></div><div class="avail-text">Available 13–15 May</div></div></div>
+        <button class="btn-sm-g" onclick="openSheet('sh-staff-profile')">Profile</button>
+      </div>
+      <div class="staff-card" style="opacity:0.75">
+        <div class="s-check" onclick="toggleCheck(this)"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6"/></svg></div>
+        <div class="s-av" style="background:#B5D4F4;color:#0C447C">SG</div>
+        <div class="s-info"><div class="s-name">Sam Grant</div><div class="s-loc">Mansfield, VIC · Alpine & NE Victoria</div><div class="s-tags"><span class="s-tag">MTB</span><span class="s-tag">GL</span><span class="s-tag">ALP</span></div><div class="avail-row"><div class="avail-dot" style="background:var(--sand)"></div><div class="avail-text" style="color:#7A3800">Available from 13 May</div></div></div>
+        <button class="btn-sm-g" onclick="openSheet('sh-staff-profile')">Profile</button>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PAGE: ROSTER ══ -->
+  <div class="page" id="pg-roster">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">People</div><div class="hero-name" style="font-size:22px">Roster</div><div class="hero-sub">4 instructors on file</div></div>
+    <div class="alert-bar" style="margin-top:12px" onclick="openSheet('sh-compliance')">
+      <div class="alert-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="alert-info"><div class="alert-title">2 compliance issues</div><div class="alert-sub">First Aid expiring within 30 days</div></div>
+      <div class="alert-chev"></div>
+    </div>
+    <div class="search-bar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="Search roster..."></div>
+    <div class="filter-chips">
+      <button class="fchip on">All</button><button class="fchip">Available now</button><button class="fchip">Compliance issues</button><button class="fchip">GL</button><button class="fchip">CI</button>
+    </div>
+    <div class="roster-list" style="margin-top:10px">
+      <div class="roster-card">
+        <div class="r-av" style="background:#F5E0C3;color:#7A3800">AT</div>
+        <div class="r-info"><div class="r-name">Alex Torres</div><div class="r-loc">Melbourne · 84 days · 14 programs with ROE</div><div class="r-tags"><span class="badge bok" style="font-size:9px">Available</span><span class="badge bwarn" style="font-size:9px">First Aid · 28d</span><span class="badge bochre" style="font-size:9px">GL · AI · ALP</span></div></div>
+        <div class="r-actions"><button class="btn-sm-g" onclick="openSheet('sh-roster-profile')">Profile</button><button class="btn-sm-g">Message</button></div>
+      </div>
+      <div class="roster-card">
+        <div class="r-av" style="background:#E8A265;color:#4A3728">JM</div>
+        <div class="r-info"><div class="r-name">Jordan Mills</div><div class="r-loc">Geelong · 52 days · 10 programs with ROE</div><div class="r-tags"><span class="badge bok" style="font-size:9px">Available</span><span class="badge bok" style="font-size:9px">All clear</span><span class="badge bochre" style="font-size:9px">GL · CI · ALP</span></div></div>
+        <div class="r-actions"><button class="btn-sm-g" onclick="openSheet('sh-roster-profile')">Profile</button><button class="btn-sm-g">Message</button></div>
+      </div>
+      <div class="roster-card" style="opacity:0.65">
+        <div class="r-av" style="background:#D3D1C7;color:#5F5E5A">CL</div>
+        <div class="r-info"><div class="r-name">Casey Lowe</div><div class="r-loc">Ballarat · 38 days · 6 programs with ROE</div><div class="r-tags"><span class="badge bgray" style="font-size:9px">Unavailable · 10 May</span><span class="badge bdanger" style="font-size:9px">First Aid expired</span></div></div>
+        <div class="r-actions"><button class="btn-sm-g">Profile</button></div>
+      </div>
+      <div class="roster-card">
+        <div class="r-av" style="background:#E8A265;color:#4A3728">MP</div>
+        <div class="r-info"><div class="r-name">Morgan Park</div><div class="r-loc">Bendigo · 21 days · 4 programs with ROE</div><div class="r-tags"><span class="badge bok" style="font-size:9px">Available</span><span class="badge bwarn" style="font-size:9px">Onboarding 50%</span><span class="badge bochre" style="font-size:9px">GL · MTB</span></div></div>
+        <div class="r-actions"><button class="btn-sm-g" onclick="openSheet('sh-roster-profile')">Profile</button></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);text-align:center;padding:12px 0;font-style:italic">Auto-added after first verified program</div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PAGE: INBOX ══ -->
+  <div class="page" id="pg-inbox">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">Messages</div><div class="hero-name" style="font-size:22px">Kooee inbox</div><div class="hero-sub">2 unread</div></div>
+    <div style="padding:12px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Unread</div>
+    <div class="inbox-list">
+      <div class="inbox-item unread" onclick="openSheet('sh-msg')"><div class="ia" style="background:#E8A265;color:#4A3728">JM</div><div class="ii"><div class="ii-name">Jordan Mills</div><div class="ii-prev">Available for Alpine Valley 12–15 May. Happy to...</div></div><div class="ii-meta"><div class="ii-time">3h</div><div class="ii-dot"></div></div></div>
+      <div class="inbox-item unread" onclick="openSheet('sh-msg')"><div class="ia" style="background:#F5E0C3;color:#7A3800">AT</div><div class="ii"><div class="ii-name">Alex Torres</div><div class="ii-prev">Accepted — Grampians 28 Apr. Just confirming...</div></div><div class="ii-meta"><div class="ii-time">1h</div><div class="ii-dot"></div></div></div>
+    </div>
+    <div style="padding:12px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Earlier</div>
+    <div class="inbox-list">
+      <div class="inbox-item" onclick="openSheet('sh-msg')"><div class="ia" style="background:#D3D1C7;color:#5F5E5A">CL</div><div class="ii"><div class="ii-name">Casey Lowe</div><div class="ii-prev">Passed — prior booking. Available from 12 May...</div></div><div class="ii-meta"><div class="ii-time">1d</div></div></div>
+      <div class="inbox-item" onclick="openSheet('sh-msg')"><div class="ia" style="background:#E8A265;color:#4A3728">MP</div><div class="ii"><div class="ii-name">Morgan Park</div><div class="ii-prev">Thanks for the Kooee — can you confirm the role...</div></div><div class="ii-meta"><div class="ii-time">2d</div></div></div>
+      <div class="inbox-item" onclick="openSheet('sh-msg')"><div class="ia" style="background:#9FE1CB;color:#085041">RK</div><div class="ii"><div class="ii-name">Riley King</div><div class="ii-prev">Available for Alpine Valley. Background check...</div></div><div class="ii-meta"><div class="ii-time">2d</div></div></div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PAGE: PROGRAMS ══ -->
+  <div class="page" id="pg-programs">
+    <div class="hero" style="padding-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><div class="hero-date">Programs</div><div class="hero-name" style="font-size:22px">Catalogue</div></div>
+        <button class="btn-p" onclick="openSheet('sh-creator')">+ New</button>
+      </div>
+    </div>
+    <div class="prog-tabs">
+      <button class="ptab on">All (4)</button>
+      <button class="ptab">Advertised (2)</button>
+      <button class="ptab">Roles open</button>
+      <button class="ptab">Draft</button>
+    </div>
+    <div class="prog-cards-list">
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe ready"></div>
+        <div class="prog-top"><div><div class="prog-name">Grampians — Abseiling</div><div class="prog-date">28–30 Apr · 3 days · 186 students</div></div><span class="badge bok">Advertised</span></div>
+        <div class="prog-roles"><span class="role-chip role-filled">3×GL ✓</span><span class="role-chip role-filled">2×AI ✓</span><span class="role-chip role-filled">2×CI ✓</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Grampians NP · Filled</div><div class="prog-btns"><button class="btn-sm-g" onclick="event.stopPropagation();openSheet('sh-prog-detail')">Details</button><button class="btn-sm-g" onclick="event.stopPropagation()">Edit</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe warn"></div>
+        <div class="prog-top"><div><div class="prog-name">Alpine Valley — MTB</div><div class="prog-date">12–15 May · 4 days · 110 students</div></div><span class="badge bwarn">1 open</span></div>
+        <div class="prog-roles"><span class="role-chip role-filled">1×GL ✓</span><span class="role-chip role-needed">1×MTB needed</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Alpine Valley</div><div class="prog-btns"><button class="btn-sm-p" onclick="event.stopPropagation();showPage('pg-staff')">Find staff</button><button class="btn-sm-g" onclick="event.stopPropagation()">Edit</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="prog-stripe ready"></div>
+        <div class="prog-top"><div><div class="prog-name">Dandenong — Bushcraft</div><div class="prog-date">1 May · 1 day · 80 students</div></div><span class="badge bgray">Not advertised</span></div>
+        <div class="prog-roles"><span class="role-chip role-filled">2×GL ✓</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Dandenong Ranges</div><div class="prog-btns"><button class="btn-sm-g" onclick="event.stopPropagation()">Advertise</button><button class="btn-sm-g" onclick="event.stopPropagation()">Edit</button></div></div>
+      </div>
+      <div class="prog-card" style="opacity:0.65" onclick="openSheet('sh-creator')">
+        <div class="prog-stripe" style="background:var(--border)"></div>
+        <div class="prog-top"><div><div class="prog-name">Wilsons Prom — Kayak</div><div class="prog-date">22 May · 2 days · 65 students</div></div><span class="badge bgray">Draft</span></div>
+        <div class="prog-roles"><span class="role-chip role-needed">2×CI needed</span><span class="role-chip role-needed">1×GL needed</span></div>
+        <div class="prog-footer"><div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Wilsons Prom</div><div class="prog-btns"><button class="btn-sm-p" onclick="event.stopPropagation();openSheet('sh-creator')">Continue</button></div></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PAGE: REPORTS ══ -->
+  <div class="page" id="pg-reports">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">Analytics</div><div class="hero-name" style="font-size:22px">Reports</div></div>
+    <div class="filter-chips" style="margin-top:12px"><button class="fchip on">2025–26</button><button class="fchip">2024–25</button><button class="fchip">2023–24</button></div>
+    <div class="reports-wrap" style="margin-top:14px">
+      <div class="hero-stat">
+        <div class="hs-left"><div class="hs-label">Season total spend</div><div class="hs-val">$3,840</div><div class="hs-sub">96 program days · 28 programs</div></div>
+        <div class="hs-right"><div class="hs-label">Avg per day</div><div style="font-size:22px;font-weight:700;color:var(--paper)">$160</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-tile"><div class="st-val">28</div><div class="st-label">Programs</div></div>
+        <div class="stat-tile"><div class="st-val">3</div><div class="st-label">New hires</div></div>
+        <div class="stat-tile"><div class="st-val">78%</div><div class="st-label">Accept rate</div></div>
+      </div>
+      <div class="stat-2">
+        <div class="stat-tile"><div class="st-val">2.8d</div><div class="st-label">Avg fill time</div></div>
+        <div class="stat-tile"><div class="st-val">$387</div><div class="st-label">Acquisition fees</div></div>
+      </div>
+      <div class="rep-card">
+        <div class="rep-card-hdr"><div class="rep-card-title">Spend by month</div></div>
+        <div class="rep-row"><span class="rep-l">April 2026</span><span class="rep-v">$720 · 10 days</span></div>
+        <div class="rep-row"><span class="rep-l">March 2026</span><span class="rep-v">$1,120 · 16 days</span></div>
+        <div class="rep-row"><span class="rep-l">February 2026</span><span class="rep-v">$480 · 7 days</span></div>
+        <div class="rep-row"><span class="rep-l">January 2026</span><span class="rep-v">$240 · 4 days</span></div>
+      </div>
+      <div class="rep-card">
+        <div class="rep-card-hdr"><div class="rep-card-title">Top instructors</div></div>
+        <div class="rep-row"><div><div class="rep-l">Alex Torres</div><div style="font-size:10px;color:var(--text3)">12 days · GL · AI</div></div><span class="rep-v">$1,320</span></div>
+        <div class="rep-row"><div><div class="rep-l">Jordan Mills</div><div style="font-size:10px;color:var(--text3)">9 days · CI · ALP</div></div><span class="rep-v">$990</span></div>
+        <div class="rep-row"><div><div class="rep-l">Morgan Park</div><div style="font-size:10px;color:var(--text3)">5 days · GL · MTB</div></div><span class="rep-v">$550</span></div>
+      </div>
+      <div class="rep-card">
+        <div class="rep-card-hdr"><div class="rep-card-title">PD contributions</div></div>
+        <div class="rep-row"><span class="rep-l">Total contributed</span><span class="rep-v" style="color:var(--ochre)">$192</span></div>
+        <div class="rep-row"><span class="rep-l">Per program day</span><span class="rep-v">$2.00</span></div>
+        <div class="rep-row"><span class="rep-l">Instructors receiving</span><span class="rep-v">4</span></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+</div><!-- end main-scroll -->
+
+<!-- BULK BAR -->
+<div class="bulk-bar" id="bulk-bar">
+  <button class="btn-g" onclick="clearSelection()">Clear</button>
+  <button class="btn-s" style="flex:1" onclick="openSheet('sh-bulk')">Send Kooee to 2 instructors</button>
+</div>
+
+<!-- ═══ SHEETS ═══ -->
+
+<!-- Compliance -->
+<div class="sheet-overlay" id="sh-compliance" onclick="if(event.target===this)closeSheet('sh-compliance')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Compliance alerts</div><div class="sheet-sub">2 instructors need attention</div></div><button class="sheet-close" onclick="closeSheet('sh-compliance')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="s-row"><span class="s-l">Alex Torres · First Aid</span><span class="s-v" style="color:var(--ochre)">Exp. 28 May 2026</span></div>
+      <div class="s-row"><span class="s-l">Casey Lowe · First Aid</span><span class="s-v" style="color:#A32D2D">Expired</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-s" style="flex:1" onclick="closeSheet('sh-compliance');showPage('pg-roster')">View roster</button></div>
+  </div>
+</div>
+
+<!-- Program detail -->
+<div class="sheet-overlay" id="sh-prog-detail" onclick="if(event.target===this)closeSheet('sh-prog-detail')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Grampians — Abseiling</div><div class="sheet-sub">28–30 Apr · Ready · 186 students</div></div><button class="sheet-close" onclick="closeSheet('sh-prog-detail')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="sheet-strip">
+        <div class="ss-item"><div class="ss-label">Dates</div><div class="ss-val">28–30 Apr</div></div>
+        <div class="ss-item"><div class="ss-label">Students</div><div class="ss-val">186</div></div>
+        <div class="ss-item"><div class="ss-label">Groups</div><div class="ss-val">12</div></div>
+      </div>
+      <div class="sheet-sec">Staffing</div>
+      <div class="s-row"><span class="s-l">Group Leader (GL)</span><span class="s-v" style="color:#3B6D11">3/3 filled</span></div>
+      <div class="s-row"><span class="s-l">Abseil Instructor (AI)</span><span class="s-v" style="color:#3B6D11">2/2 filled</span></div>
+      <div class="s-row"><span class="s-l">Canoe Instructor (CI)</span><span class="s-v" style="color:#3B6D11">2/2 filled</span></div>
+      <div class="sheet-sec">Logistics</div>
+      <div class="s-row"><span class="s-l">Client</span><span class="s-v">Riverside Secondary</span></div>
+      <div class="s-row"><span class="s-l">Location</span><span class="s-v">Grampians NP, VIC</span></div>
+      <div class="s-row"><span class="s-l">Briefing</span><span class="s-v">28 Apr · 6am · Office</span></div>
+      <div class="s-row"><span class="s-l">Transport</span><span class="s-v">Company vehicle or own</span></div>
+      <div class="s-row"><span class="s-l">Accommodation</span><span class="s-v">On-site camp</span></div>
+      <div class="s-row"><span class="s-l">Director</span><span class="s-v">Sam</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-prog-detail')">Edit</button><button class="btn-p">View advert</button></div>
+  </div>
+</div>
+
+<!-- Message thread -->
+<div class="sheet-overlay" id="sh-msg" onclick="if(event.target===this)closeSheet('sh-msg')">
+  <div class="sheet" style="max-height:90%"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Jordan Mills</div><div class="sheet-sub">Re: Alpine Valley MTB · 12–15 May</div></div><button class="sheet-close" onclick="closeSheet('sh-msg')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="display:flex;flex-direction:column;margin-bottom:14px">
+        <div class="msg-bubble-out"><div class="bubble bubble-out">Hi Jordan, we have an MTB instructor role available 12–15 May at Alpine Valley. Are you available and interested?</div><div class="bubble-time" style="text-align:right">Yesterday 4:12pm</div></div>
+        <div class="msg-bubble-in"><div class="bubble bubble-in">Yes available! Happy to take on the MTB role. Is it just MTB or GL across the program too?</div><div class="bubble-time">Jordan · 3h ago</div></div>
+      </div>
+      <div class="sheet-sec" style="margin-top:0">Quick replies</div>
+      <div class="msg-qr"><button class="qr-chip">Confirm role</button><button class="qr-chip">Send details</button><button class="qr-chip">Ask availability</button></div>
+      <textarea class="msg-input" placeholder="Reply to Jordan..."></textarea>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-msg')">View profile</button><button class="btn-s">Send reply</button></div>
+  </div>
+</div>
+
+<!-- Bulk send -->
+<div class="sheet-overlay" id="sh-bulk" onclick="if(event.target===this)closeSheet('sh-bulk')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Send a Kooee</div><div class="sheet-sub">Alpine Valley MTB · 12–15 May</div></div><button class="sheet-close" onclick="closeSheet('sh-bulk')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="sheet-strip"><div class="ss-item"><div class="ss-label">Role</div><div class="ss-val">MTB Instructor</div></div><div class="ss-item"><div class="ss-label">Dates</div><div class="ss-val">12–15 May</div></div><div class="ss-item"><div class="ss-label">Sending to</div><div class="ss-val">2 instructors</div></div></div>
+      <div class="sheet-sec">Sending to</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+        <div style="background:var(--wb);border-radius:11px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div class="s-av" style="width:34px;height:34px;background:#C0DD97;color:#27500A;font-size:10px">NB</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Nat Brooks</div><div style="font-size:10px;color:var(--text2)">MTB · GL · Bright, VIC · Available all dates</div></div></div>
+        <div style="background:var(--wb);border-radius:11px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div class="s-av" style="width:34px;height:34px;background:#9FE1CB;color:#085041;font-size:10px">RK</div><div><div style="font-size:12px;font-weight:600;color:var(--text)">Riley King</div><div style="font-size:10px;color:var(--text2)">MTB · GL · Wangaratta, VIC · Available all dates</div></div></div>
+      </div>
+      <div class="sheet-sec">Optional message</div>
+      <textarea class="msg-input" placeholder="e.g. Hi — looking to fill an MTB instructor role for a school camp. Dates are 12–15 May, Alpine Valley. Let me know if you're keen."></textarea>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-bulk')">Cancel</button><button class="btn-s">Send Kooee to 2</button></div>
+  </div>
+</div>
+
+<!-- Staff profile -->
+<div class="sheet-overlay" id="sh-staff-profile" onclick="if(event.target===this)closeSheet('sh-staff-profile')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Nat Brooks</div><div class="sheet-sub">Bright, VIC · 67 days in field</div></div><button class="sheet-close" onclick="closeSheet('sh-staff-profile')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px"><span class="badge bochre">MTB</span><span class="badge bochre">GL</span><span class="badge bochre">ALP</span><span class="badge bok">WWCC VIC</span><span class="badge bok">First Aid valid</span></div>
+      <div class="sheet-sec">Availability</div>
+      <div class="s-row"><span class="s-l">12–15 May</span><span class="s-v" style="color:#3B6D11">Fully available</span></div>
+      <div class="sheet-sec">Profile</div>
+      <div class="s-row"><span class="s-l">Home base</span><span class="s-v">Bright, VIC</span></div>
+      <div class="s-row"><span class="s-l">Days in field</span><span class="s-v">67 · this season</span></div>
+      <div class="s-row"><span class="s-l">Programs with ROE</span><span class="s-v">New connection</span></div>
+      <div class="sheet-sec">Compliance</div>
+      <div class="s-row"><span class="s-l">First Aid</span><span class="s-v" style="color:#3B6D11">Valid to Nov 2026</span></div>
+      <div class="s-row"><span class="s-l">WWCC</span><span class="s-v" style="color:#3B6D11">VIC · Valid to 2027</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-staff-profile')">Message</button><button class="btn-s">Send Kooee</button></div>
+  </div>
+</div>
+
+<!-- Roster profile -->
+<div class="sheet-overlay" id="sh-roster-profile" onclick="if(event.target===this)closeSheet('sh-roster-profile')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Alex Torres</div><div class="sheet-sub">Melbourne, VIC · 84 days in field</div></div><button class="sheet-close" onclick="closeSheet('sh-roster-profile')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px"><span class="badge bochre">GL</span><span class="badge bochre">AI</span><span class="badge bochre">ALP</span><span class="badge bwarn">First Aid · 28d</span></div>
+      <div class="sheet-sec">Onboarding — Ridgeline OE</div>
+      <div class="s-row"><span class="s-l">Casual agreement</span><span class="s-v" style="color:#3B6D11">Signed</span></div>
+      <div class="s-row"><span class="s-l">Bank details</span><span class="s-v" style="color:#3B6D11">On file</span></div>
+      <div class="s-row"><span class="s-l">Code of conduct</span><span class="s-v" style="color:#3B6D11">Acknowledged</span></div>
+      <div class="sheet-sec">Programs with ROE</div>
+      <div class="s-row"><span class="s-l">Total programs</span><span class="s-v">14</span></div>
+      <div class="s-row"><span class="s-l">Days in field</span><span class="s-v">84</span></div>
+      <div class="s-row"><span class="s-l">Last program</span><span class="s-v">17 Apr 2026</span></div>
+      <div class="sheet-sec">Compliance</div>
+      <div class="s-row"><span class="s-l">First Aid</span><span class="s-v" style="color:var(--ochre)">Exp. 28 May 2026</span></div>
+      <div class="s-row"><span class="s-l">WWCC Victoria</span><span class="s-v" style="color:#3B6D11">Valid to Aug 2028</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-roster-profile')">Message</button><button class="btn-s">Send a Kooee</button></div>
+  </div>
+</div>
+
+<!-- Notif -->
+<div class="sheet-overlay" id="sh-notif" onclick="if(event.target===this)closeSheet('sh-notif')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Notifications</div><div class="sheet-sub">2 unread</div></div><button class="sheet-close" onclick="closeSheet('sh-notif')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="s-row"><span class="s-l">Jordan M. responded to Kooee</span><span class="s-v" style="color:var(--ochre)">3h ago</span></div>
+      <div class="s-row"><span class="s-l">Alex T. accepted — Grampians</span><span class="s-v" style="color:#3B6D11">1h ago</span></div>
+      <div class="s-row"><span class="s-l">Compliance reminder · Alex T.</span><span class="s-v">1d ago</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="sheet-overlay" id="sh-filters" onclick="if(event.target===this)closeSheet('sh-filters')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Adjust filters</div><div class="sheet-sub">Customise your staff search</div></div><button class="sheet-close" onclick="closeSheet('sh-filters')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="sheet-sec">Availability</div>
+      <div class="s-row"><span class="s-l">Available for dates</span><span class="s-v" style="color:var(--ochre)">12–15 May 2026</span></div>
+      <div class="s-row"><span class="s-l">Status</span><span class="s-v">Available now</span></div>
+      <div class="sheet-sec">Qualifications</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 8px"><button class="fchip on">MTB</button><button class="fchip">GL</button><button class="fchip">AI</button><button class="fchip">ALP</button><button class="fchip">CI</button><button class="fchip">RCI</button><button class="fchip">DofE</button></div>
+      <div class="sheet-sec">Location</div>
+      <div class="s-row"><span class="s-l">Region</span><span class="s-v">Alpine & NE Victoria</span></div>
+      <div class="s-row"><span class="s-l">Radius from program</span><span class="s-v">200km</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-filters')">Reset</button><button class="btn-p" onclick="closeSheet('sh-filters')">Apply filters</button></div>
+  </div>
+</div>
+
+<!-- Program creator -->
+<div class="sheet-overlay" id="sh-creator" onclick="if(event.target===this)closeSheet('sh-creator')">
+  <div class="sheet" style="max-height:92%"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">New program</div><div class="sheet-sub">Step 1 of 4 — Program details</div></div><button class="sheet-close" onclick="closeSheet('sh-creator')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="step-bar"><div class="step-seg done"></div><div class="step-seg"></div><div class="step-seg"></div><div class="step-seg"></div></div>
+      <div class="field"><div class="field-label">School / Client</div><input class="field-input" placeholder="e.g. Riverside Secondary — Yr 9"></div>
+      <div class="field"><div class="field-label">Program name / theme</div><input class="field-input" placeholder="e.g. Into the Wild"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><div class="field-label">Start date</div><input type="date" class="field-input"></div>
+        <div class="field"><div class="field-label">End date</div><input type="date" class="field-input"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><div class="field-label">Est. students</div><input type="number" class="field-input" placeholder="120"></div>
+        <div class="field"><div class="field-label">Groups</div><input type="number" class="field-input" placeholder="8"></div>
+      </div>
+      <div class="field"><div class="field-label">Program location</div><input class="field-input" placeholder="e.g. Grampians National Park"></div>
+      <div class="field"><div class="field-label">Program director</div><input class="field-input" placeholder="e.g. Sam"></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-creator')">Save draft</button><button class="btn-p">Next →</button></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer" onclick="if(event.target.classList.contains('drawer-dim'))closeDrawer()">
+  <div class="drawer-panel">
+    <div class="d-top">
+      <div class="d-biz"><div class="d-logo">R</div><div><div class="d-biz-name">Ridgeline Outdoor Ed</div><div class="d-plan">Growth · $250/mo</div></div></div>
+    </div>
+    <div class="d-sec-label">Overview</div>
+    <button class="d-item" id="di-overview" onclick="navTo('pg-overview','di-overview')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
+    <div class="d-sec-label">People</div>
+    <button class="d-item" id="di-staff" onclick="navTo('pg-staff','di-staff')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Staff search<span class="d-badge">!</span></button>
+    <button class="d-item" id="di-roster" onclick="navTo('pg-roster','di-roster')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Roster</button>
+    <button class="d-item" id="di-inbox" onclick="navTo('pg-inbox','di-inbox')"><svg viewBox="0 0 24 24"><path d="M1 3h14v9a1 1 0 01-1 1H2a1 1 0 01-1-1V3z"/><path d="M1 3l7 5 7-5"/></svg>Kooee inbox<span class="d-badge">2</span></button>
+    <div class="d-sec-label">Programs</div>
+    <button class="d-item" id="di-programs" onclick="navTo('pg-programs','di-programs')"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M8 5v6M5 8h6"/></svg>Programs</button>
+    <div class="d-sec-label">Reporting</div>
+    <button class="d-item" id="di-reports" onclick="navTo('pg-reports','di-reports')"><svg viewBox="0 0 24 24"><path d="M2 12l3-4 3 2 3-5 3 3"/></svg>Reports</button>
+    <div class="d-foot">
+      <div class="d-user"><div class="d-av">RL</div><div><div class="d-un">Rachel · Admin</div><div class="d-up">Settings & account</div></div></div>
+    </div>
+  </div>
+  <div class="drawer-dim"></div>
+</div>
+
+<script>
+// page nav
+let currentPage='pg-overview';let currentDI='di-overview';
+function showPage(id){
+  document.getElementById(currentPage).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  currentPage=id;
+  document.getElementById('main-scroll').scrollTop=0;
+}
+function navTo(pageId,diId){
+  showPage(pageId);
+  document.getElementById(currentDI).classList.remove('on');
+  document.getElementById(diId).classList.add('on');
+  currentDI=diId;
+  closeDrawer();
+}
+// init active drawer item
+document.getElementById('di-overview').classList.add('on');
+
+// sheets
+function openSheet(id){document.getElementById(id).classList.add('open')}
+function closeSheet(id){document.getElementById(id).classList.remove('open')}
+
+// drawer
+function openDrawer(){document.getElementById('drawer').classList.add('open')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+
+// selection
+let selCount=2;
+function toggleCheck(el){
+  el.classList.toggle('on');
+  selCount=document.querySelectorAll('#pg-staff .s-check.on').length;
+  const bar=document.getElementById('bulk-bar');
+  const rc=document.getElementById('results-count');
+  if(selCount>0){
+    bar.classList.add('show');
+    bar.querySelector('.btn-s').textContent='Send Kooee to '+selCount+' instructor'+(selCount>1?'s':'');
+    rc.textContent='6 match · '+selCount+' selected';
+  } else {
+    bar.classList.remove('show');
+    rc.textContent='6 match · none selected';
+  }
+}
+function clearSelection(){
+  document.querySelectorAll('#pg-staff .s-check.on').forEach(e=>e.classList.remove('on'));
+  selCount=0;
+  document.getElementById('bulk-bar').classList.remove('show');
+  document.getElementById('results-count').textContent='6 match · none selected';
+}
+// show bulk bar on staff page
+document.addEventListener('click',function(e){
+  if(currentPage==='pg-staff'&&selCount>0)document.getElementById('bulk-bar').classList.add('show');
+});
+// show bulk bar initially on staff page
+function showPage(id){
+  document.getElementById(currentPage).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  currentPage=id;
+  document.getElementById('main-scroll').scrollTop=0;
+  const bar=document.getElementById('bulk-bar');
+  if(id==='pg-staff'&&selCount>0){bar.classList.add('show')}
+  else if(id!=='pg-staff'){bar.classList.remove('show')}
+}
+</script>
+</body>
+</html>

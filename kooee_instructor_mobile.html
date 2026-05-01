@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kooee — Instructor Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --ochre:#C45C1A;--bark:#2C1A0E;--dusk:#4A3728;--sand:#E8A265;--dry:#F5E0C3;--paper:#FBF7F2;
+  --card:#FFFFFF;--bg:#ECEAE5;
+  --text:#2C1A0E;--text2:#5A4030;--text3:#8A7060;
+  --border:rgba(196,92,26,0.12);--borderM:rgba(196,92,26,0.22);
+  --wb:rgba(196,92,26,0.08);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --card:#1E1410;--bg:#130D08;
+    --text:#F5E0C3;--text2:#C0A080;--text3:#806050;
+    --border:rgba(196,92,26,0.18);--borderM:rgba(196,92,26,0.3);
+    --wb:rgba(196,92,26,0.1);
+  }
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;display:flex;flex-direction:column;position:relative}
+
+/* NAV */
+.topnav{background:var(--bark);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;flex-shrink:0;position:relative;z-index:50}
+.nav-logo{display:flex;align-items:center;gap:9px}
+.nav-k{width:30px;height:30px;background:var(--ochre);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:17px;color:var(--paper)}
+.nav-wordmark{font-size:16px;font-weight:700;color:var(--dry);letter-spacing:-0.3px}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.nav-btn{width:36px;height:36px;border-radius:50%;background:rgba(245,224,195,0.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background 0.15s}
+.nav-btn:active{background:rgba(245,224,195,0.2)}
+.nav-btn svg{width:18px;height:18px;stroke:var(--dry);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ndot{width:8px;height:8px;border-radius:50%;background:var(--ochre);border:2px solid var(--bark);position:absolute;top:4px;right:4px}
+.nav-menu-btn{width:36px;height:36px;border-radius:9px;background:rgba(245,224,195,0.1);border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background 0.15s}
+.nav-menu-btn:active{background:rgba(245,224,195,0.2)}
+.nav-menu-btn span{width:15px;height:1.5px;background:var(--dry);border-radius:1px;display:block}
+.nav-menu-btn span:last-child{width:9px}
+
+/* SCROLL */
+.main-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.main-scroll::-webkit-scrollbar{display:none}
+
+/* PAGES */
+.page{display:none;animation:fadeIn 0.22s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{background:var(--bark);padding:20px 20px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(196,92,26,0.08);pointer-events:none}
+.hero-date{font-size:11px;color:rgba(245,224,195,0.4);font-weight:500;margin-bottom:4px;letter-spacing:0.3px}
+.hero-name{font-family:'DM Serif Display',serif;font-size:28px;color:var(--dry);letter-spacing:-0.5px;line-height:1.1;margin-bottom:5px}
+.hero-sub{font-size:12px;color:rgba(245,224,195,0.35)}
+
+/* METRICS */
+.metrics-wrap{padding:16px 20px 4px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.metrics-wrap::-webkit-scrollbar{display:none}
+.met{flex-shrink:0;background:var(--card);border-radius:16px;padding:14px 16px;min-width:118px;box-shadow:0 1px 8px rgba(0,0,0,0.08);cursor:pointer;position:relative;overflow:hidden;border:0.5px solid var(--border);transition:transform 0.12s}
+.met:active{transform:scale(0.96)}
+.met-bar{position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.met-bar.ochre{background:linear-gradient(90deg,var(--sand),var(--ochre))}
+.met-bar.ok{background:linear-gradient(90deg,#7AC255,#3B6D11)}
+.met-bar.neutral{background:var(--border)}
+.met-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 6px}
+.met-val{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-0.5px;line-height:1}
+.met-val.ochre{color:var(--ochre)}
+.met-val.ok{color:#3B6D11}
+.met-sub{font-size:10px;color:var(--text3);margin-top:4px}
+.met-cta{font-size:10px;color:var(--ochre);font-weight:600;margin-top:4px}
+
+/* SECTION */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px}
+.sec-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.sec-link{font-size:13px;color:var(--ochre);font-weight:600;border:none;background:none;cursor:pointer;font-family:inherit}
+
+/* ALERT — kooee incoming */
+.kooee-alert{margin:0 20px;background:var(--card);border:1px solid rgba(196,92,26,0.3);border-left:3px solid var(--ochre);border-radius:0 14px 14px 0;padding:13px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:opacity 0.15s}
+.kooee-alert:active{opacity:0.8}
+.ka-icon{width:34px;height:34px;border-radius:9px;background:rgba(196,92,26,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ka-icon svg{width:15px;height:15px;stroke:var(--ochre);stroke-width:2;fill:none;stroke-linecap:round}
+.ka-info{flex:1}
+.ka-title{font-size:12px;font-weight:700;color:var(--ochre)}
+.ka-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.btn-accept{background:var(--ochre);color:var(--paper);border:none;border-radius:9px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-pass{background:transparent;color:var(--text2);border:1px solid var(--borderM);border-radius:9px;padding:7px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-send{background:var(--dusk);color:var(--dry);border:none;border-radius:9px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* PROGRAM CARDS */
+.prog-cards{padding:0 20px}
+.prog-card{background:var(--card);border-radius:18px;padding:14px 15px;margin-bottom:10px;box-shadow:0 1px 8px rgba(0,0,0,0.07);cursor:pointer;position:relative;border:0.5px solid var(--border);transition:transform 0.12s}
+.prog-card:active{transform:scale(0.98)}
+.urgency-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.urg-company{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.1px}
+.urg-timer{font-size:10px;font-weight:600;border-radius:20px;padding:3px 9px}
+.urg-timer.red{background:#FCEBEB;color:#A32D2D}
+.urg-timer.amber{background:#FAEEDA;color:#7A3800}
+.urg-timer.green{background:#EAF3DE;color:#3B6D11}
+@media(prefers-color-scheme:dark){
+  .urg-timer.red{background:rgba(163,45,45,0.2);color:#F08080}
+  .urg-timer.amber{background:rgba(232,162,101,0.15);color:var(--sand)}
+  .urg-timer.green{background:rgba(59,109,17,0.2);color:#7AC255}
+}
+.prog-loc{font-size:11px;color:var(--text2);margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.prog-loc svg{width:11px;height:11px;stroke:var(--text3);stroke-width:1.5;fill:none}
+.roles-needed{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.r-chip{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
+.r-chip.needed{background:var(--dry);color:#7A3800}
+.r-chip.filled{background:#EAF3DE;color:#3B6D11}
+@media(prefers-color-scheme:dark){
+  .r-chip.needed{background:rgba(196,92,26,0.2);color:var(--sand)}
+  .r-chip.filled{background:rgba(59,109,17,0.2);color:#7AC255}
+}
+.prog-footer{display:flex;align-items:center;justify-content:space-between}
+.prog-dates{font-size:11px;color:var(--text2)}
+.prog-actions{display:flex;gap:7px}
+
+/* UPCOMING PROGRAMS */
+.upcoming-card{background:var(--card);border-radius:16px;padding:13px 15px;margin-bottom:9px;border:0.5px solid var(--border);cursor:pointer;transition:transform 0.12s;display:flex;gap:12px;align-items:flex-start}
+.upcoming-card:active{transform:scale(0.98)}
+.up-date-block{background:var(--ochre);border-radius:10px;padding:6px 10px;text-align:center;flex-shrink:0;min-width:40px}
+.up-day{font-size:16px;font-weight:700;color:var(--paper);line-height:1}
+.up-month{font-size:9px;font-weight:600;color:rgba(251,247,242,0.7);text-transform:uppercase;letter-spacing:0.5px}
+.up-info{flex:1}
+.up-prog{font-size:13px;font-weight:700;color:var(--text)}
+.up-company{font-size:11px;color:var(--text2);margin-top:2px}
+.up-loc{font-size:11px;color:var(--text3);margin-top:3px}
+.up-status{margin-top:6px}
+
+/* PROVIDERS */
+.prov-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 20px}
+.prov-card{background:var(--card);border-radius:16px;padding:13px 13px;border:0.5px solid var(--border)}
+.prov-logo{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-bottom:8px}
+.prov-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.prov-loc{font-size:10px;color:var(--text3);margin-bottom:7px}
+.prov-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.prov-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;background:var(--wb);color:var(--text2)}
+.connected-dot{width:6px;height:6px;border-radius:50%;background:#3B6D11;display:inline-block;margin-right:3px}
+
+/* FIELD RECORD */
+.logbook-header{padding:14px 20px}
+.stat-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+.stat-tile{background:var(--card);border-radius:13px;padding:10px 10px;text-align:center;border:0.5px solid var(--border)}
+.st-val{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.st-sub{font-size:8px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;margin-top:3px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0}
+.view-toggle{display:flex;background:var(--wb);border-radius:9px;padding:3px;gap:2px}
+.vt-btn{border:none;background:transparent;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.18s;font-family:inherit}
+.vt-btn.on{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+.legend{display:flex;gap:10px}
+.leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+/* timeline */
+.timeline{position:relative;padding-left:30px;padding-right:20px;padding-top:4px}
+.timeline::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:1.5px;background:var(--border)}
+.tl-entry{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-10px;top:14px;width:11px;height:11px;border-radius:50%;background:var(--ochre);border:2.5px solid var(--bg)}
+.tl-dot.leisure{background:var(--dusk)}
+.tl-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;transition:transform 0.12s}
+.tl-card:active{transform:scale(0.98)}
+.tl-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.tl-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.1px}
+.tl-date-wrap{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;margin-left:8px}
+.tl-date{font-size:10px;color:var(--text3)}
+.tl-auto-tag{font-size:9px;background:var(--dry);color:#7A3800;padding:1px 6px;border-radius:20px;font-weight:600}
+@media(prefers-color-scheme:dark){.tl-auto-tag{background:rgba(196,92,26,0.2);color:var(--sand)}}
+.tl-badges{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.tl-meta{display:flex;gap:6px;font-size:10px;color:var(--text3);margin:4px 0;flex-wrap:wrap}
+.tl-notes{font-size:10px;color:var(--text3);font-style:italic;line-height:1.5;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--border)}
+.tl-month-marker{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;margin-left:-10px;padding-left:8px;border-left:3px solid var(--ochre);padding-top:2px;padding-bottom:2px}
+/* classic table */
+.classic-table{width:100%;border-collapse:collapse;font-size:11px}
+.classic-table th{text-align:left;padding:8px 10px;font-size:9px;font-weight:600;color:var(--text3);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.classic-table td{padding:10px 10px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+.classic-table tr:last-child td{border-bottom:none}
+.act-pill{width:28px;height:28px;border-radius:7px;background:var(--dry);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7A3800;flex-shrink:0}
+@media(prefers-color-scheme:dark){.act-pill{background:rgba(196,92,26,0.2);color:var(--sand)}}
+.act-pill.leisure{background:var(--wb);color:var(--text3)}
+.cell-main{font-size:11px;font-weight:600;color:var(--text)}
+.cell-sub{font-size:10px;color:var(--text3);margin-top:1px}
+
+/* PROFILE */
+.profile-wrap{padding:0 20px}
+.profile-hero{background:var(--bark);border-radius:18px;padding:20px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start}
+.profile-av{width:56px;height:56px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--paper);flex-shrink:0}
+.profile-name{font-family:'DM Serif Display',serif;font-size:20px;color:var(--dry);letter-spacing:-0.3px}
+.profile-role{font-size:12px;color:rgba(245,224,195,0.45);margin-top:3px}
+.profile-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.p-card{background:var(--card);border-radius:16px;border:0.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.p-card-hdr{padding:13px 15px;border-bottom:0.5px solid var(--border)}
+.p-card-title{font-size:13px;font-weight:700;color:var(--text)}
+.p-row{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 15px;border-bottom:0.5px solid var(--border);font-size:13px}
+.p-row:last-child{border-bottom:none}
+.p-label{color:var(--text2);font-weight:500;flex-shrink:0}
+.p-val{font-weight:600;color:var(--text);text-align:right;max-width:60%}
+.p-edit-row{display:flex;justify-content:space-between;align-items:center;padding:11px 15px;border-bottom:0.5px solid var(--border)}
+.p-edit-row:last-child{border-bottom:none}
+.p-edit-label{font-size:13px;color:var(--text2);font-weight:500}
+.p-edit-val{font-size:13px;font-weight:600;color:var(--text)}
+
+/* PD CREDITS */
+.pd-wallet{background:linear-gradient(135deg,var(--ochre),#8B3C0A);border-radius:20px;padding:22px;margin:0 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.pd-wallet::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none}
+.pd-wallet-label{font-size:10px;color:rgba(251,247,242,0.55);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.pd-wallet-val{font-family:'DM Serif Display',serif;font-size:44px;color:var(--paper);letter-spacing:-1px;line-height:1}
+.pd-wallet-sub{font-size:11px;color:rgba(251,247,242,0.5);margin-top:6px}
+.pd-wallet-bottom{display:flex;align-items:flex-end;justify-content:space-between;margin-top:16px}
+.pd-expire{font-size:10px;color:rgba(251,247,242,0.4)}
+.btn-redeem{background:rgba(251,247,242,0.18);color:var(--paper);border:1px solid rgba(251,247,242,0.3);border-radius:9px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.pd-trail{padding:0 20px}
+.pd-row{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:8px;border:0.5px solid var(--border)}
+.pd-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pd-dot.earn{background:#3B6D11}
+.pd-dot.spend{background:var(--ochre)}
+.pd-info{flex:1}
+.pd-what{font-size:12px;font-weight:600;color:var(--text)}
+.pd-when{font-size:10px;color:var(--text3);margin-top:2px}
+.pd-amount{font-size:14px;font-weight:700}
+.pd-amount.earn{color:#3B6D11}
+.pd-amount.spend{color:var(--ochre)}
+
+/* AVAILABILITY */
+.cal-wrap{padding:0 20px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-month{font-size:16px;font-weight:700;color:var(--text)}
+.cal-btn{background:var(--wb);border:none;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cal-btn svg{width:14px;height:14px;stroke:var(--text2);stroke-width:2;fill:none}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
+.cal-day-label{text-align:center;font-size:10px;font-weight:600;color:var(--text3);padding:4px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px}
+.cal-day{height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--text);cursor:pointer;transition:all 0.12s}
+.cal-day.empty{opacity:0}
+.cal-day.avail{background:rgba(59,109,17,0.15);color:#3B6D11;font-weight:700}
+.cal-day.unavail{background:rgba(196,92,26,0.12);color:var(--ochre)}
+.cal-day.booked{background:var(--bark);color:var(--dry);font-weight:700}
+.cal-day.today{border:2px solid var(--ochre)}
+.cal-day:hover:not(.empty){transform:scale(1.08)}
+.cal-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2);font-weight:500}
+.cl-dot{width:10px;height:10px;border-radius:3px}
+.cal-mode-row{display:flex;gap:8px;margin-bottom:14px}
+
+/* BUTTONS common */
+.btn-p{background:var(--ochre);color:var(--paper);border:none;border-radius:11px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.15s}
+.btn-p:active{opacity:0.82}
+.btn-s{background:var(--dusk);color:var(--dry);border:none;border-radius:11px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-g{background:transparent;color:var(--text2);border:1px solid var(--borderM);border-radius:11px;padding:8px 13px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-sm-g{background:transparent;color:var(--text2);border:1px solid var(--borderM);border-radius:9px;padding:6px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.bok{background:#EAF3DE;color:#3B6D11}
+.bwarn{background:#FAEEDA;color:#7A3800}
+.bdanger{background:#FCEBEB;color:#A32D2D}
+.bgray{background:#F1EFE8;color:#5F5E5A}
+.bochre{background:var(--dry);color:#7A3800}
+@media(prefers-color-scheme:dark){
+  .bok{background:rgba(59,109,17,0.2);color:#7AC255}
+  .bwarn{background:rgba(232,162,101,0.15);color:var(--sand)}
+  .bdanger{background:rgba(163,45,45,0.2);color:#F08080}
+  .bgray{background:rgba(255,255,255,0.07);color:var(--text2)}
+  .bochre{background:rgba(196,92,26,0.2);color:var(--sand)}
+}
+
+/* SHEETS */
+.sheet-overlay{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.25s}
+.sheet-overlay.open{background:rgba(0,0,0,0.55);pointer-events:all}
+.sheet{background:var(--card);border-radius:24px 24px 0 0;max-height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1)}
+.sheet-overlay.open .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:10px auto 0;flex-shrink:0}
+.sheet-hdr{padding:14px 20px 12px;border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.sheet-ttl{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.sheet-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.sheet-close{background:var(--wb);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sheet-close svg{width:13px;height:13px;stroke:var(--text2);stroke-width:2.5;fill:none}
+.sheet-body{padding:16px 20px;overflow-y:auto;flex:1}
+.sheet-body::-webkit-scrollbar{display:none}
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.s-row:last-child{border-bottom:none}
+.s-l{color:var(--text2);font-weight:500}
+.s-v{font-weight:600;color:var(--text);text-align:right;max-width:60%}
+.sheet-strip{background:var(--bark);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:18px;flex-wrap:wrap}
+.ss-label{font-size:9px;color:rgba(245,224,195,0.45);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px}
+.ss-val{font-size:12px;font-weight:700;color:var(--dry)}
+.sheet-sec{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin:14px 0 7px}
+.sheet-sec:first-child{margin-top:0}
+.sheet-foot{padding:14px 20px 30px;border-top:0.5px solid var(--border);display:flex;gap:10px;flex-shrink:0}
+.sheet-foot .btn-p{flex:1;padding:14px;font-size:13px}
+.sheet-foot .btn-s{flex:1;padding:14px;font-size:13px}
+.sheet-foot .btn-g{padding:14px 15px}
+.sheet-foot .btn-accept{flex:1;padding:14px;font-size:13px;border-radius:11px}
+.sheet-foot .btn-send{flex:1;padding:14px;font-size:13px;border-radius:11px}
+
+/* DRAWER */
+.drawer-overlay{position:fixed;inset:0;z-index:300;display:flex;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer-panel{width:280px;height:100%;background:var(--bark);display:flex;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);box-shadow:8px 0 40px rgba(0,0,0,0.4);overflow-y:auto}
+.drawer-overlay.open .drawer-panel{transform:translateX(0)}
+.drawer-dim{flex:1;cursor:pointer}
+.d-top{padding:52px 18px 16px;border-bottom:0.5px solid rgba(245,224,195,0.08);margin-bottom:6px}
+.d-user-row{display:flex;align-items:center;gap:10px}
+.d-av-big{width:40px;height:40px;border-radius:50%;background:var(--ochre);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--paper)}
+.d-name{font-size:14px;font-weight:700;color:var(--dry)}
+.d-plan{font-size:10px;color:rgba(245,224,195,0.3);margin-top:1px}
+.d-sec-label{font-size:8px;color:rgba(245,224,195,0.22);letter-spacing:1.4px;text-transform:uppercase;padding:10px 18px 4px}
+.d-item{display:flex;align-items:center;gap:11px;padding:11px 14px;margin:1px 9px;border-radius:11px;font-size:13px;font-weight:500;color:rgba(245,224,195,0.5);border:none;background:transparent;cursor:pointer;width:calc(100% - 18px);text-align:left;font-family:inherit;transition:all 0.12s}
+.d-item:active{background:rgba(245,224,195,0.08)}
+.d-item.on{background:var(--ochre);color:var(--paper)}
+.d-item svg{width:17px;height:17px;flex-shrink:0;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0.75}
+.d-item.on svg{opacity:1}
+.d-badge{font-size:9px;background:var(--ochre);color:var(--paper);border-radius:20px;padding:1px 6px;margin-left:auto;font-weight:600}
+.d-item.on .d-badge{background:rgba(251,247,242,0.3)}
+.d-credit-row{margin:8px;background:rgba(196,92,26,0.12);border-radius:11px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.d-credit-label{font-size:10px;color:rgba(245,224,195,0.4);font-weight:500}
+.d-credit-val{font-size:16px;font-weight:700;color:var(--sand)}
+
+/* bottom pad */
+.bottom-pad{height:30px}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <div class="nav-k">K</div>
+    <div class="nav-wordmark">Kooee</div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="openSheet('sh-notif')">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <div class="ndot"></div>
+    </button>
+    <button class="nav-menu-btn" onclick="openDrawer()">
+      <span></span><span></span><span style="width:9px"></span>
+    </button>
+  </div>
+</nav>
+
+<div class="main-scroll" id="main-scroll">
+
+  <!-- ══ BASE CAMP ══ -->
+  <div class="page active" id="pg-basecamp">
+    <div class="hero">
+      <div class="hero-date">Wednesday, 30 April 2026</div>
+      <div class="hero-name">Morning,<br>Jamie</div>
+      <div class="hero-sub">Premium · 84 days in field this season</div>
+    </div>
+
+    <div class="metrics-wrap">
+      <div class="met" onclick="showPage('pg-logbook')">
+        <div class="met-bar ok"></div>
+        <div class="met-label">Days in field</div>
+        <div class="met-val ok">84</div>
+        <div class="met-sub">This season</div>
+      </div>
+      <div class="met" onclick="showPage('pg-pd')">
+        <div class="met-bar ochre"></div>
+        <div class="met-label">PD credits</div>
+        <div class="met-val ochre">34</div>
+        <div class="met-cta">≈ $34 value</div>
+      </div>
+      <div class="met" onclick="showPage('pg-programs')">
+        <div class="met-bar ok"></div>
+        <div class="met-label">Upcoming</div>
+        <div class="met-val">3</div>
+        <div class="met-sub">Confirmed</div>
+      </div>
+      <div class="met" onclick="showPage('pg-programs')">
+        <div class="met-bar ochre"></div>
+        <div class="met-label">Kooees waiting</div>
+        <div class="met-val ochre">2</div>
+        <div class="met-cta">Respond now</div>
+      </div>
+    </div>
+
+    <!-- Incoming Kooee alert -->
+    <div style="margin:14px 20px 0">
+      <div class="kooee-alert" onclick="openSheet('sh-prog-detail')">
+        <div class="ka-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .92l3 0a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div class="ka-info">
+          <div class="ka-title">Kooee from Outdoor Ed Victoria</div>
+          <div class="ka-sub">Grampians · 5–7 May · GL + AI needed</div>
+        </div>
+        <button class="btn-accept" onclick="event.stopPropagation();openSheet('sh-prog-detail')">View</button>
+      </div>
+    </div>
+
+    <!-- On the trail -->
+    <div class="sec-hdr"><div class="sec-title">On the trail</div><button class="sec-link" onclick="showPage('pg-programs')">All programs</button></div>
+    <div style="padding:0 20px">
+      <div class="upcoming-card" onclick="openSheet('sh-upcoming-detail')">
+        <div class="up-date-block"><div class="up-day">28</div><div class="up-month">Apr</div></div>
+        <div class="up-info"><div class="up-prog">Grampians — Abseiling</div><div class="up-company">Outdoor Ed Victoria</div><div class="up-loc">Grampians NP, VIC · 3 days</div><div class="up-status"><span class="badge bok">Confirmed</span></div></div>
+      </div>
+      <div class="upcoming-card" onclick="openSheet('sh-upcoming-detail')">
+        <div class="up-date-block"><div class="up-day">1</div><div class="up-month">May</div></div>
+        <div class="up-info"><div class="up-prog">Dandenong — Bushcraft</div><div class="up-company">Wild Schools Co.</div><div class="up-loc">Dandenong Ranges, VIC · 1 day</div><div class="up-status"><span class="badge bok">Confirmed</span></div></div>
+      </div>
+      <div class="upcoming-card" onclick="openSheet('sh-upcoming-detail')">
+        <div class="up-date-block"><div class="up-day">8</div><div class="up-month">May</div></div>
+        <div class="up-info"><div class="up-prog">Alpine — Alpine Hiking</div><div class="up-company">Summit Adventures</div><div class="up-loc">Mt Buller, VIC · 4 days</div><div class="up-status"><span class="badge bok">Confirmed</span></div></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PROGRAMS ══ -->
+  <div class="page" id="pg-programs">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">In the field</div><div class="hero-name" style="font-size:22px">Programs</div></div>
+
+    <div style="display:flex;gap:7px;padding:12px 20px 0;overflow-x:auto;scrollbar-width:none">
+      <button class="fchip on">Kooees to you (2)</button>
+      <button class="fchip">Advertised</button>
+      <button class="fchip">Upcoming</button>
+      <style>.fchip{border:1px solid var(--borderM);border-radius:20px;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text2);background:var(--card);white-space:nowrap;cursor:pointer;flex-shrink:0;font-family:inherit;transition:all 0.12s}.fchip.on{background:var(--ochre);color:var(--paper);border-color:var(--ochre)}</style>
+    </div>
+
+    <div style="padding:10px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Kooees sent to you — respond now</div>
+    <div class="prog-cards">
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="urgency-row"><div class="urg-company">Outdoor Ed Victoria</div><span class="urg-timer red">3 days out</span></div>
+        <div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Grampians NP, VIC · 3 days</div>
+        <div class="roles-needed"><span class="r-chip needed">GL needed</span><span class="r-chip needed">AI needed</span><span class="r-chip filled">CI filled</span></div>
+        <div class="prog-footer"><div class="prog-dates">28–30 Apr 2026</div><div class="prog-actions"><button class="btn-pass" onclick="event.stopPropagation()">Pass</button><button class="btn-accept" onclick="event.stopPropagation();openSheet('sh-prog-detail')">Accept Kooee</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="urgency-row"><div class="urg-company">Wild Schools Co.</div><span class="urg-timer amber">12 days out</span></div>
+        <div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Dandenong Ranges, VIC · 1 day</div>
+        <div class="roles-needed"><span class="r-chip needed">GL needed</span></div>
+        <div class="prog-footer"><div class="prog-dates">12 May 2026</div><div class="prog-actions"><button class="btn-pass" onclick="event.stopPropagation()">Pass</button><button class="btn-accept" onclick="event.stopPropagation()">Accept Kooee</button></div></div>
+      </div>
+    </div>
+
+    <div style="padding:10px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Advertised — apply now</div>
+    <div class="prog-cards">
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="urgency-row"><div class="urg-company">Summit Adventures</div><span class="urg-timer amber">8 days out</span></div>
+        <div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Mount Buller, VIC · 4 days</div>
+        <div class="roles-needed"><span class="r-chip needed">ALP needed</span><span class="r-chip filled">GL filled</span></div>
+        <div class="prog-footer"><div class="prog-dates">8–11 May 2026</div><div class="prog-actions"><button class="btn-send" onclick="event.stopPropagation()">Send a Kooee</button></div></div>
+      </div>
+      <div class="prog-card" onclick="openSheet('sh-prog-detail')">
+        <div class="urgency-row"><div class="urg-company">Blue Mtns Expeditions</div><span class="urg-timer green">18 days out</span></div>
+        <div class="prog-loc"><svg viewBox="0 0 16 16"><circle cx="8" cy="7" r="3"/><path d="M8 2a5 5 0 010 10C5 12 3 9.3 3 7a5 5 0 015-5z"/></svg>Blue Mountains, NSW · 5 days</div>
+        <div class="roles-needed"><span class="r-chip needed">CI needed</span><span class="r-chip needed">DofE needed</span><span class="r-chip needed">GL needed</span></div>
+        <div class="prog-footer"><div class="prog-dates">18–22 May 2026</div><div class="prog-actions"><button class="btn-send" onclick="event.stopPropagation()">Send a Kooee</button></div></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ AVAILABILITY ══ -->
+  <div class="page" id="pg-avail">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">Schedule</div><div class="hero-name" style="font-size:22px">Availability</div></div>
+    <div class="cal-wrap" style="margin-top:14px">
+      <div class="cal-nav">
+        <button class="cal-btn"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="cal-month">May 2026</div>
+        <button class="cal-btn"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="cal-mode-row">
+        <button class="fchip on">View</button>
+        <button class="fchip">Mark available</button>
+        <button class="fchip">Mark unavailable</button>
+      </div>
+      <div class="cal-legend">
+        <div class="cl-item"><div class="cl-dot" style="background:var(--bark)"></div>Program booked</div>
+        <div class="cl-item"><div class="cl-dot" style="background:rgba(59,109,17,0.25)"></div>Available</div>
+        <div class="cl-item"><div class="cl-dot" style="background:rgba(196,92,26,0.2)"></div>Unavailable</div>
+      </div>
+      <div class="cal-days-header">
+        <div class="cal-day-label">M</div><div class="cal-day-label">T</div><div class="cal-day-label">W</div><div class="cal-day-label">T</div><div class="cal-day-label">F</div><div class="cal-day-label">S</div><div class="cal-day-label">S</div>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day today">1</div><div class="cal-day avail">2</div><div class="cal-day avail">3</div>
+        <div class="cal-day avail">4</div><div class="cal-day avail">5</div><div class="cal-day avail">6</div><div class="cal-day avail">7</div><div class="cal-day booked">8</div><div class="cal-day booked">9</div><div class="cal-day booked">10</div>
+        <div class="cal-day booked">11</div><div class="cal-day avail">12</div><div class="cal-day booked">13</div><div class="cal-day avail">14</div><div class="cal-day avail">15</div><div class="cal-day avail">16</div><div class="cal-day avail">17</div>
+        <div class="cal-day unavail">18</div><div class="cal-day unavail">19</div><div class="cal-day unavail">20</div><div class="cal-day avail">21</div><div class="cal-day avail">22</div><div class="cal-day avail">23</div><div class="cal-day avail">24</div>
+        <div class="cal-day avail">25</div><div class="cal-day avail">26</div><div class="cal-day avail">27</div><div class="cal-day avail">28</div><div class="cal-day avail">29</div><div class="cal-day avail">30</div><div class="cal-day avail">31</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <button class="btn-g" style="flex:1;padding:12px;font-size:12px">Sync Google Calendar</button>
+        <button class="btn-g" style="flex:1;padding:12px;font-size:12px">Sync Apple Calendar</button>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PROVIDERS ══ -->
+  <div class="page" id="pg-providers">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">In the field</div><div class="hero-name" style="font-size:22px">Providers</div></div>
+    <div style="padding:12px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Connected</div>
+    <div class="prov-grid" style="margin-bottom:14px">
+      <div class="prov-card" style="border-color:rgba(59,109,17,0.25)" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:#EAF3DE;color:#3B6D11">OV</div>
+        <div class="prov-name">Outdoor Ed Victoria</div>
+        <div class="prov-loc">Melbourne, VIC</div>
+        <div class="prov-tags"><span class="prov-tag">Abseiling</span><span class="prov-tag">Alpine</span></div>
+        <span class="badge bok" style="font-size:9px;margin-bottom:8px"><span class="connected-dot"></span>Connected</span>
+        <div style="display:flex;gap:5px"><button class="btn-sm-g" style="flex:1;font-size:10px;padding:6px 8px" onclick="event.stopPropagation()">Catalogue</button></div>
+      </div>
+      <div class="prov-card" style="border-color:rgba(59,109,17,0.25)" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:#EAF3DE;color:#3B6D11">WS</div>
+        <div class="prov-name">Wild Schools Co.</div>
+        <div class="prov-loc">Dandenong, VIC</div>
+        <div class="prov-tags"><span class="prov-tag">Bushcraft</span><span class="prov-tag">GL</span></div>
+        <span class="badge bok" style="font-size:9px;margin-bottom:8px"><span class="connected-dot"></span>Connected</span>
+        <div style="display:flex;gap:5px"><button class="btn-sm-g" style="flex:1;font-size:10px;padding:6px 8px" onclick="event.stopPropagation()">Catalogue</button></div>
+      </div>
+      <div class="prov-card" style="border-color:rgba(59,109,17,0.25)" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:#EAF3DE;color:#3B6D11">SA</div>
+        <div class="prov-name">Summit Adventures</div>
+        <div class="prov-loc">Bright, VIC</div>
+        <div class="prov-tags"><span class="prov-tag">Alpine</span><span class="prov-tag">MTB</span></div>
+        <span class="badge bok" style="font-size:9px;margin-bottom:8px"><span class="connected-dot"></span>Connected</span>
+        <div style="display:flex;gap:5px"><button class="btn-sm-g" style="flex:1;font-size:10px;padding:6px 8px" onclick="event.stopPropagation()">Catalogue</button></div>
+      </div>
+    </div>
+    <div style="padding:0 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Discover</div>
+    <div class="prov-grid">
+      <div class="prov-card" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:var(--dry);color:#7A3800">BM</div>
+        <div class="prov-name">Blue Mtns Expeditions</div>
+        <div class="prov-loc">Katoomba, NSW</div>
+        <div class="prov-tags"><span class="prov-tag">Canoe</span><span class="prov-tag">RCI</span></div>
+        <div style="margin-top:8px"><button class="btn-sm-g" style="width:100%;padding:7px;font-size:10px" onclick="event.stopPropagation();openSheet('sh-provider')">Send a Kooee</button></div>
+      </div>
+      <div class="prov-card" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:var(--dry);color:#7A3800">KE</div>
+        <div class="prov-name">Kinglake Expeditions</div>
+        <div class="prov-loc">Kinglake, VIC</div>
+        <div class="prov-tags"><span class="prov-tag">MTB</span><span class="prov-tag">RCI</span></div>
+        <div style="margin-top:8px"><button class="btn-sm-g" style="width:100%;padding:7px;font-size:10px" onclick="event.stopPropagation();openSheet('sh-provider')">Send a Kooee</button></div>
+      </div>
+      <div class="prov-card" onclick="openSheet('sh-provider')">
+        <div class="prov-logo" style="background:var(--dry);color:#7A3800">TA</div>
+        <div class="prov-name">Tread Adventures</div>
+        <div class="prov-loc">Ballarat, VIC</div>
+        <div class="prov-tags"><span class="prov-tag">DofE</span><span class="prov-tag">GL</span></div>
+        <div style="margin-top:8px"><button class="btn-sm-g" style="width:100%;padding:7px;font-size:10px" onclick="event.stopPropagation();openSheet('sh-provider')">Send a Kooee</button></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ FIELD RECORD ══ -->
+  <div class="page" id="pg-logbook">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">In the field</div><div class="hero-name" style="font-size:22px">Field record</div></div>
+    <div class="logbook-header">
+      <div class="stat-row-4">
+        <div class="stat-tile"><div class="st-val">84</div><div class="st-sub">Days</div></div>
+        <div class="stat-tile"><div class="st-val">31</div><div class="st-sub">Programs</div></div>
+        <div class="stat-tile"><div class="st-val">7</div><div class="st-sub">Activities</div></div>
+        <div class="stat-tile"><div class="st-val">672</div><div class="st-sub">Hours</div></div>
+      </div>
+      <div class="toggle-row">
+        <div class="view-toggle">
+          <button class="vt-btn on" id="vt-journal" onclick="setView('journal')">Journal</button>
+          <button class="vt-btn" id="vt-classic" onclick="setView('classic')">Classic</button>
+        </div>
+        <div class="legend">
+          <div class="leg"><div class="leg-dot" style="background:var(--ochre)"></div>Work</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--dusk)"></div>Leisure</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Journal view -->
+    <div id="view-journal" style="padding-bottom:10px">
+      <div class="timeline">
+        <div class="tl-month-marker">April 2026</div>
+        <div class="tl-entry">
+          <div class="tl-dot"></div>
+          <div class="tl-card" onclick="openSheet('sh-log-detail')">
+            <div class="tl-head"><div><div class="tl-title">Abseiling — Grampians NP</div><div class="tl-badges"><span class="badge bochre">AI</span><span class="badge bochre">GL</span></div></div><div class="tl-date-wrap"><div class="tl-date">15–17 Apr · 3 days</div><span class="tl-auto-tag">Auto</span></div></div>
+            <div class="tl-meta"><span>Outdoor Ed Victoria</span><span>·</span><span>Grampians NP, VIC</span></div>
+            <div class="tl-notes">Yr 10 cohort, 24 students. Tyrolean traverse added day 2. Weather clear all days.</div>
+          </div>
+        </div>
+        <div class="tl-entry">
+          <div class="tl-dot leisure"></div>
+          <div class="tl-card" style="border-color:rgba(74,55,40,0.2)" onclick="openSheet('sh-log-detail')">
+            <div class="tl-head"><div><div class="tl-title">Trail run — Dandenong Ranges</div><div class="tl-badges"><span class="badge bgray">Leisure</span></div></div><div class="tl-date-wrap"><div class="tl-date">12 Apr · 1 day</div><span style="font-size:9px;color:var(--text3)">Manual</span></div></div>
+            <div class="tl-meta"><span>Personal</span><span>·</span><span>Dandenong Ranges, VIC</span></div>
+            <div class="tl-notes">20km trail. Scouted new route for upcoming Wild Schools program.</div>
+          </div>
+        </div>
+        <div class="tl-entry">
+          <div class="tl-dot"></div>
+          <div class="tl-card" onclick="openSheet('sh-log-detail')">
+            <div class="tl-head"><div><div class="tl-title">Bushcraft — Dandenong Ranges</div><div class="tl-badges"><span class="badge bochre">GL</span></div></div><div class="tl-date-wrap"><div class="tl-date">8 Apr · 1 day</div><span class="tl-auto-tag">Auto</span></div></div>
+            <div class="tl-meta"><span>Wild Schools Co.</span><span>·</span><span>Dandenong Ranges, VIC</span></div>
+            <div class="tl-notes">Primary school program. Fire lighting, shelter build, navigation basics.</div>
+          </div>
+        </div>
+        <div class="tl-month-marker" style="margin-top:4px">March 2026</div>
+        <div class="tl-entry">
+          <div class="tl-dot"></div>
+          <div class="tl-card" onclick="openSheet('sh-log-detail')">
+            <div class="tl-head"><div><div class="tl-title">Alpine Hiking — Mount Buller</div><div class="tl-badges"><span class="badge bochre">ALP</span><span class="badge bochre">GL</span></div></div><div class="tl-date-wrap"><div class="tl-date">22–24 Mar · 3 days</div><span class="tl-auto-tag">Auto</span></div></div>
+            <div class="tl-meta"><span>Summit Adventures</span><span>·</span><span>Mount Buller, VIC</span></div>
+            <div class="tl-notes">3-day traverse. Amended route on day 2 due to conditions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classic table -->
+    <div id="view-classic" style="display:none;padding:4px 20px 10px;overflow-x:auto">
+      <table class="classic-table">
+        <thead><tr><th></th><th></th><th>Activity</th><th>Location</th><th>Days</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr onclick="openSheet('sh-log-detail')"><td><div class="leg-dot" style="background:var(--ochre);width:8px;height:8px;border-radius:50%"></div></td><td><div class="act-pill">AI</div></td><td><div class="cell-main">Abseiling</div><div class="cell-sub">Outdoor Ed Vic</div></td><td style="font-size:10px;color:var(--text3)">Grampians</td><td style="text-align:center;font-weight:700">3</td><td style="font-size:10px;color:var(--text3);white-space:nowrap">15 Apr</td></tr>
+          <tr onclick="openSheet('sh-log-detail')"><td><div class="leg-dot" style="background:var(--dusk);width:8px;height:8px;border-radius:50%"></div></td><td><div class="act-pill leisure">TR</div></td><td><div class="cell-main">Trail run</div><div class="cell-sub">Personal</div></td><td style="font-size:10px;color:var(--text3)">Dandenong</td><td style="text-align:center;font-weight:700">1</td><td style="font-size:10px;color:var(--text3);white-space:nowrap">12 Apr</td></tr>
+          <tr onclick="openSheet('sh-log-detail')"><td><div class="leg-dot" style="background:var(--ochre);width:8px;height:8px;border-radius:50%"></div></td><td><div class="act-pill">GL</div></td><td><div class="cell-main">Bushcraft</div><div class="cell-sub">Wild Schools Co.</div></td><td style="font-size:10px;color:var(--text3)">Dandenong</td><td style="text-align:center;font-weight:700">1</td><td style="font-size:10px;color:var(--text3);white-space:nowrap">8 Apr</td></tr>
+          <tr onclick="openSheet('sh-log-detail')"><td><div class="leg-dot" style="background:var(--ochre);width:8px;height:8px;border-radius:50%"></div></td><td><div class="act-pill">ALP</div></td><td><div class="cell-main">Alpine hiking</div><div class="cell-sub">Summit Adventures</div></td><td style="font-size:10px;color:var(--text3)">Mt Buller</td><td style="text-align:center;font-weight:700">3</td><td style="font-size:10px;color:var(--text3);white-space:nowrap">22 Mar</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;gap:8px;padding:8px 20px 0">
+      <button class="btn-g" style="flex:1;padding:11px;font-size:12px">+ Manual entry</button>
+      <button class="btn-g" style="flex:1;padding:11px;font-size:12px">Export PDF</button>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PD CREDITS ══ -->
+  <div class="page" id="pg-pd">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">Growth</div><div class="hero-name" style="font-size:22px">PD Credits</div></div>
+    <div style="margin-top:14px">
+      <div class="pd-wallet">
+        <div class="pd-wallet-label">Current balance</div>
+        <div class="pd-wallet-val">34</div>
+        <div class="pd-wallet-sub">Credits ≈ $34.00 value</div>
+        <div class="pd-wallet-bottom">
+          <div class="pd-expire">Expires Apr 2027</div>
+          <button class="btn-redeem" onclick="openSheet('sh-redeem')">Redeem credits</button>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 20px 8px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px">Credit trail</div>
+    <div class="pd-trail">
+      <div class="pd-row"><div class="pd-dot earn"></div><div class="pd-info"><div class="pd-what">Grampians — OEV · 3 days</div><div class="pd-when">17 Apr 2026</div></div><div class="pd-amount earn">+6</div></div>
+      <div class="pd-row"><div class="pd-dot earn"></div><div class="pd-info"><div class="pd-what">Dandenong — Wild Schools · 1 day</div><div class="pd-when">8 Apr 2026</div></div><div class="pd-amount earn">+2</div></div>
+      <div class="pd-row"><div class="pd-dot spend"></div><div class="pd-info"><div class="pd-what">Redeemed — Remote First Aid</div><div class="pd-when">2 Mar 2026</div></div><div class="pd-amount spend">−20</div></div>
+      <div class="pd-row"><div class="pd-dot earn"></div><div class="pd-info"><div class="pd-what">Mt Buller — Summit Adv · 3 days</div><div class="pd-when">24 Mar 2026</div></div><div class="pd-amount earn">+6</div></div>
+    </div>
+    <div style="padding:14px 20px 0;font-size:11px;color:var(--text3)">1 credit = 1 program day = $1 value. Credits expire 12 months after earning. Max balance $300.</div>
+    <div class="bottom-pad"></div>
+  </div>
+
+  <!-- ══ PROFILE ══ -->
+  <div class="page" id="pg-profile">
+    <div class="hero" style="padding-bottom:20px"><div class="hero-date">Account</div><div class="hero-name" style="font-size:22px">My profile</div></div>
+    <div class="profile-wrap" style="margin-top:14px">
+      <div class="profile-hero">
+        <div class="profile-av">JM</div>
+        <div>
+          <div class="profile-name">Jamie Mitchell</div>
+          <div class="profile-role">Outdoor Education Instructor</div>
+          <div class="profile-badges"><span class="badge bok">Available</span><span class="badge bochre">GL</span><span class="badge bochre">AI</span><span class="badge bochre">ALP</span><span class="badge bochre">CI</span></div>
+        </div>
+      </div>
+      <div class="p-card">
+        <div class="p-card-hdr"><div class="p-card-title">Personal details</div></div>
+        <div class="p-edit-row"><div class="p-edit-label">Status</div><span class="badge bok">Available</span></div>
+        <div class="p-edit-row"><div class="p-edit-label">Email</div><div class="p-edit-val">jamie@email.com</div></div>
+        <div class="p-edit-row"><div class="p-edit-label">Phone</div><div class="p-edit-val">0412 345 678</div></div>
+        <div class="p-edit-row"><div class="p-edit-label">Home base</div><div class="p-edit-val">Ballarat, VIC</div></div>
+        <div class="p-edit-row"><div class="p-edit-label">Dietary</div><div class="p-edit-val">Vegetarian</div></div>
+        <div class="p-edit-row"><div class="p-edit-label">Medications</div><div class="p-edit-val">Penicillin allergy</div></div>
+      </div>
+      <div class="p-card">
+        <div class="p-card-hdr"><div class="p-card-title">Qualifications & compliance</div></div>
+        <div class="p-row"><span class="p-label">Cert IV Outdoor Rec</span><span class="p-val"><span class="badge bok">Verified</span></span></div>
+        <div class="p-row"><span class="p-label">First Aid HLTAID011</span><span class="p-val"><span class="badge bwarn">Exp. 28 May</span></span></div>
+        <div class="p-row"><span class="p-label">WWCC Victoria</span><span class="p-val"><span class="badge bok">Valid to Aug 2028</span></span></div>
+        <div class="p-row"><span class="p-label">Canoe Victoria L2</span><span class="p-val"><span class="badge bok">Valid to Dec 2026</span></span></div>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+  </div>
+
+</div><!-- end main-scroll -->
+
+<!-- ═══ SHEETS ═══ -->
+
+<!-- Notifications -->
+<div class="sheet-overlay" id="sh-notif" onclick="if(event.target===this)closeSheet('sh-notif')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Notifications</div><div class="sheet-sub">2 unread</div></div><button class="sheet-close" onclick="closeSheet('sh-notif')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="s-row"><span class="s-l">Kooee from Outdoor Ed Victoria</span><span class="s-v" style="color:var(--ochre)">3h ago</span></div>
+      <div class="s-row"><span class="s-l">Kooee from Wild Schools Co.</span><span class="s-v" style="color:var(--ochre)">1d ago</span></div>
+      <div class="s-row"><span class="s-l">First Aid expiring in 28 days</span><span class="s-v">Reminder</span></div>
+      <div class="s-row"><span class="s-l">+2 PD credits earned · OEV</span><span class="s-v" style="color:#3B6D11">3d ago</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Program detail (incoming Kooee) -->
+<div class="sheet-overlay" id="sh-prog-detail" onclick="if(event.target===this)closeSheet('sh-prog-detail')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Outdoor Ed Victoria</div><div class="sheet-sub">Grampians · 28–30 Apr · Kooee sent to you</div></div><button class="sheet-close" onclick="closeSheet('sh-prog-detail')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="sheet-strip">
+        <div class="ss-item"><div class="ss-label">Dates</div><div class="ss-val">28–30 Apr</div></div>
+        <div class="ss-item"><div class="ss-label">Days</div><div class="ss-val">3</div></div>
+        <div class="ss-item"><div class="ss-label">Students</div><div class="ss-val">186</div></div>
+      </div>
+      <div class="sheet-sec">Roles needed</div>
+      <div class="s-row"><span class="s-l">Group Leader (GL)</span><span class="s-v" style="color:var(--ochre)">Needed</span></div>
+      <div class="s-row"><span class="s-l">Abseil Instructor (AI)</span><span class="s-v" style="color:var(--ochre)">Needed</span></div>
+      <div class="s-row"><span class="s-l">Canoe Instructor (CI)</span><span class="s-v" style="color:#3B6D11">Filled</span></div>
+      <div class="sheet-sec">Logistics</div>
+      <div class="s-row"><span class="s-l">Location</span><span class="s-v">Grampians NP, VIC</span></div>
+      <div class="s-row"><span class="s-l">Briefing</span><span class="s-v">28 Apr · 6am · Office</span></div>
+      <div class="s-row"><span class="s-l">Transport</span><span class="s-v">Company vehicle or own</span></div>
+      <div class="s-row"><span class="s-l">Accommodation</span><span class="s-v">On-site camp</span></div>
+      <div class="s-row"><span class="s-l">Meals</span><span class="s-v">Catered on site</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-pass" style="padding:14px 16px;border-radius:11px" onclick="closeSheet('sh-prog-detail')">Pass</button><button class="btn-accept sheet-foot" style="flex:1;padding:14px;border-radius:11px;font-size:13px">Accept Kooee</button></div>
+  </div>
+</div>
+
+<!-- Upcoming program detail -->
+<div class="sheet-overlay" id="sh-upcoming-detail" onclick="if(event.target===this)closeSheet('sh-upcoming-detail')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Grampians — Abseiling</div><div class="sheet-sub">28–30 Apr · Outdoor Ed Victoria</div></div><button class="sheet-close" onclick="closeSheet('sh-upcoming-detail')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="sheet-strip">
+        <div class="ss-item"><div class="ss-label">Dates</div><div class="ss-val">28–30 Apr</div></div>
+        <div class="ss-item"><div class="ss-label">Your role</div><div class="ss-val">GL · AI</div></div>
+      </div>
+      <div class="sheet-sec">Logistics</div>
+      <div class="s-row"><span class="s-l">Location</span><span class="s-v">Grampians NP, VIC</span></div>
+      <div class="s-row"><span class="s-l">Briefing</span><span class="s-v">28 Apr · 6am · Office</span></div>
+      <div class="s-row"><span class="s-l">Transport</span><span class="s-v">Company vehicle or own</span></div>
+      <div class="s-row"><span class="s-l">Arrive on site</span><span class="s-v">28 Apr · 9:30am</span></div>
+      <div class="s-row"><span class="s-l">Accommodation</span><span class="s-v">On-site camp</span></div>
+      <div class="s-row"><span class="s-l">Meals</span><span class="s-v">Catered on site</span></div>
+      <div class="s-row"><span class="s-l">Director</span><span class="s-v">Sam</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-upcoming-detail')">Message provider</button><button class="btn-p">Add to calendar</button></div>
+  </div>
+</div>
+
+<!-- Provider detail -->
+<div class="sheet-overlay" id="sh-provider" onclick="if(event.target===this)closeSheet('sh-provider')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Outdoor Ed Victoria</div><div class="sheet-sub">Melbourne, VIC · Connected</div></div><button class="sheet-close" onclick="closeSheet('sh-provider')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:12px;margin-bottom:14px">
+        <div style="flex:1;background:var(--wb);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--text)">32</div><div style="font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-top:2px">Instructors</div></div>
+        <div style="flex:1;background:var(--wb);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--text)">14</div><div style="font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-top:2px">Programs/yr</div></div>
+        <div style="flex:1;background:var(--wb);border-radius:12px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;color:var(--text)">14</div><div style="font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-top:2px">Prog with you</div></div>
+      </div>
+      <div class="sheet-sec">About</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px">Leading outdoor ed provider across VIC. 14 programs per year across schools and corporate groups. Est. 2008.</div>
+      <div class="sheet-sec">Activity types</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px"><span class="badge bochre">Abseiling</span><span class="badge bochre">Alpine</span><span class="badge bochre">Bushcraft</span><span class="badge bochre">Ropes</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-provider')">Message</button><button class="btn-p">View catalogue</button></div>
+  </div>
+</div>
+
+<!-- Log detail -->
+<div class="sheet-overlay" id="sh-log-detail" onclick="if(event.target===this)closeSheet('sh-log-detail')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Abseiling — Grampians NP</div><div class="sheet-sub">15–17 Apr 2026 · 3 days · Auto</div></div><button class="sheet-close" onclick="closeSheet('sh-log-detail')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:5px;margin-bottom:12px"><span class="badge bochre">AI</span><span class="badge bochre">GL</span></div>
+      <div class="s-row"><span class="s-l">Company</span><span class="s-v">Outdoor Ed Victoria</span></div>
+      <div class="s-row"><span class="s-l">Location</span><span class="s-v">Grampians NP, VIC</span></div>
+      <div class="s-row"><span class="s-l">Days</span><span class="s-v">3</span></div>
+      <div class="s-row"><span class="s-l">Type</span><span class="s-v">Work</span></div>
+      <div class="sheet-sec">Notes</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Yr 10 cohort, 24 students. Tyrolean traverse added day 2. Weather clear all days. Group responded well to challenge course component.</div>
+    </div>
+    <div class="sheet-foot"><button class="btn-g" onclick="closeSheet('sh-log-detail')">Edit entry</button><button class="btn-p">Export this entry</button></div>
+  </div>
+</div>
+
+<!-- Redeem credits -->
+<div class="sheet-overlay" id="sh-redeem" onclick="if(event.target===this)closeSheet('sh-redeem')">
+  <div class="sheet"><div class="sheet-handle"></div>
+    <div class="sheet-hdr"><div><div class="sheet-ttl">Redeem credits</div><div class="sheet-sub">34 credits · ≈ $34.00</div></div><button class="sheet-close" onclick="closeSheet('sh-redeem')"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="sheet-body">
+      <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px">Redeem your PD credits at partner training providers in Training camp. Credits are applied at checkout.</div>
+      <div class="s-row"><span class="s-l">Remote First Aid (2-day)</span><span class="s-v">20 credits</span></div>
+      <div class="s-row"><span class="s-l">Swiftwater Rescue L1</span><span class="s-v">18 credits</span></div>
+      <div class="s-row"><span class="s-l">Wilderness Navigation</span><span class="s-v">12 credits</span></div>
+      <div class="s-row"><span class="s-l">WFA Recertification</span><span class="s-v">10 credits</span></div>
+    </div>
+    <div class="sheet-foot"><button class="btn-p" onclick="closeSheet('sh-redeem');showPage('pg-pd')">Browse Training camp</button></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer" onclick="if(event.target.classList.contains('drawer-dim'))closeDrawer()">
+  <div class="drawer-panel">
+    <div class="d-top">
+      <div class="d-user-row"><div class="d-av-big">JM</div><div><div class="d-name">Jamie Mitchell</div><div class="d-plan">Premium · $4.99/mo</div></div></div>
+    </div>
+    <div class="d-credit-row"><div class="d-credit-label">PD Credits</div><div class="d-credit-val">34 credits</div></div>
+    <div class="d-sec-label">Main</div>
+    <button class="d-item" id="di-basecamp" onclick="navTo('pg-basecamp','di-basecamp')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Base camp</button>
+    <button class="d-item" id="di-profile" onclick="navTo('pg-profile','di-profile')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>My profile</button>
+    <button class="d-item" id="di-avail" onclick="navTo('pg-avail','di-avail')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Availability</button>
+    <div class="d-sec-label">In the field</div>
+    <button class="d-item" id="di-providers" onclick="navTo('pg-providers','di-providers')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Providers</button>
+    <button class="d-item" id="di-programs" onclick="navTo('pg-programs','di-programs')"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Programs<span class="d-badge">2</span></button>
+    <button class="d-item" id="di-logbook" onclick="navTo('pg-logbook','di-logbook')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Field record</button>
+    <div class="d-sec-label">Growth</div>
+    <button class="d-item" id="di-pd" onclick="navTo('pg-pd','di-pd')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>PD credits<span class="d-badge">34</span></button>
+    <button class="d-item" id="di-training" onclick="navTo('pg-basecamp','di-basecamp')"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Training camp</button>
+  </div>
+  <div class="drawer-dim"></div>
+</div>
+
+<script>
+let currentPage='pg-basecamp',currentDI='di-basecamp';
+function showPage(id){
+  document.getElementById(currentPage).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  currentPage=id;
+  document.getElementById('main-scroll').scrollTop=0;
+}
+function navTo(pageId,diId){
+  showPage(pageId);
+  document.getElementById(currentDI).classList.remove('on');
+  document.getElementById(diId).classList.add('on');
+  currentDI=diId;
+  closeDrawer();
+}
+document.getElementById('di-basecamp').classList.add('on');
+function openSheet(id){document.getElementById(id).classList.add('open')}
+function closeSheet(id){document.getElementById(id).classList.remove('open')}
+function openDrawer(){document.getElementById('drawer').classList.add('open')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+function setView(v){
+  document.getElementById('view-journal').style.display=v==='journal'?'block':'none';
+  document.getElementById('view-classic').style.display=v==='classic'?'block':'none';
+  document.getElementById('vt-journal').classList.toggle('on',v==='journal');
+  document.getElementById('vt-classic').classList.toggle('on',v==='classic');
+}
+</script>
+</body>
+</html>
