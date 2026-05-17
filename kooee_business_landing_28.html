@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee, The outdoor staffing platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --o:#C45C1A;--ol:#E8A265;--dry:#F5E0C3;--paper:#FBF7F2;
+  --page:#0D0806;--card:#161008;--card2:#1C130A;
+  --bark:#2C1A0E;--dusk:#3D2510;--mid:#4A2E14;
+  --warm:#6B3D18;
+  --b:rgba(196,92,26,0.15);--bm:rgba(196,92,26,0.32);
+  --t1:rgba(245,224,195,0.9);--t2:rgba(245,224,195,0.6);--t3:rgba(245,224,195,0.3);
+  --ok:#7AC255;--red:rgba(255,80,80,0.75);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--page);color:var(--dry);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.4}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.65)}}
+.fu{animation:up 0.9s cubic-bezier(.16,1,.3,1) both}
+.fu0{animation-delay:.0s}.fu1{animation-delay:.1s}.fu2{animation-delay:.2s}.fu3{animation-delay:.32s}.fu4{animation-delay:.46s}
+.rv{opacity:0;transform:translateY(22px);transition:opacity 0.75s cubic-bezier(.16,1,.3,1),transform 0.75s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;background:rgba(13,8,6,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b)}
+.ni{max-width:1100px;margin:0 auto;padding:0 40px;width:100%;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lk{width:30px;height:30px;background:var(--o);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:var(--paper)}
+.ln{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--dry);letter-spacing:-0.3px}
+.lt{font-size:11px;color:var(--t3);border-left:1px solid var(--b);padding-left:9px;margin-left:3px}
+.bp{display:inline-flex;align-items:center;gap:7px;background:var(--o);color:var(--paper);font-family:'DM Sans',sans-serif;font-weight:600;border-radius:10px;border:none;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.bp:hover{background:#a34612;transform:translateY(-1px);box-shadow:0 10px 28px rgba(196,92,26,0.4)}
+.bg{display:inline-flex;align-items:center;gap:7px;color:var(--t2);font-family:'DM Sans',sans-serif;font-weight:500;border-radius:10px;border:1px solid var(--b);cursor:pointer;text-decoration:none;background:none;transition:all 0.2s}
+.bg:hover{border-color:var(--bm);color:var(--dry);background:rgba(196,92,26,0.05)}
+
+/* LAYOUT */
+.mx{max-width:1100px;margin:0 auto;padding:0 40px}
+.mxn{max-width:780px;margin:0 auto;padding:0 40px}
+.serif{font-family:'Playfair Display',serif}
+
+/* BIG SECTION HEADLINE */
+.sh{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,52px);font-weight:500;line-height:1.08;letter-spacing:-1px;color:var(--dry)}
+.sh em{font-style:italic;color:var(--ol)}
+.sl{font-size:16px;color:var(--t2);font-weight:300;line-height:1.75}
+
+/* EYEBROW */
+.ew{display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:16px}
+.ew::before{content:'';width:22px;height:1px;background:var(--o);flex-shrink:0}
+.ewc{justify-content:center}.ewc::before{display:none}.ewc::after{content:'';width:22px;height:1px;background:var(--o)}
+
+/* HERO BG */
+.hg{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 50% 40%,rgba(196,92,26,0.09) 0%,transparent 65%);pointer-events:none}
+.hgr{position:absolute;inset:0;background-image:linear-gradient(rgba(196,92,26,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(196,92,26,0.022) 1px,transparent 1px);background-size:60px 60px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 5%,transparent 70%);pointer-events:none}
+
+/* PROBLEM SECTIONS */
+.prob{padding:100px 0;overflow:hidden}
+.prob-in{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.prob-in.flip{direction:rtl}.prob-in.flip>*{direction:ltr}
+.prob-num{font-family:'Playfair Display',serif;font-size:80px;font-weight:400;color:rgba(196,92,26,0.12);line-height:1;margin-bottom:-8px;font-style:italic}
+.prob-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.22);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.prob-h{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:500;line-height:1.1;letter-spacing:-0.8px;color:var(--dry);margin-bottom:16px}
+.prob-h em{font-style:italic;color:var(--ol)}
+.prob-b{font-size:15px;color:var(--t2);font-weight:300;line-height:1.8;margin-bottom:24px}
+.prob-visual{background:var(--card);border:1px solid var(--b);border-radius:18px;padding:24px;position:relative;overflow:hidden}
+.prob-visual::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,92,26,0.4),transparent)}
+
+/* TIMELINE */
+.tl-item{display:flex;gap:10px;margin-bottom:12px}
+.tl-item:last-child{margin-bottom:0}
+.tl-sp{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:18px}
+.tl-dot{width:8px;height:8px;border-radius:50%;border:2px solid;flex-shrink:0}
+.tl-line{width:1px;flex:1;margin:3px 0}
+.tl-t{font-size:10px;font-weight:700;min-width:32px;flex-shrink:0;padding-top:1px}
+.tl-ttl{font-size:12px;font-weight:600;margin-bottom:1px;line-height:1.3}
+.tl-s{font-size:11px;font-weight:300;color:var(--t3);line-height:1.4}
+.bad .tl-dot{border-color:rgba(255,100,80,0.4);background:rgba(255,100,80,0.1)}
+.bad .tl-line{background:rgba(255,100,80,0.1)}
+.bad .tl-t{color:rgba(255,100,80,0.5)}
+.bad .tl-ttl{color:rgba(245,224,195,0.35)}
+.gd .tl-dot{border-color:var(--ok);background:var(--ok)}
+.gd .tl-line{background:rgba(122,194,85,0.18)}
+.gd .tl-t{color:var(--ok)}
+.gd .tl-ttl{color:var(--dry)}
+
+/* COMPLIANCE MOCK */
+.cr{display:flex;align-items:center;gap:9px;padding:9px 12px;background:rgba(13,8,6,0.5);border:1px solid var(--b);border-radius:9px;margin-bottom:6px}
+.cr:last-child{margin-bottom:0}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cn{font-size:12px;color:var(--dry);flex:1}
+.cbg{font-size:9px;font-weight:700;border-radius:20px;padding:2px 8px;border:1px solid}
+
+/* PD MOCK */
+.pdr{padding:10px 13px;background:rgba(13,8,6,0.5);border:1px solid var(--b);border-radius:9px;margin-bottom:6px}
+.pdr:last-child{margin-bottom:0}
+.pdbar{height:3px;background:rgba(245,224,195,0.07);border-radius:2px;overflow:hidden;margin:5px 0}
+.pdfill{height:100%;background:linear-gradient(90deg,var(--o),var(--ol));border-radius:2px}
+
+/* CALLOUT STAT */
+.cstat{background:linear-gradient(135deg,rgba(196,92,26,0.12),rgba(44,26,14,0.5));border:1px solid var(--bm);border-radius:14px;padding:20px 24px}
+.cstat-num{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1;letter-spacing:-1px;color:var(--dry);margin-bottom:6px}
+.cstat-num em{font-style:normal;color:var(--ol)}
+.cstat-lbl{font-size:13px;color:var(--t2);font-weight:300;line-height:1.6}
+.cstat-src{font-size:10px;color:var(--t3);margin-top:8px;font-style:italic}
+
+/* CALC */
+.calc-wrap{background:var(--bark);border:1px solid var(--bm);border-radius:22px;overflow:hidden}
+.chdr{background:linear-gradient(135deg,#1a0d04,var(--bark));padding:32px;text-align:center;border-bottom:1px solid var(--b)}
+.cbdy{padding:32px;background:var(--card)}
+.clbl{font-size:10px;font-weight:700;color:var(--ol);letter-spacing:0.9px;text-transform:uppercase;margin-bottom:8px;display:block}
+.cinp{width:100%;background:rgba(13,8,6,0.6);border:1px solid var(--b);border-radius:11px;padding:12px 15px;font-size:15px;color:var(--dry);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none;appearance:none}
+.cinp:focus{border-color:var(--bm)}
+.cinp::placeholder{color:var(--t3)}
+.cnote{font-size:12px;color:var(--t3);margin-top:6px;font-weight:300;line-height:1.55}
+.csl{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:rgba(196,92,26,0.2);outline:none;border-radius:4px;cursor:pointer;display:block}
+.csl::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--o);cursor:pointer;box-shadow:0 2px 8px rgba(196,92,26,0.4)}
+.sv{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;color:var(--dry);margin-bottom:8px;line-height:1}
+.sv em{font-style:normal;color:var(--ol)}
+.cq{margin-bottom:24px}
+.sw-row{display:flex;gap:10px}
+.sw-btn{flex:1;background:var(--card2);border:1px solid var(--b);border-radius:9px;padding:10px 14px;cursor:pointer;text-align:center;font-size:13px;font-weight:500;color:var(--t2);transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.sw-btn.sel{background:rgba(196,92,26,0.1);border-color:var(--o);color:var(--dry)}
+.cr-result{display:none;margin-top:24px}
+.cr-result.show{display:block;animation:up 0.55s cubic-bezier(.16,1,.3,1) both}
+.rhero{background:linear-gradient(135deg,#1a0d04,var(--bark));border:1px solid var(--bm);border-radius:16px;padding:28px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.rhero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50%,rgba(196,92,26,0.12),transparent 65%);pointer-events:none}
+.rey{font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+.rv2{font-family:'Playfair Display',serif;font-size:clamp(42px,7vw,62px);font-weight:500;color:var(--dry);letter-spacing:-2px;line-height:1;margin-bottom:6px;position:relative;z-index:1}
+.rs2{font-size:13px;color:var(--t2);font-weight:300;position:relative;z-index:1}
+.ri{background:rgba(196,92,26,0.06);border:1px solid var(--b);border-radius:12px;padding:14px 18px;margin-bottom:12px;font-size:13px;color:var(--t2);line-height:1.75}
+.ri strong{color:var(--ol);font-weight:600}
+.r4{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rc{background:rgba(13,8,6,0.5);border:1px solid var(--b);border-radius:12px;padding:14px}
+.rc.good{border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.04)}
+.rcl{font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:5px}
+.rcv{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;letter-spacing:-0.4px;line-height:1;margin-bottom:3px}
+.bkt{background:rgba(13,8,6,0.5);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:12px}
+.bkr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(245,224,195,0.05);font-size:12px}
+.bkr:last-child{border-bottom:none;padding-top:10px;margin-top:3px}
+.bkr.tot{font-size:13px;font-weight:600}
+.bkl{color:var(--t2);font-weight:300}
+.bkv{color:var(--dry);font-weight:500}
+.bkr.red .bkv{color:var(--red)}
+.vstbl{background:rgba(13,8,6,0.5);border:1px solid var(--bm);border-radius:12px;padding:16px;margin-bottom:12px}
+.vssave{background:rgba(122,194,85,0.06);border:1px solid rgba(122,194,85,0.2);border-radius:9px;padding:11px 15px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+
+/* HOW IT WORKS */
+.how-num{width:40px;height:40px;border-radius:11px;background:rgba(196,92,26,0.1);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--ol);flex-shrink:0}
+
+/* PLANS */
+.pc{border:1px solid var(--b);border-radius:18px;padding:26px;transition:all 0.22s;position:relative;background:var(--card)}
+.pc:hover{border-color:var(--bm);transform:translateY(-3px)}
+.pc.feat{border-color:var(--o);background:linear-gradient(160deg,#1e0d03,var(--card))}
+.pc-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--o);color:var(--paper);font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;border-radius:20px;padding:4px 12px;white-space:nowrap}
+.pn{font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.pw{font-size:13px;color:var(--t2);font-weight:300;line-height:1.6;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--b)}
+.pf{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--t2);font-weight:300;margin-bottom:7px;line-height:1.4}
+.pf::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--o);flex-shrink:0;margin-top:5px}
+
+/* SIGNUP */
+.finp{width:100%;background:var(--card2);border:1px solid var(--b);border-radius:11px;padding:13px 16px;font-size:15px;color:var(--dry);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:10px}
+.finp:focus{border-color:var(--bm)}
+.finp::placeholder{color:var(--t3)}
+
+/* SECTION BACKGROUNDS, alternating warmth */
+.bg-page{background:var(--page)}
+.bg-bark{background:var(--bark)}
+.bg-dusk{background:var(--dusk)}
+.bg-mid{background:linear-gradient(160deg,var(--dusk),var(--bark))}
+.bg-card{background:var(--card)}
+
+@media(max-width:800px){
+  .ni{padding:0 20px}.mx{padding:0 20px}.mxn{padding:0 20px}
+  .prob-in{grid-template-columns:1fr!important;gap:40px}
+  .prob-in.flip{direction:ltr}
+  .g4{grid-template-columns:1fr 1fr!important}
+  .r4{grid-template-columns:1fr}
+  .cbdy{padding:24px 20px}.chdr{padding:24px 20px}
+  .hide-m{display:none}
+  .tl-2col{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ▸ NAV -->
+<nav>
+  <div class="ni">
+    <a href="#" class="logo">
+      <div class="lk">K</div>
+      <span class="serif ln">Kooee</span>
+      <span class="lt hide-m">for providers</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="#" class="hide-m" style="font-size:13px;color:var(--t2);text-decoration:none">For instructors</a>
+      <a href="#signup" class="bp" style="padding:10px 20px;font-size:13px">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ▸ HERO -->
+<section class="bg-page" style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:80px 40px 72px">
+  <div class="hg"></div><div class="hgr"></div>
+
+  <div class="fu fu0" style="display:inline-flex;align-items:center;gap:8px;background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.28);border-radius:20px;padding:6px 16px;margin-bottom:28px;position:relative;z-index:2">
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--o);animation:pulse 2s infinite;display:inline-block;flex-shrink:0"></span>
+    <span style="font-size:11px;font-weight:600;color:var(--ol);letter-spacing:1.2px;text-transform:uppercase">Launching 2026, early access now open</span>
+  </div>
+
+  <h1 class="fu fu1 serif" style="font-size:clamp(42px,7vw,88px);font-weight:500;line-height:1.03;letter-spacing:-2.5px;max-width:900px;margin-bottom:24px;color:var(--dry);position:relative;z-index:2">
+    The outdoor staffing<br><em style="color:var(--ol)">platform.</em>
+  </h1>
+
+  <p class="fu fu2" style="font-size:clamp(15px,1.7vw,19px);color:var(--t2);font-weight:300;line-height:1.75;max-width:520px;margin-bottom:44px;position:relative;z-index:2">
+    Kooee connects outdoor providers with instructors,<br>and invests in keeping great people in the field for longer.</p>
+  
+
+  <div class="fu fu3" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:72px;position:relative;z-index:2">
+    <a href="#problems" class="bp" style="padding:16px 32px;font-size:16px;box-shadow:0 8px 32px rgba(196,92,26,0.38)">
+      See how it works
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#calc" class="bg" style="padding:16px 32px;font-size:16px">See what it's costing you</a>
+  </div>
+
+  </section>
+
+
+<!-- ▸ STATS, warm bark -->
+<section class="bg-bark" style="padding:72px 0;border-top:1px solid rgba(196,92,26,0.18)">
+  <div class="mxn">
+    <p class="rv" style="text-align:center;font-size:17px;color:var(--t1);font-weight:300;line-height:1.75;max-width:560px;margin:0 auto 44px">The outdoor sector is built on great people. But the systems supporting it have not kept pace with what the industry needs.</p>
+    <div class="rv" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(196,92,26,0.12);border-radius:16px;overflow:hidden">
+      <div style="background:rgba(28,19,10,0.8);padding:36px 28px;text-align:center">
+        <div class="serif" style="font-size:52px;font-weight:500;color:var(--o);line-height:1;margin-bottom:10px;font-style:italic">X%</div>
+        <div style="font-size:13px;color:var(--t2);font-weight:300;line-height:1.55;max-width:170px;margin:0 auto">of outdoor instructors have seriously considered leaving the industry</div>
+      </div>
+      <div style="background:rgba(28,19,10,0.8);padding:36px 28px;text-align:center">
+        <div class="serif" style="font-size:52px;font-weight:500;color:var(--o);line-height:1;margin-bottom:10px;font-style:italic">X%</div>
+        <div style="font-size:13px;color:var(--t2);font-weight:300;line-height:1.55;max-width:170px;margin:0 auto">have never had access to funded professional development</div>
+      </div>
+      <div style="background:rgba(28,19,10,0.8);padding:36px 28px;text-align:center">
+        <div class="serif" style="font-size:52px;font-weight:500;color:var(--o);line-height:1;margin-bottom:10px;font-style:italic">X%</div>
+        <div style="font-size:13px;color:var(--t2);font-weight:300;line-height:1.55;max-width:170px;margin:0 auto">want to work more but struggle to connect with the right programs</div>
+      </div>
+    </div>
+    <p class="rv" style="text-align:center;font-size:11px;color:var(--t3);margin-top:14px;font-style:italic">Kooee Instructor Survey 2026. n=200+</p>
+  </div>
+</section>
+
+<!-- ▸ PROBLEM 1, STAFFING (lighter dusk bg) -->
+<section class="prob bg-dusk" id="problems" style="border-top:1px solid rgba(196,92,26,0.18)">
+  <div class="prob-in">
+    <div class="rv">
+      <div class="prob-tag">Staffing and rostering</div>
+      <h2 class="prob-h">Three days out, your instructor just cancelled.<br><em>The clock is running.</em></h2>
+      <p class="prob-b">You open your contacts and start texting. Most people you know are already booked. Twenty minutes in, you are posting an urgent call-out on Facebook hoping someone sees it in time. That is the current system, and every provider in the country is using it.</p>
+      <div style="background:rgba(196,92,26,0.08);border:1px solid var(--bm);border-radius:12px;padding:16px 20px">
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:500;color:var(--dry);letter-spacing:-0.5px;line-height:1;margin-bottom:4px;font-style:italic">Under 10 minutes</div>
+        <div style="font-size:13px;color:var(--t2);font-weight:300">To reach your entire shortlist with full program details attached. The rest is up to them.</div>
+      </div>
+    </div>
+    <div class="rv d1 prob-visual">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="tl-2col">
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,100,80,0.1)">Without Kooee: hours of your day</div>
+          <div class="tl-item bad"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t" style="color:rgba(255,100,80,0.5)">9:00</div><div><div class="tl-ttl">Instructor cancels</div><div class="tl-s">Three days before program. Panic.</div></div></div>
+          <div class="tl-item bad"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t" style="color:rgba(255,100,80,0.5)">9:10</div><div><div class="tl-ttl">Start texting contacts</div><div class="tl-s">Most people you know are already booked.</div></div></div>
+          <div class="tl-item bad"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t" style="color:rgba(255,100,80,0.5)">9:40</div><div><div class="tl-ttl">Post urgent call-out</div><div class="tl-s">Facebook. Hope someone sees it in time.</div></div></div>
+          <div class="tl-item bad" style="margin-bottom:0"><div class="tl-sp"><div class="tl-dot" style="background:rgba(255,100,80,0.25)"></div></div><div class="tl-t" style="color:rgba(255,100,80,0.5)">10:30+</div><div><div class="tl-ttl" style="color:var(--red)">Still waiting.</div><div class="tl-s">Hours of billable time gone. Program still unfilled.</div></div></div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--ok);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(122,194,85,0.1)">With Kooee: under 10 minutes</div>
+          <div class="tl-item gd"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t">9:00</div><div><div class="tl-ttl">Instructor cancels</div><div class="tl-s">Open Kooee. Search that date and activity.</div></div></div>
+          <div class="tl-item gd"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t">9:03</div><div><div class="tl-ttl">Available instructors found</div><div class="tl-s">Compliance visible on every profile upfront.</div></div></div>
+          <div class="tl-item gd"><div class="tl-sp"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-t">9:07</div><div><div class="tl-ttl">Bulk Kooee sent</div><div class="tl-s">Entire shortlist messaged with program details.</div></div></div>
+          <div class="tl-item gd" style="margin-bottom:0"><div class="tl-sp"><div class="tl-dot"></div></div><div class="tl-t">9:09</div><div><div class="tl-ttl" style="color:var(--ok)">Done.</div><div class="tl-s">Ball is in their court. Your day continues.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ▸ PROBLEM 2, COMPLIANCE (page dark, flipped) -->
+<section class="prob bg-page" style="border-top:1px solid rgba(196,92,26,0.12)">
+  <div class="prob-in flip">
+    <div class="rv prob-visual">
+      <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:0.9px;font-weight:700;margin-bottom:12px">Your team, one view</div>
+      <div class="cr" style="flex-wrap:wrap;gap:5px;row-gap:5px">
+        <div class="cdot" style="background:var(--ok)"></div>
+        <div class="cn">Sarah M.</div>
+        <span class="cbg" style="color:var(--ok);border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.07)">WWCC ✓</span>
+        <span class="cbg" style="color:var(--ok);border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.07)">FA ✓</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">GL</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">CI</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">Climb</span>
+      </div>
+      <div class="cr" style="flex-wrap:wrap;gap:5px;row-gap:5px">
+        <div class="cdot" style="background:var(--ol)"></div>
+        <div class="cn">James T.</div>
+        <span class="cbg" style="color:var(--ok);border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.07)">WWCC ✓</span>
+        <span class="cbg" style="color:var(--ol);border-color:rgba(196,92,26,0.28);background:rgba(196,92,26,0.07)">FA 42d ⚠</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">GL</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">MTB</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">Ropes</span>
+      </div>
+      <div class="cr" style="flex-wrap:wrap;gap:5px;row-gap:5px">
+        <div class="cdot" style="background:var(--red)"></div>
+        <div class="cn">Riley K.</div>
+        <span class="cbg" style="color:var(--red);border-color:rgba(255,80,80,0.22);background:rgba(255,80,80,0.06)">WWCC expired ✗</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">GL</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">CI</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">MTB</span>
+      </div>
+      <div class="cr" style="flex-wrap:wrap;gap:5px;row-gap:5px">
+        <div class="cdot" style="background:var(--ok)"></div>
+        <div class="cn">Marcus W.</div>
+        <span class="cbg" style="color:var(--ok);border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.07)">WWCC ✓</span>
+        <span class="cbg" style="color:var(--ok);border-color:rgba(122,194,85,0.22);background:rgba(122,194,85,0.07)">FA ✓</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">D</span>
+        <span class="cbg" style="color:var(--t2);border-color:var(--b);background:rgba(245,224,195,0.04)">AD</span>
+      </div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--b)">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:6px;font-weight:300">Alert: James T. first aid expires in 42 days</div>
+        <div style="background:rgba(196,92,26,0.08);border:1px solid var(--bm);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--ol)">60-day advance warning sent. Instructor updating now.</div>
+      </div>
+    </div>
+    <div class="rv d1">
+      <div class="prob-tag">Centralised platform</div>
+      <h2 class="prob-h">Your team's information lives across emails,<br><em>spreadsheets and memory.</em></h2>
+      <p class="prob-b">Qualifications in one email, first aid certs in another, availability confirmed by text. Staff history lives in a spreadsheet that is already out of date. There is no single place to see your team clearly. Every program cycle starts from scratch.</p>
+      <p style="font-size:14px;color:var(--t1);font-weight:400;line-height:1.7">Kooee is one place for all of it. Profiles hold qualifications, compliance and availability in a single view. Your dashboard tracks the whole team with 60-day alerts before anything expires. Instructors update their own documents. You see the status, not the inbox thread.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ▸ PROBLEM 3, RETENTION (bark, warm) -->
+<section class="prob bg-bark" style="border-top:1px solid rgba(196,92,26,0.18)">
+  <div class="prob-in">
+    <div class="rv">
+      <div class="prob-tag">Staff retention and development</div>
+      <h2 class="prob-h">Experienced instructors don't burn out loudly.<br><em>They just don't come back next season.</em></h2>
+      <p class="prob-b">The outdoor sector loses skilled instructors every season, not to competitors, but to industries that invest in their people. When there is no clear path forward, the decision to move on is easy. The ones who stay do so out of passion alone. That is not a retention strategy.</p>
+
+      <!-- Real stat, LinkedIn Workforce Learning Report 2022 -->
+      <div class="cstat" style="margin-bottom:24px">
+        <div class="cstat-num"><em>94%</em></div>
+        <div class="cstat-lbl">of employees say they would stay longer at a company that invests in their learning and development.</div>
+        <div class="cstat-src">LinkedIn Workforce Learning Report, 2022</div>
+      </div>
+
+      <p style="font-size:14px;color:var(--t1);font-weight:400;line-height:1.7">Kooee contributes a minimum of $2 per program day per instructor as a PD credit, with the option to increase this. Register as an approved provider and run your own workshops. Instructors redeem credits with you and bring those skills back to your programs. PD contributions are a legitimate business expense.</p>
+    </div>
+    <div class="rv d1 prob-visual">
+      <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:0.9px;font-weight:700;margin-bottom:12px">PD credits invested this season</div>
+      <div class="pdr"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:12px;font-weight:600;color:var(--dry)">Sarah M.</span><span style="font-size:12px;font-weight:600;color:var(--ol)">24 credits ($24)</span></div><div class="pdbar"><div class="pdfill" style="width:75%"></div></div><div style="font-size:11px;color:var(--t3)">12 program days</div></div>
+      <div class="pdr"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:12px;font-weight:600;color:var(--dry)">James T.</span><span style="font-size:12px;font-weight:600;color:var(--ol)">12 credits ($12)</span></div><div class="pdbar"><div class="pdfill" style="width:38%"></div></div><div style="font-size:11px;color:var(--t3)">6 program days</div></div>
+      <div class="pdr"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:12px;font-weight:600;color:var(--dry)">Marcus W.</span><span style="font-size:12px;font-weight:600;color:var(--ol)">18 credits ($18)</span></div><div class="pdbar"><div class="pdfill" style="width:56%"></div></div><div style="font-size:11px;color:var(--t3)">9 program days</div></div>
+      <div style="background:linear-gradient(135deg,var(--o),#8a3a0e);border-radius:11px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <div>
+          <div class="serif" style="font-size:30px;font-weight:500;color:white;letter-spacing:-0.5px">$54</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5)">invested in your team this season</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">industry average</div>
+          <div class="serif" style="font-size:28px;font-weight:500;color:rgba(255,80,80,0.8);letter-spacing:-0.5px">$0</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--t3);margin-top:12px;line-height:1.55;text-align:center">This is not just a feature. It is a structural shift in how the outdoor industry invests in its people. The providers who lead it will be the ones who keep the best instructors for the long term.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ▸ CALCULATOR (dark gradient) -->
+<section style="padding:100px 0;background:linear-gradient(155deg,#2a1508,#1a0d04,var(--bark));border-top:1px solid rgba(196,92,26,0.2);border-bottom:1px solid rgba(196,92,26,0.2);position:relative;overflow:hidden" id="calc">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(196,92,26,0.1) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="mxn" style="position:relative;z-index:1">
+    <div class="rv" style="text-align:center;margin-bottom:44px">
+      <div class="ewc" style="display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:16px">
+        <span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>Free cost calculator<span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>
+      </div>
+      <h2 class="sh" style="margin-bottom:10px">What does finding new instructors<br><em>actually cost your business?</em></h2>
+      <p class="sl">A few honest questions. Real numbers. No email required.</p>
+    </div>
+    <div class="calc-wrap rv">
+      <div class="chdr">
+        <div style="font-size:11px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">Results update as you go</div>
+        <div style="font-size:13px;color:var(--t2);font-weight:300">Based on your monthly average, shown across a full 6-month season</div>
+      </div>
+      <div class="cbdy">
+        <div class="cq">
+          <label class="clbl">New instructors hired per month, on average</label>
+          <div class="sv" id="q1v">5 <em>per month</em></div>
+          <input class="csl" type="range" min="0" max="50" value="5" id="q1" oninput="calc()">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px"><span>0</span><span>50</span></div>
+        </div>
+
+        <div class="cq">
+          <label class="clbl">Time searching and reaching out per hire</label>
+          <div class="cnote" style="margin-bottom:10px">Facebook posts, WhatsApp threads, texts, calls, waiting for replies, everything before you have a candidate.</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:13px;font-weight:600;color:var(--dry)">Hours per hire</span>
+            <span style="font-size:15px;font-weight:700;color:var(--ol)" id="t1v">3h</span>
+          </div>
+          <input class="csl" type="range" min="0" max="16" value="3" step="0.5" id="t1" oninput="calc()">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:3px"><span>0</span><span>16h</span></div>
+        </div>
+
+        <div class="cq">
+          <label class="clbl">Time on compliance, contracts and confirming per hire</label>
+          <div class="cnote" style="margin-bottom:10px">Chasing WWCC, first aid, certs. Then the onboarding email: contract, bank details, emergency contacts, one loop.</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:13px;font-weight:600;color:var(--dry)">Hours per hire</span>
+            <span style="font-size:15px;font-weight:700;color:var(--ol)" id="t2v">2h</span>
+          </div>
+          <input class="csl" type="range" min="0" max="12" value="2" step="0.5" id="t2" oninput="calc()">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:3px"><span>0</span><span>12h</span></div>
+          <div class="cnote" style="color:var(--ol);margin-top:8px">With Kooee, compliance is visible before you reach out. Contracts and docs handled in-platform.</div>
+        </div>
+
+        <div class="cq">
+          <label class="clbl">Hourly rate of the person doing this (AUD)</label>
+          <input class="cinp" type="number" id="q3" value="45" min="0" oninput="calc()" placeholder="e.g. 45" style="max-width:200px">
+          <div class="cnote">Include super/on-costs if applicable</div>
+        </div>
+
+        <div class="cq">
+          <label class="clbl">Do you pay for existing staffing or rostering software?</label>
+          <div class="sw-row">
+            <div class="sw-btn sel" id="sw-no" onclick="selSw('no')">No existing tools</div>
+            <div class="sw-btn" id="sw-yes" onclick="selSw('yes')">Yes, I pay for tools</div>
+          </div>
+          <div id="sw-wrap" style="display:none;margin-top:10px">
+            <label class="clbl" style="margin-bottom:6px">Monthly cost (AUD)</label>
+            <input class="cinp" type="number" id="q5b" value="0" min="0" oninput="calc()" placeholder="e.g. 99" style="max-width:180px">
+          </div>
+        </div>
+
+        <div class="cq">
+          <label class="clbl">Agency, referral or platform fees per hire? (AUD)</label>
+          <input class="cinp" type="number" id="q6" value="0" min="0" oninput="calc()" placeholder="0" style="max-width:180px">
+          <div class="cnote">Enter 0 for word of mouth only</div>
+        </div>
+
+        <div class="cq" style="margin-bottom:0">
+          <label class="clbl">Which Kooee plan suits your organisation?</label>
+          <select class="cinp" id="q7" onchange="calc()" style="cursor:pointer;max-width:380px;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22rgba(245,224,195,0.28)%22 stroke-width=%222.5%22 stroke-linecap=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 14px center;-webkit-appearance:none;appearance:none">
+            <option value="150" data-acq="150">Seasonal, casual programs</option>
+            <option value="100" data-acq="130" selected>Growth, regular season</option>
+            <option value="200" data-acq="110">Scale, multiple programs</option>
+            <option value="350" data-acq="90">Enterprise, multi-site, high volume</option>
+          </select>
+          <div class="cnote">Pricing on request. See plans below.</div>
+        </div>
+
+        <div style="margin-top:26px;text-align:center" id="ctabox">
+          <button class="bp" onclick="showRes()" style="padding:15px 34px;font-size:16px;box-shadow:0 8px 28px rgba(196,92,26,0.38)">
+            Show me the number
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p style="font-size:12px;color:var(--t3);margin-top:8px">No email required.</p>
+        </div>
+
+        <div class="cr-result" id="cr">
+          <hr style="border:none;border-top:1px solid var(--b);margin:24px 0">
+          <div class="rhero">
+            <div class="rey">Your 6-month new hire admin cost, without Kooee</div>
+            <div class="rv2" id="rt">$0</div>
+            <div class="rs2" id="rs"></div>
+          </div>
+          <div style="background:rgba(196,92,26,0.05);border:1px solid var(--b);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--t3);line-height:1.55"><strong style="color:var(--t2)">Note:</strong> New hire admin only. Ongoing rostering and program communications, also reduced by Kooee, are not included.</div>
+          <div class="ri" id="rins"></div>
+          <div class="r4">
+            <div class="rc"><div class="rcl" style="color:var(--t3)">Admin cost per hire</div><div class="rcv" id="rcph" style="color:var(--dry)">$0</div><div style="font-size:11px;color:var(--t3);font-weight:300">Staff time + fees</div></div>
+            <div class="rc"><div class="rcl" style="color:var(--t3)">Hours lost per hire</div><div class="rcv" id="rhrs" style="color:var(--dry)">0h</div><div style="font-size:11px;color:var(--t3);font-weight:300">Finding + compliance</div></div>
+            <div class="rc good"><div class="rcl" style="color:var(--ok)">You save (6 months)</div><div class="rcv" id="rsave" style="color:var(--ok)">$0</div><div style="font-size:11px;color:var(--ok);opacity:0.7">After subscription</div></div>
+            <div class="rc good"><div class="rcl" style="color:var(--ok)">Hours back</div><div class="rcv" id="rhrsb" style="color:var(--ok)">0h</div><div style="font-size:11px;color:var(--ok);opacity:0.7">Per season</div></div>
+          </div>
+          <div class="bkt">
+            <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:0.7px;text-transform:uppercase;margin-bottom:10px">Breakdown</div>
+            <div class="bkr"><span class="bkl">Searching &amp; reaching out</span><span class="bkv" id="rbt1">-</span></div>
+            <div class="bkr"><span class="bkl">Compliance, contracts &amp; onboarding</span><span class="bkv" id="rbt2">-</span></div>
+            <div class="bkr"><span class="bkl">Third-party fees</span><span class="bkv" id="rb3p">-</span></div>
+            <div class="bkr tot red"><span class="bkl" style="color:var(--dry);font-weight:600">Cost per hire</span><span class="bkv" id="rbcph">-</span></div>
+            <div style="height:5px"></div>
+            <div class="bkr"><span class="bkl">6-month total</span><span class="bkv" id="rbs">-</span></div>
+            <div class="bkr tot red"><span class="bkl" style="color:var(--dry);font-weight:600">Total 6-month cost</span><span class="bkv" id="rbtot">-</span></div>
+          </div>
+          <div class="vstbl">
+            <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:0.7px;text-transform:uppercase;margin-bottom:10px">Current cost vs Kooee, 6 months</div>
+            <div class="bkr"><span class="bkl">Your hire admin cost</span><span style="color:var(--red);font-weight:500;font-size:12px;text-decoration:line-through" id="vsadm">-</span></div>
+            <div class="bkr" id="vsswr" style="display:none"><span class="bkl">Existing software</span><span style="color:var(--red);font-weight:500;font-size:12px;text-decoration:line-through" id="vssw">-</span></div>
+            <div class="bkr tot"><span class="bkl" style="color:var(--dry);font-weight:600">Your total current cost</span><span style="color:var(--red);font-weight:600;font-size:12px;text-decoration:line-through" id="vscur">-</span></div>
+            <div style="height:6px"></div>
+            <div class="bkr"><span class="bkl">Kooee subscription + access fees</span><a href="#signup" style="color:var(--ol);text-decoration:none;border-bottom:1px solid rgba(232,162,101,0.3);font-size:12px">Get in touch</a></div>
+            <div class="bkr tot"><span class="bkl" style="color:var(--dry);font-weight:600">Estimated Kooee cost</span><span class="bkv" id="vsk">-</span></div>
+            <div class="vssave">
+              <div><div style="font-size:13px;font-weight:600;color:var(--ok)">Estimated saving</div><div style="font-size:11px;color:rgba(122,194,85,0.5);margin-top:1px">Over 6 months</div></div>
+              <span class="serif" style="font-size:24px;font-weight:500;color:var(--ok);letter-spacing:-0.5px" id="vssav">-</span>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.6">Estimated cost is based on indicative pricing. <a href="#signup" style="color:var(--ol);text-decoration:none;border-bottom:1px solid rgba(232,162,101,0.3)">Get in touch</a> for an accurate quote.</p>
+          <div style="text-align:center;margin-top:14px">
+            <a href="#signup" class="bp" style="padding:14px 28px;font-size:14px;display:inline-flex;margin-bottom:8px">
+              Claim founding partner pricing
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a><br>
+            <button onclick="resetCalc()" style="background:none;border:none;color:var(--t3);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:6px;text-decoration:underline;text-underline-offset:3px">Start over</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ▸ GLIMPSE -->
+<section class="bg-dusk" style="padding:100px 0;border-top:1px solid rgba(196,92,26,0.18)">
+  <div class="mx">
+    <div class="rv" style="text-align:center;margin-bottom:48px">
+      <div style="display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:14px"><span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>A glimpse inside<span style="width:22px;height:1px;background:var(--o);display:inline-block"></span></div>
+      <h2 class="sh" style="margin-bottom:10px">Your programs. Your team.<br><em>All in one place.</em></h2>
+      <p class="sl">A live view of every program, every role, every compliance status. No chasing. No guessing.</p>
+    </div>
+    <div class="rv" style="background:var(--card);border:1px solid var(--b);border-radius:20px;overflow:hidden;max-width:900px;margin:0 auto">
+      <!-- Window bar -->
+      <div style="background:var(--bark);padding:11px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--b)">
+        <div style="width:9px;height:9px;border-radius:50%;background:rgba(255,80,80,0.35)"></div>
+        <div style="width:9px;height:9px;border-radius:50%;background:rgba(255,200,80,0.25)"></div>
+        <div style="width:9px;height:9px;border-radius:50%;background:rgba(122,194,85,0.25)"></div>
+        <div style="flex:1;text-align:center;font-size:11px;color:var(--t3)">kooeeconnect.com.au / programs</div>
+      </div>
+      <!-- Dash header -->
+      <div style="padding:14px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:13px;font-weight:600;color:var(--dry)">Your programs</div>
+        <div style="display:flex;gap:8px">
+          <div style="background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:5px 12px;font-size:11px;color:var(--t3)">All programs</div>
+          <div style="background:var(--o);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--paper)">+ New program</div>
+        </div>
+      </div>
+      <!-- Program 1 -->
+      <div style="display:grid;grid-template-columns:140px 1fr 130px;border-bottom:1px solid rgba(245,224,195,0.05)">
+        <div style="padding:18px 20px;border-right:1px solid rgba(245,224,195,0.05)">
+          <div style="font-size:9px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">Program 1</div>
+          <div style="font-size:13px;font-weight:600;color:var(--dry);margin-bottom:4px;line-height:1.3">1-3 Jul 2026</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t3)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Blue Mountains</div>
+        </div>
+        <div style="padding:18px 20px">
+          <div style="font-size:14px;font-weight:600;color:var(--dry);margin-bottom:4px">Murrumbidgee Valley High School</div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:9px">180 students · 12 groups · 3 days · Centre based</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
+            <span style="font-size:10px;font-weight:700;background:rgba(232,162,101,0.08);color:rgba(232,162,101,0.8);border:1px solid rgba(232,162,101,0.2);border-radius:20px;padding:3px 9px">GL - 8 of 12 filled</span>
+          </div>
+          <div style="font-size:11px;color:var(--t3);font-style:italic">Briefing 30 Jun 4pm · Centre arrival 9am</div>
+        </div>
+        <div style="padding:16px 16px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;border-left:1px solid rgba(245,224,195,0.05)">
+          <span style="font-size:11px;font-weight:700;color:var(--ok)">Advertised</span>
+          <div style="background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:4px 11px;font-size:11px;color:var(--t2)">Edit</div>
+          <div style="background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.25);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--ol)">View advert</div>
+        </div>
+      </div>
+      <!-- Program 2 -->
+      <div style="display:grid;grid-template-columns:140px 1fr 130px;border-bottom:1px solid rgba(245,224,195,0.05)">
+        <div style="padding:18px 20px;border-right:1px solid rgba(245,224,195,0.05)">
+          <div style="font-size:9px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">Program 2</div>
+          <div style="font-size:13px;font-weight:600;color:var(--dry);margin-bottom:4px;line-height:1.3">8-11 Jul 2026</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t3)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Snowy Mountains</div>
+        </div>
+        <div style="padding:18px 20px">
+          <div style="font-size:14px;font-weight:600;color:var(--dry);margin-bottom:4px">Hawkesbury Grammar</div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:9px">60 students · 4 groups · 4 days · Duke of Ed expedition</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
+            <span style="font-size:10px;font-weight:700;background:rgba(122,194,85,0.07);color:var(--ok);border:1px solid rgba(122,194,85,0.18);border-radius:20px;padding:3px 9px">GL - filled</span>
+            <span style="font-size:10px;font-weight:700;background:rgba(196,92,26,0.08);color:var(--ol);border:1px solid rgba(196,92,26,0.22);border-radius:20px;padding:3px 9px">AI - 2 open</span>
+          </div>
+          <div style="font-size:11px;color:var(--t3);font-style:italic">Briefing 7 Jul 5pm · Depart Windsor 7am</div>
+        </div>
+        <div style="padding:16px 16px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;border-left:1px solid rgba(245,224,195,0.05)">
+          <span style="font-size:11px;font-weight:700;color:var(--ok)">Advertised</span>
+          <div style="background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:4px 11px;font-size:11px;color:var(--t2)">Edit</div>
+          <div style="background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.25);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--ol)">View advert</div>
+        </div>
+      </div>
+      <!-- Program 3 — fading -->
+      <div style="position:relative;overflow:hidden">
+        <div style="display:grid;grid-template-columns:140px 1fr 130px;opacity:0.4">
+          <div style="padding:18px 20px;border-right:1px solid rgba(245,224,195,0.05)">
+            <div style="font-size:9px;font-weight:700;color:var(--ol);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">Program 3</div>
+            <div style="font-size:13px;font-weight:600;color:var(--dry);margin-bottom:4px;line-height:1.3">22-26 Jul 2026</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t3)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Barrington Tops</div>
+          </div>
+          <div style="padding:18px 20px">
+            <div style="font-size:14px;font-weight:600;color:var(--dry);margin-bottom:4px">Southern Highlands Secondary College</div>
+            <div style="font-size:11px;color:var(--t3);margin-bottom:9px">120 students · 8 groups · 5 days · Expedition</div>
+            <div style="display:flex;gap:5px;margin-bottom:7px">
+              <span style="font-size:10px;font-weight:700;background:rgba(196,92,26,0.08);color:var(--ol);border:1px solid rgba(196,92,26,0.22);border-radius:20px;padding:3px 9px">GL - 8 open</span>
+            </div>
+            <div style="font-size:11px;color:var(--t3);font-style:italic">Briefing 21 Jul 3pm · Depart Bowral 6am</div>
+          </div>
+          <div style="padding:16px 16px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;border-left:1px solid rgba(245,224,195,0.05)">
+            <span style="font-size:11px;color:var(--t3)">Not advertised</span>
+            <div style="background:var(--card2);border:1px solid var(--b);border-radius:7px;padding:4px 11px;font-size:11px;color:var(--t2)">Edit</div>
+            <div style="background:var(--o);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--paper)">Advertise</div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 20%,var(--card))"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ▸ PLANS -->
+<section class="bg-page" style="padding:80px 0;border-top:1px solid rgba(196,92,26,0.12)" id="plans">
+  <div class="mx">
+
+    <div class="rv" style="text-align:center;margin-bottom:40px">
+      <div style="display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:14px"><span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>Plans<span style="width:22px;height:1px;background:var(--o);display:inline-block"></span></div>
+      <h2 class="sh" style="margin-bottom:10px">Simple, transparent <em>pricing.</em></h2>
+      <p class="sl">Every plan includes full platform access. What changes is how you scale.</p>
+    </div>
+
+    <div class="rv" style="border:1px solid var(--b);border-radius:16px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+        <colgroup>
+          <col style="width:180px">
+          <col><col><col><col>
+        </colgroup>
+        <thead>
+          <tr style="background:var(--bark)">
+            <th style="padding:16px 20px;font-weight:400;text-align:left"></th>
+            <th style="padding:16px 12px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.4px;text-transform:uppercase;text-align:center">Seasonal</th>
+            <th style="padding:16px 12px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.4px;text-transform:uppercase;text-align:center">Growth</th>
+            <th style="padding:16px 12px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.4px;text-transform:uppercase;text-align:center">Scale</th>
+            <th style="padding:16px 12px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.4px;text-transform:uppercase;text-align:center">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top:1px solid rgba(245,224,195,0.05)">
+            <td style="padding:14px 20px;font-size:12px;color:var(--t3)">Billing</td>
+            <td style="padding:14px 12px;font-size:12px;color:var(--t2);text-align:center">Month to month</td>
+            <td style="padding:14px 12px;font-size:12px;color:var(--t2);text-align:center">6-month plan</td>
+            <td style="padding:14px 12px;font-size:12px;color:var(--t2);text-align:center">6-month plan</td>
+            <td style="padding:14px 12px;font-size:12px;color:var(--t2);text-align:center">6-month plan</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(245,224,195,0.05);background:rgba(245,224,195,0.018)">
+            <td style="padding:14px 20px;font-size:12px;color:var(--t3)">Platform access</td>
+            <td style="padding:14px 12px;text-align:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(122,194,85,0.4)"/><path d="M5 8l2 2 4-4" stroke="#7AC255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+            <td style="padding:14px 12px;text-align:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(122,194,85,0.4)"/><path d="M5 8l2 2 4-4" stroke="#7AC255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+            <td style="padding:14px 12px;text-align:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(122,194,85,0.4)"/><path d="M5 8l2 2 4-4" stroke="#7AC255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+            <td style="padding:14px 12px;text-align:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(122,194,85,0.4)"/><path d="M5 8l2 2 4-4" stroke="#7AC255" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          </tr>
+          <tr style="border-top:1px solid rgba(245,224,195,0.05)">
+            <td style="padding:14px 20px;font-size:12px;color:var(--t3)">Admin users</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">1</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">1</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">3</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--ok);text-align:center">Unlimited</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(245,224,195,0.05);background:rgba(245,224,195,0.018)">
+            <td style="padding:14px 20px;font-size:12px;color:var(--t3)">Program adverts/mo</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">1</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">1</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--dry);text-align:center">3</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--ok);text-align:center">Unlimited</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(245,224,195,0.05)">
+            <td style="padding:14px 20px;font-size:12px;color:var(--t3)">New instructor rate</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--t2);text-align:center">Standard</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--ol);text-align:center">Reduced</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--ol);text-align:center">Better</td>
+            <td style="padding:14px 12px;font-size:13px;font-weight:600;color:var(--ok);text-align:center">Best</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Founding partner -->
+    <div class="rv" style="margin-top:16px;background:linear-gradient(135deg,rgba(196,92,26,0.12),rgba(44,26,14,0.5));border:1px solid var(--bm);border-radius:14px;padding:20px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="width:36px;height:36px;border-radius:9px;background:rgba(196,92,26,0.12);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:var(--dry);margin-bottom:2px">Founding Partner pricing. Lock it in before we launch.</div>
+        <div style="font-size:12px;color:var(--t2);font-weight:300">Sign up on a 6-month plan before launch and receive 20% off for 2 years.</div>
+      </div>
+      <a href="#signup" class="bp" style="padding:11px 20px;font-size:13px;white-space:nowrap;flex-shrink:0">Claim your spot</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ▸ FAQ -->
+<section class="bg-page" style="padding:80px 0;border-bottom:1px solid var(--b)">
+  <div style="max-width:680px;margin:0 auto;padding:0 24px">
+    <div class="rv" style="text-align:center;margin-bottom:44px">
+      <div style="display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:14px"><span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>Common questions<span style="width:22px;height:1px;background:var(--o);display:inline-block"></span></div>
+      <h2 class="sh">Before you reach out.<br><em>The usual questions.</em></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div class="rv" style="background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden">
+        <button onclick="tfaq(this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;background:none;border:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;gap:12px">
+          <span style="font-size:15px;font-weight:500;color:var(--dry)">When does Kooee launch?</span>
+          <svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;transition:transform 0.25s"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="fb" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">
+          <p style="padding:0 22px 18px;font-size:14px;color:var(--t2);font-weight:300;line-height:1.75">Mid 2026. Founding partners get access before the public launch, along with direct input into the product during the final development phase.</p>
+        </div>
+      </div>
+      <div class="rv" style="background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden">
+        <button onclick="tfaq(this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;background:none;border:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;gap:12px">
+          <span style="font-size:15px;font-weight:500;color:var(--dry)">Is Kooee Australian?</span>
+          <svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;transition:transform 0.25s"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="fb" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">
+          <p style="padding:0 22px 18px;font-size:14px;color:var(--t2);font-weight:300;line-height:1.75">Yes. Kooee is an Australian company built specifically for the Australian outdoor education sector. All data is stored locally and the platform is designed around how Australian providers and instructors actually operate.</p>
+        </div>
+      </div>
+      <div class="rv" style="background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden">
+        <button onclick="tfaq(this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;background:none;border:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;gap:12px">
+          <span style="font-size:15px;font-weight:500;color:var(--dry)">What does the instructor side look like?</span>
+          <svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;transition:transform 0.25s"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="fb" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">
+          <p style="padding:0 22px 18px;font-size:14px;color:var(--t2);font-weight:300;line-height:1.75">Instructors create a verified profile with their qualifications, compliance documents, experience and availability. When you send them a Kooee they get a push notification with program details and tap to accept or pass. Their field record updates automatically after each program.</p>
+        </div>
+      </div>
+      <div class="rv" style="background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden">
+        <button onclick="tfaq(this)" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;background:none;border:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;gap:12px">
+          <span style="font-size:15px;font-weight:500;color:var(--dry)">What happens after I register interest?</span>
+          <svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;transition:transform 0.25s"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="fb" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">
+          <p style="padding:0 22px 18px;font-size:14px;color:var(--t2);font-weight:300;line-height:1.75">We reach out personally within 48 hours to walk you through the platform and answer any questions. No sales pitch. Just a conversation about whether Kooee is the right fit for your programs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-bark" style="padding:120px 0;border-top:1px solid rgba(196,92,26,0.2);position:relative;overflow:hidden;text-align:center" id="signup">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(196,92,26,0.1) 0%,transparent 65%);pointer-events:none"></div>
+  <div class="mxn" style="position:relative;z-index:1;max-width:560px">
+    <div class="rv">
+      <div style="display:inline-flex;align-items:center;gap:9px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:16px"><span style="width:22px;height:1px;background:var(--o);display:inline-block"></span>Get early access<span style="width:22px;height:1px;background:var(--o);display:inline-block"></span></div>
+      <h2 class="serif" style="font-size:clamp(32px,5vw,50px);font-weight:500;line-height:1.08;letter-spacing:-1.2px;color:var(--dry);margin-bottom:14px">
+        The platform that keeps<br>outdoor people <em style="color:var(--ol)">in the field.</em>
+      </h2>
+      <p style="font-size:15px;color:var(--t1);font-weight:300;line-height:1.75;margin-bottom:36px">Register your interest and we will reach out personally within 48 hours. No sales pitch. Just a conversation about whether Kooee is the right fit for your programs. Founding partners lock in 20% off for 2 years.</p>
+      <div style="text-align:left">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <input class="finp" type="text" placeholder="Your name" style="margin-bottom:0">
+          <input class="finp" type="text" placeholder="Organisation" style="margin-bottom:0">
+        </div>
+        <input class="finp" type="email" placeholder="Email address" inputmode="email">
+        <input class="finp" type="tel" placeholder="Mobile number" inputmode="tel">
+        <select class="finp" style="-webkit-appearance:none;cursor:pointer;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22rgba(245,224,195,0.28)%22 stroke-width=%222.5%22 stroke-linecap=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 14px center">
+          <option value="" disabled selected>How many program days per year?</option>
+          <option>Under 50</option><option>50–200</option><option>200–500</option><option>500+</option>
+        </select>
+        <button class="bp" style="width:100%;padding:17px;font-size:16px;box-shadow:0 8px 32px rgba(196,92,26,0.38);border-radius:12px;margin-top:2px">
+          Register interest
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p style="font-size:12px;color:var(--t3);margin-top:11px;text-align:center">We will be in touch within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-page" style="border-top:1px solid var(--b);padding:32px 0">
+  <div class="mx" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <a href="#" class="logo"><div class="lk">K</div><span class="serif ln">Kooee</span></a>
+    <div style="display:flex;gap:24px">
+      <a href="#" style="font-size:13px;color:var(--t3);text-decoration:none">For instructors</a>
+      <a href="#" style="font-size:13px;color:var(--t3);text-decoration:none">Privacy</a>
+      <a href="#" style="font-size:13px;color:var(--t3);text-decoration:none">Contact</a>
+    </div>
+    <span style="font-size:12px;color:var(--t3)">&copy; 2026 Kooee Pty Ltd, ACN 697 697 822</span>
+  </div>
+</footer>
+
+<script>
+// Scroll reveals
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); }), {threshold:0.05, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach((el,i) => { el.style.transitionDelay = (i%4)*0.07+'s'; obs.observe(el); });
+
+// Responsive
+function rsp() {
+  const m = window.innerWidth < 800;
+  const h = document.getElementById('hwg');
+  const p = document.getElementById('plg');
+  if(h) h.style.gridTemplateColumns = m ? '1fr 1fr' : 'repeat(4,1fr)';
+  if(p) p.style.gridTemplateColumns = m ? '1fr 1fr' : 'repeat(4,1fr)';
+}
+rsp(); window.addEventListener('resize', rsp);
+
+// Calc
+function fmt(n){ return '$'+Math.round(n).toLocaleString('en-AU'); }
+function fH(n){ const v=Math.round(n*10)/10; return v===0?'0h':v+'h'; }
+let shown=false, swMode='no';
+
+function selSw(m) {
+  swMode=m;
+  document.getElementById('sw-no').className='sw-btn'+(m==='no'?' sel':'');
+  document.getElementById('sw-yes').className='sw-btn'+(m==='yes'?' sel':'');
+  document.getElementById('sw-wrap').style.display=m==='yes'?'block':'none';
+  const r=document.getElementById('vsswr'); if(r) r.style.display=m==='yes'?'flex':'none';
+  calc();
+}
+
+function calc() {
+  const perMo=parseFloat(document.getElementById('q1').value)||0;
+  const t1=parseFloat(document.getElementById('t1').value)||0;
+  const t2=parseFloat(document.getElementById('t2').value)||0;
+  const rate=parseFloat(document.getElementById('q3').value)||45;
+  const swMo=swMode==='yes'?(parseFloat(document.getElementById('q5b').value)||0):0;
+  const tp=parseFloat(document.getElementById('q6').value)||0;
+  const plan=parseInt(document.getElementById('q7').value)||100;
+  const hH=t1+t2, pS=Math.round(perMo*6);
+  document.getElementById('q1v').innerHTML=perMo+' <em>per month</em>';
+  document.getElementById('t1v').textContent=fH(t1);
+  document.getElementById('t2v').textContent=fH(t2);
+  if(!shown) return;
+  const cH=(hH*rate)+tp, tA=cH*pS, swS=swMo*6, tC=tA+swS, hS=hH*pS;
+  const sel=document.getElementById('q7');
+  const acqFee=parseInt(sel.options[sel.selectedIndex].dataset.acq)||130;
+  const kS=plan*6, ac=acqFee*pS, kT=kS+ac, sav=tC-kT, savP=tC>0?Math.round((sav/tC)*100):0;
+  document.getElementById('rt').textContent=fmt(tC);
+  document.getElementById('rs').textContent=perMo+'/month \u00d7 6 = '+pS+' instructors this season';
+  document.getElementById('rins').innerHTML='Your team spends <strong>'+fH(hH)+' per hire</strong> on finding, compliance and onboarding. Across <strong>'+pS+' hires</strong> this season: <strong>'+Math.round(hS)+' hours</strong> \u2014 worth <strong>'+fmt(hH*rate*pS)+'</strong> in staff time.'+(tp>0?' Plus <strong>'+fmt(tp*pS)+'</strong> in third-party costs.':'');
+  document.getElementById('rcph').textContent=fmt(cH);
+  document.getElementById('rhrs').textContent=fH(hH);
+  document.getElementById('rsave').textContent=fmt(Math.max(0,sav));
+  document.getElementById('rhrsb').textContent=Math.round(hS)+'h';
+  document.getElementById('rbt1').textContent=fmt(t1*rate)+' ('+fH(t1)+' \u00d7 $'+rate+')';
+  document.getElementById('rbt2').textContent=fmt(t2*rate)+' ('+fH(t2)+' \u00d7 $'+rate+')';
+  document.getElementById('rb3p').textContent=tp>0?fmt(tp):'$0';
+  document.getElementById('rbcph').textContent=fmt(cH);
+  document.getElementById('rbs').textContent=perMo+' \u00d7 6 = '+pS;
+  document.getElementById('rbtot').textContent=fmt(tA);
+  document.getElementById('vsadm').textContent=fmt(tA);
+  if(swMode==='yes') document.getElementById('vssw').textContent=fmt(swS);
+  document.getElementById('vscur').textContent=fmt(tC);
+  document.getElementById('vsk').textContent=fmt(kT);
+  document.getElementById('vssav').textContent=fmt(Math.max(0,sav))+' ('+savP+'%)';
+}
+
+function showRes() {
+  shown=true; calc();
+  document.getElementById('cr').classList.add('show');
+  document.getElementById('ctabox').style.display='none';
+  setTimeout(()=>document.getElementById('cr').scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+function resetCalc() {
+  shown=false;
+  document.getElementById('cr').classList.remove('show');
+  document.getElementById('ctabox').style.display='block';
+  ['q1','t1','t2','q3','q5b','q6'].forEach(id => {
+    const el=document.getElementById(id);
+    if(el) el.value={q1:5,t1:3,t2:2,q3:45,q5b:0,q6:0}[id];
+  });
+  document.getElementById('q7').value=100;
+  selSw('no'); calc();
+  document.getElementById('calc').scrollIntoView({behavior:'smooth'});
+}
+
+calc();
+function tfaq(btn) {
+  const body=btn.nextElementSibling;
+  const icon=btn.querySelector('.fi');
+  const isOpen=body.style.maxHeight&&body.style.maxHeight!=='0px';
+  document.querySelectorAll('.fb').forEach(b=>b.style.maxHeight='0px');
+  document.querySelectorAll('.fi').forEach(i=>i.style.transform='');
+  if(!isOpen){body.style.maxHeight=body.scrollHeight+'px';icon.style.transform='rotate(180deg)';}
+}
+</script>
+<!-- ▸ SIGNUP, bark warm -->
+</body>
+</html>

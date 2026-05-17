@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee — Business Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --o:#C45C1A;--ol:#E8A265;
+  --bg:#F7F3EE;--surface:#FFFFFF;--border:#E2D9D0;--border2:#C8BAB0;
+  --text:#1A1208;--text2:#6B5540;--text3:#A8927E;
+  --page:#0D0806;--dry:#F5E0C3;--t3:rgba(245,224,195,0.3);
+  --ok:#3D8B37;--okbg:rgba(61,139,55,0.08);--okbdr:rgba(61,139,55,0.25);
+  --err:#C0392B;
+}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:260px;min-width:260px;background:var(--page);display:flex;flex-direction:column;padding:36px 28px;position:sticky;top:0;height:100vh;overflow:hidden}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:52px;text-decoration:none}
+.logo-k{width:30px;height:30px;background:var(--o);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.logo-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--dry);letter-spacing:-0.3px}
+.steps{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:13px;padding:10px 12px;border-radius:9px;cursor:default}
+.si.clickable{cursor:pointer;transition:background 0.2s}
+.si.clickable:hover{background:rgba(196,92,26,0.08)}
+.snum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;transition:all 0.25s}
+.snum.idle{background:rgba(245,224,195,0.05);border:1px solid rgba(245,224,195,0.1);color:var(--t3)}
+.snum.act{background:var(--o);color:#fff;box-shadow:0 3px 10px rgba(196,92,26,0.45)}
+.snum.done{background:rgba(61,139,55,0.12);border:1px solid rgba(61,139,55,0.22);color:#7AC255}
+.slbl{font-size:13px;font-weight:500;transition:color 0.2s}
+.slbl.idle{color:rgba(245,224,195,0.25)}
+.slbl.act{color:var(--dry)}
+.slbl.done{color:rgba(245,224,195,0.38)}
+.ssub{font-size:11px;color:rgba(245,224,195,0.2);font-weight:300;margin-top:1px}
+.sidebar-note{margin-top:auto;padding-top:24px;border-top:1px solid rgba(196,92,26,0.1);font-size:11px;color:rgba(245,224,195,0.2);font-weight:300;line-height:1.6}
+
+/* MAIN */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;min-height:100vh}
+
+/* CARD */
+.card{background:var(--surface);border-radius:18px;width:100%;max-width:540px;box-shadow:0 1px 4px rgba(26,18,8,0.06),0 8px 32px rgba(26,18,8,0.05)}
+.ch{padding:32px 36px 26px;border-bottom:1px solid var(--border)}
+.cb{padding:32px 36px}
+.cf{padding:18px 36px 26px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+
+/* PROGRESS DOTS */
+.dots{display:flex;gap:5px;margin-bottom:18px}
+.dot{height:4px;border-radius:3px;background:var(--border);transition:all 0.3s}
+.dot.act{background:var(--o);width:20px}
+.dot.done{background:var(--ok)}
+.dot.idle{width:6px}
+
+/* TYPOGRAPHY */
+.ctitle{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-0.3px;margin-bottom:5px;line-height:1.25}
+.cdesc{font-size:13px;color:var(--text2);font-weight:300;line-height:1.65}
+
+/* FORM */
+.fg{margin-bottom:18px}
+.fg:last-child{margin-bottom:0}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px}
+label{display:block;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.4px;text-transform:uppercase;margin-bottom:6px}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s,background 0.2s;-webkit-appearance:none;appearance:none}
+.inp:focus{border-color:var(--o);background:#fff;box-shadow:0 0 0 3px rgba(196,92,26,0.07)}
+.inp::placeholder{color:var(--text3)}
+.inp.ok{border-color:var(--ok);background:#fff}
+.inp.er{border-color:var(--err)}
+.iw{position:relative}
+.ii{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;line-height:1}
+.fnote{font-size:11px;color:var(--text3);margin-top:5px;font-weight:300}
+.ferr{font-size:11px;color:var(--err);margin-top:4px;display:none}
+select.inp{cursor:pointer;padding-right:32px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A8927E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* PASSWORD */
+.pwbars{display:flex;gap:3px;margin-top:7px}
+.pwbar{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background 0.25s}
+.pwlbl{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* PLAN CARDS */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px}
+.pc{border:1.5px solid var(--border);border-radius:12px;padding:15px;cursor:pointer;transition:all 0.2s;position:relative}
+.pc:hover{border-color:var(--border2)}
+.pc.sel{border-color:var(--o);background:#FFF8F4}
+.pchk{position:absolute;top:11px;right:11px;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all 0.2s;background:#fff}
+.pc.sel .pchk{background:var(--o);border-color:var(--o)}
+.pname{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.pc.sel .pname{color:var(--o)}
+.pdesc{font-size:11px;color:var(--text3);font-weight:300;line-height:1.5;margin-bottom:8px}
+.pstat{font-size:11px;color:var(--text2);margin-bottom:2px}
+.pnote{font-size:11px;color:var(--text3);font-weight:300;line-height:1.55;padding:11px 13px;background:var(--bg);border-radius:8px}
+
+/* SUMMARY */
+.ssec{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.ssec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.stitle{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.sedit{font-size:11px;color:var(--o);cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0}
+.srow{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;font-size:13px}
+.sk{color:var(--text2);font-weight:300}
+.sv{color:var(--text);font-weight:500;text-align:right;max-width:55%}
+
+/* BUTTONS */
+.bn{display:inline-flex;align-items:center;gap:7px;background:var(--o);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:10px;padding:12px 24px;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.bn:hover{background:#a34612;transform:translateY(-1px);box-shadow:0 5px 16px rgba(196,92,26,0.32)}
+.bn:disabled{opacity:0.3;cursor:not-allowed;transform:none;box-shadow:none}
+.bb{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0;transition:color 0.2s}
+.bb:hover{color:var(--text2)}
+
+/* SUCCESS */
+.sico{width:56px;height:56px;border-radius:50%;background:var(--okbg);border:1.5px solid var(--okbdr);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+
+/* ADMIN NOTE */
+.anote{margin-top:18px;padding:13px 15px;background:rgba(196,92,26,0.04);border:1px solid rgba(196,92,26,0.1);border-radius:9px;font-size:12px;color:var(--text2);font-weight:300;line-height:1.6}
+
+/* PANELS — no animation, just show/hide */
+.panel{display:none}
+.panel.active{display:block}
+
+@media(max-width:760px){
+  body{flex-direction:column}
+  .sidebar{width:100%;height:auto;min-height:0;position:relative;padding:20px;flex-direction:row;align-items:center;gap:16px}
+  .steps{flex-direction:row;gap:8px}
+  .ssub,.sidebar-note,.logo-name{display:none}
+  .slbl{font-size:11px}
+  .si{padding:6px 8px}
+  .main{padding:20px 16px;min-height:0}
+  .ch,.cb,.cf{padding-left:20px;padding-right:20px}
+  .frow{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="#" class="logo">
+    <div class="logo-k">K</div>
+    <span class="logo-name">Kooee</span>
+  </a>
+  <div class="steps">
+    <div class="si" id="si1"><div class="snum act" id="sn1">1</div><div><div class="slbl act" id="sl1">Organisation</div><div class="ssub">Business details</div></div></div>
+    <div class="si" id="si2"><div class="snum idle" id="sn2">2</div><div><div class="slbl idle" id="sl2">Primary contact</div><div class="ssub">Main account</div></div></div>
+    <div class="si" id="si3"><div class="snum idle" id="sn3">3</div><div><div class="slbl idle" id="sl3">Password</div><div class="ssub">Account setup</div></div></div>
+    <div class="si" id="si4"><div class="snum idle" id="sn4">4</div><div><div class="slbl idle" id="sl4">Plan</div><div class="ssub">Choose your tier</div></div></div>
+    <div class="si" id="si5"><div class="snum idle" id="sn5">5</div><div><div class="slbl idle" id="sl5">Confirm</div><div class="ssub">Review and finish</div></div></div>
+  </div>
+  <p class="sidebar-note">Your details are stored securely. Everything can be updated from your dashboard after setup.</p>
+</aside>
+
+<main class="main">
+  <div class="card">
+
+    <!-- STEP 1 -->
+    <div class="panel active" id="p1">
+      <div class="ch">
+        <div class="dots"><div class="dot act"></div><div class="dot idle"></div><div class="dot idle"></div><div class="dot idle"></div><div class="dot idle"></div></div>
+        <h1 class="ctitle">Your organisation.</h1>
+        <p class="cdesc">This appears on your provider profile visible to instructors on Kooee.</p>
+      </div>
+      <div class="cb">
+        <div class="fg">
+          <label>Organisation name</label>
+          <input class="inp" id="orgName" type="text" placeholder="e.g. Blue Mountains Outdoor Education" oninput="v1()">
+        </div>
+        <div class="fg">
+          <label>ABN</label>
+          <div class="iw">
+            <input class="inp" id="abn" type="text" placeholder="11 digit ABN" maxlength="14" oninput="fmtABN(this);v1()">
+            <span class="ii" id="abn-i"></span>
+          </div>
+          <div class="fnote" id="abn-note">Australian Business Number — used to verify your organisation.</div>
+          <div class="ferr" id="abn-err">Please enter a valid 11-digit ABN.</div>
+        </div>
+        <div class="frow">
+          <div>
+            <label>State</label>
+            <select class="inp" id="state" onchange="v1()">
+              <option value="">Select state</option>
+              <option>NSW</option><option>VIC</option><option>QLD</option><option>WA</option><option>SA</option><option>TAS</option><option>ACT</option><option>NT</option>
+            </select>
+          </div>
+          <div>
+            <label>Postcode</label>
+            <input class="inp" id="postcode" type="text" placeholder="2000" maxlength="4" oninput="v1()" inputmode="numeric">
+          </div>
+        </div>
+        <div class="fg">
+          <label>Business address</label>
+          <input class="inp" id="addr" type="text" placeholder="Street address" oninput="v1()">
+        </div>
+      </div>
+      <div class="cf">
+        <span></span>
+        <button class="bn" id="n1" onclick="go(2)" disabled>Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="panel" id="p2">
+      <div class="ch">
+        <div class="dots"><div class="dot done"></div><div class="dot act"></div><div class="dot idle"></div><div class="dot idle"></div><div class="dot idle"></div></div>
+        <h1 class="ctitle">Primary contact.</h1>
+        <p class="cdesc">This becomes the main administrator account. Additional admins can be invited from your dashboard — they won't need to repeat this setup.</p>
+      </div>
+      <div class="cb">
+        <div class="frow">
+          <div><label>First name</label><input class="inp" id="fn" type="text" placeholder="First name" oninput="v2()"></div>
+          <div><label>Last name</label><input class="inp" id="ln" type="text" placeholder="Last name" oninput="v2()"></div>
+        </div>
+        <div class="fg">
+          <label>Role / Title</label>
+          <input class="inp" id="role" type="text" placeholder="e.g. Program Manager, Director" oninput="v2()">
+        </div>
+        <div class="fg">
+          <label>Work email</label>
+          <div class="iw">
+            <input class="inp" id="email" type="email" placeholder="you@organisation.com.au" oninput="v2()" inputmode="email">
+            <span class="ii" id="email-i"></span>
+          </div>
+          <div class="fnote">Confirmation will be sent here. This will be your login email.</div>
+        </div>
+        <div class="fg">
+          <label>Mobile</label>
+          <input class="inp" id="mobile" type="tel" placeholder="04XX XXX XXX" maxlength="12" oninput="v2()" inputmode="tel">
+        </div>
+      </div>
+      <div class="cf">
+        <button class="bb" onclick="go(1)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+        <button class="bn" id="n2" onclick="go(3)" disabled>Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="panel" id="p3">
+      <div class="ch">
+        <div class="dots"><div class="dot done"></div><div class="dot done"></div><div class="dot act"></div><div class="dot idle"></div><div class="dot idle"></div></div>
+        <h1 class="ctitle">Set your password.</h1>
+        <p class="cdesc">Password for your main administrator account.</p>
+      </div>
+      <div class="cb">
+        <div class="fg">
+          <label>Password</label>
+          <div class="iw">
+            <input class="inp" id="pw1" type="password" placeholder="At least 8 characters" oninput="chkPw()">
+            <span class="ii" id="eye" onclick="togglePw()" style="cursor:pointer;color:var(--text3)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+          <div class="pwbars"><div class="pwbar" id="pb1"></div><div class="pwbar" id="pb2"></div><div class="pwbar" id="pb3"></div><div class="pwbar" id="pb4"></div></div>
+          <div class="pwlbl" id="pwlbl">Enter a password</div>
+        </div>
+        <div class="fg">
+          <label>Confirm password</label>
+          <div class="iw">
+            <input class="inp" id="pw2" type="password" placeholder="Repeat your password" oninput="chkPw()">
+            <span class="ii" id="pw2i"></span>
+          </div>
+          <div class="ferr" id="pwerr">Passwords do not match.</div>
+        </div>
+        <div class="anote">Additional admins are invited from <strong>Settings › Team</strong> in your dashboard. They set their own password and don't repeat this process.</div>
+      </div>
+      <div class="cf">
+        <button class="bb" onclick="go(2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+        <button class="bn" id="n3" onclick="go(4)" disabled>Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="panel" id="p4">
+      <div class="ch">
+        <div class="dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot act"></div><div class="dot idle"></div></div>
+        <h1 class="ctitle">Choose your plan.</h1>
+        <p class="cdesc">All plans include full platform access. Select the plan that suits your operation.</p>
+      </div>
+      <div class="cb" style="padding-top:24px;padding-bottom:24px">
+
+        <!-- Plan cards — vertical list for clarity -->
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+
+          <!-- SEASONAL -->
+          <div class="pc" id="pc-s" onclick="selPlan('s')" style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:16px 18px">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span class="pname" style="margin-bottom:0">Seasonal</span>
+                <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">Month to month</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+                <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-0.5px">$150</span>
+                <span style="font-size:12px;color:var(--text3);font-weight:300">/month</span>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--text2)">1 admin · 1 advert/mo</span>
+                <span style="font-size:11px;color:var(--text2)">Instructor access: $150/hire</span>
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:3px">No minimum commitment</div>
+            </div>
+            <div class="pchk" id="pk-s" style="position:static;flex-shrink:0"></div>
+          </div>
+
+          <!-- GROWTH -->
+          <div class="pc" id="pc-g" onclick="selPlan('g')" style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:16px 18px">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span class="pname" style="margin-bottom:0">Growth</span>
+                <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">6-month plan</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+                <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-0.5px">$100</span>
+                <span style="font-size:12px;color:var(--text3);font-weight:300">/month</span>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--text2)">1 admin · 1 advert/mo</span>
+                <span style="font-size:11px;color:var(--text2)">Instructor access: $130/hire</span>
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:3px">Minimum commitment: $600</div>
+            </div>
+            <div class="pchk" id="pk-g" style="position:static;flex-shrink:0"></div>
+          </div>
+
+          <!-- SCALE -->
+          <div class="pc" id="pc-sc" onclick="selPlan('sc')" style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:16px 18px;border-color:#C45C1A;background:#FFF8F4">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span class="pname" style="margin-bottom:0;color:var(--o)">Scale</span>
+                <span style="font-size:10px;background:rgba(196,92,26,0.1);color:var(--o);border-radius:20px;padding:2px 8px;font-weight:600">Popular</span>
+                <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">6-month plan</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+                <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-0.5px">$200</span>
+                <span style="font-size:12px;color:var(--text3);font-weight:300">/month</span>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--text2)">3 admins · 3 adverts/mo</span>
+                <span style="font-size:11px;color:var(--text2)">Instructor access: $110/hire</span>
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:3px">Minimum commitment: $1,200</div>
+            </div>
+            <div class="pchk" id="pk-sc" style="position:static;flex-shrink:0"></div>
+          </div>
+
+          <!-- ENTERPRISE -->
+          <div class="pc" id="pc-e" onclick="selPlan('e')" style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:16px 18px">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span class="pname" style="margin-bottom:0">Enterprise</span>
+                <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">6-month plan</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+                <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--text);letter-spacing:-0.5px">$350</span>
+                <span style="font-size:12px;color:var(--text3);font-weight:300">/month</span>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--text2)">Unlimited admins + adverts</span>
+                <span style="font-size:11px;color:var(--text2)">Instructor access: $90/hire</span>
+              </div>
+              <div style="font-size:11px;color:var(--text3);margin-top:3px">Minimum commitment: $2,100</div>
+            </div>
+            <div class="pchk" id="pk-e" style="position:static;flex-shrink:0"></div>
+          </div>
+
+        </div>
+
+        <div style="font-size:11px;color:var(--text3);font-weight:300;line-height:1.6;padding:11px 13px;background:var(--bg);border-radius:8px">
+          Instructor access fees apply when a new instructor is added to your account for the first time. 6-month plans are billed upfront. You can upgrade your plan at any time from your dashboard.
+        </div>
+
+      </div>
+      <div class="cf">
+        <button class="bb" onclick="go(3)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+        <button class="bn" id="n4" onclick="go(5)" disabled>Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 5 — CONFIRM -->
+    <div class="panel" id="p5">
+      <div class="ch">
+        <div class="dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot act"></div></div>
+        <h1 class="ctitle">Review your details.</h1>
+        <p class="cdesc">Everything look right? You can edit any section below before completing setup.</p>
+      </div>
+      <div class="cb">
+        <div class="ssec">
+          <div class="stitle">Organisation <span class="sedit" onclick="go(1)">Edit</span></div>
+          <div class="srow"><span class="sk">Name</span><span class="sv" id="sum-org"></span></div>
+          <div class="srow"><span class="sk">ABN</span><span class="sv" id="sum-abn"></span></div>
+          <div class="srow"><span class="sk">State</span><span class="sv" id="sum-state"></span></div>
+          <div class="srow"><span class="sk">Address</span><span class="sv" id="sum-addr"></span></div>
+        </div>
+        <div class="ssec">
+          <div class="stitle">Primary contact <span class="sedit" onclick="go(2)">Edit</span></div>
+          <div class="srow"><span class="sk">Name</span><span class="sv" id="sum-name"></span></div>
+          <div class="srow"><span class="sk">Role</span><span class="sv" id="sum-role"></span></div>
+          <div class="srow"><span class="sk">Email</span><span class="sv" id="sum-email"></span></div>
+          <div class="srow"><span class="sk">Mobile</span><span class="sv" id="sum-mob"></span></div>
+        </div>
+        <div class="ssec">
+          <div class="stitle">Plan <span class="sedit" onclick="go(4)">Edit</span></div>
+          <div class="srow"><span class="sk">Selected plan</span><span class="sv" id="sum-plan"></span></div>
+          <div class="srow"><span class="sk">Billing</span><span class="sv" id="sum-billing"></span></div>
+          <div class="srow"><span class="sk">Min. commitment</span><span class="sv" id="sum-commit"></span></div>
+        </div>
+      </div>
+      <div class="cf">
+        <button class="bb" onclick="go(4)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+        <button class="bn" onclick="done()" style="background:#2D7A28">Complete setup <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="panel" id="p6">
+      <div class="cb" style="padding:52px 36px;text-align:center">
+        <div class="sico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D8B37" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h1 class="ctitle" style="text-align:center;font-size:24px;margin-bottom:10px">You're all set.</h1>
+        <p style="font-size:14px;color:var(--text2);font-weight:300;line-height:1.75;max-width:360px;margin:0 auto 28px">A confirmation email is on its way. Your dashboard is ready. We'll be in touch to finalise your plan details.</p>
+        <button class="bn" style="margin:0 auto" onclick="alert('Redirecting to dashboard...')">
+          Go to dashboard <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p style="font-size:12px;color:var(--text3);margin-top:14px">Confirmation sent to <strong id="conf-email" style="color:var(--text2)"></strong></p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+let cur = 1;
+let plan = '';
+
+function go(n) {
+  document.getElementById('p' + cur).classList.remove('active');
+  document.getElementById('p' + n).classList.add('active');
+  for (let i = 1; i <= 5; i++) {
+    const nm = document.getElementById('sn' + i);
+    const lb = document.getElementById('sl' + i);
+    const si = document.getElementById('si' + i);
+    if (i < n) {
+      nm.className = 'snum done'; nm.textContent = '✓';
+      lb.className = 'slbl done';
+      si.className = 'si clickable';
+    } else if (i === n) {
+      nm.className = 'snum act'; nm.textContent = i;
+      lb.className = 'slbl act';
+      si.className = 'si';
+    } else {
+      nm.className = 'snum idle'; nm.textContent = i;
+      lb.className = 'slbl idle';
+      si.className = 'si';
+    }
+  }
+  if (n === 5) fillSummary();
+  cur = n;
+}
+
+// ABN formatting + validation
+function fmtABN(el) {
+  let d = el.value.replace(/\D/g,'').slice(0,11);
+  let f = '';
+  for (let i=0;i<d.length;i++) { if(i===2||i===5||i===8) f+=' '; f+=d[i]; }
+  el.value = f;
+  const ok = d.length === 11;
+  el.className = 'inp' + (d.length>0 ? (ok?' ok':''): '');
+  document.getElementById('abn-i').textContent = ok ? '✓' : '';
+  document.getElementById('abn-i').style.color = 'var(--ok)';
+  document.getElementById('abn-err').style.display = (d.length>0&&!ok) ? 'block' : 'none';
+  document.getElementById('abn-note').style.display = ok ? 'none' : 'block';
+}
+
+function v1() {
+  const ok =
+    document.getElementById('orgName').value.trim().length > 1 &&
+    document.getElementById('abn').value.replace(/\D/g,'').length === 11 &&
+    document.getElementById('state').value &&
+    document.getElementById('postcode').value.length === 4 &&
+    document.getElementById('addr').value.trim().length > 3;
+  document.getElementById('n1').disabled = !ok;
+}
+
+function v2() {
+  const em = document.getElementById('email').value;
+  const eok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+  const ei = document.getElementById('email-i');
+  ei.textContent = eok ? '✓' : '';
+  ei.style.color = 'var(--ok)';
+  const ok =
+    document.getElementById('fn').value.trim() &&
+    document.getElementById('ln').value.trim() &&
+    document.getElementById('role').value.trim() &&
+    eok &&
+    document.getElementById('mobile').value.replace(/\D/g,'').length >= 10;
+  document.getElementById('n2').disabled = !ok;
+}
+
+function chkPw() {
+  const p = document.getElementById('pw1').value;
+  const p2 = document.getElementById('pw2').value;
+  const bars = [document.getElementById('pb1'),document.getElementById('pb2'),document.getElementById('pb3'),document.getElementById('pb4')];
+  let sc = 0;
+  if(p.length>=8) sc++;
+  if(/[A-Z]/.test(p)) sc++;
+  if(/[0-9]/.test(p)) sc++;
+  if(/[^A-Za-z0-9]/.test(p)) sc++;
+  const cols = ['#e74c3c','#e67e22','#f39c12','#3D8B37'];
+  const lbls = ['Too short','Weak','Good','Strong'];
+  bars.forEach((b,i)=>b.style.background = i<sc ? cols[sc-1] : 'var(--border)');
+  const lbl = document.getElementById('pwlbl');
+  lbl.textContent = p.length===0 ? 'Enter a password' : lbls[sc-1]||'Too short';
+  lbl.style.color = p.length===0 ? 'var(--text3)' : cols[sc-1]||cols[0];
+  const match = p2.length>0 && p===p2;
+  const mis = p2.length>0 && p!==p2;
+  document.getElementById('pw2i').textContent = match?'✓':mis?'✗':'';
+  document.getElementById('pw2i').style.color = match?'var(--ok)':'var(--err)';
+  document.getElementById('pwerr').style.display = mis?'block':'none';
+  document.getElementById('n3').disabled = !(sc>=2&&match);
+}
+
+function togglePw() {
+  const i = document.getElementById('pw1');
+  i.type = i.type==='password'?'text':'password';
+}
+
+function selPlan(p) {
+  plan = p;
+  ['s','g','sc','e'].forEach(x=>{
+    document.getElementById('pc-'+x).classList.toggle('sel', x===p);
+    const chk = document.getElementById('pk-'+x);
+    chk.innerHTML = x===p ? '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>' : '';
+    document.getElementById('pc-'+x).querySelector('.pname').style.color = x===p ? 'var(--o)' : '';
+  });
+  document.getElementById('n4').disabled = false;
+}
+
+function fillSummary() {
+  document.getElementById('sum-org').textContent = document.getElementById('orgName').value;
+  document.getElementById('sum-abn').textContent = document.getElementById('abn').value;
+  document.getElementById('sum-state').textContent = document.getElementById('state').value;
+  document.getElementById('sum-addr').textContent = document.getElementById('addr').value;
+  document.getElementById('sum-name').textContent = document.getElementById('fn').value+' '+document.getElementById('ln').value;
+  document.getElementById('sum-role').textContent = document.getElementById('role').value;
+  document.getElementById('sum-email').textContent = document.getElementById('email').value;
+  document.getElementById('sum-mob').textContent = document.getElementById('mobile').value;
+  const names = {s:'Seasonal',g:'Growth',sc:'Scale',e:'Enterprise'};
+  const prices = {s:'$150/month',g:'$100/month',sc:'$200/month',e:'$350/month'};
+  const billing = {s:'Month to month',g:'6-month plan',sc:'6-month plan',e:'6-month plan'};
+  const commit = {s:'No minimum commitment',g:'$600',sc:'$1,200',e:'$2,100'};
+  document.getElementById('sum-plan').textContent = (names[plan]||'—') + ' — ' + (prices[plan]||'');
+  document.getElementById('sum-billing').textContent = billing[plan]||'—';
+  document.getElementById('sum-commit').textContent = commit[plan]||'—';
+}
+
+function done() {
+  document.getElementById('conf-email').textContent = document.getElementById('email').value;
+  document.getElementById('p5').classList.remove('active');
+  document.getElementById('p6').classList.add('active');
+  for(let i=1;i<=5;i++){
+    document.getElementById('sn'+i).className='snum done';
+    document.getElementById('sn'+i).textContent='✓';
+    document.getElementById('sl'+i).className='slbl done';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --o:#C45C1A;--ol:#E8A265;--dry:#F5E0C3;--paper:#FBF7F2;
+  --page:#0D0806;--card:#161008;--card2:#1C130A;
+  --b:rgba(196,92,26,0.15);--bm:rgba(196,92,26,0.32);
+  --t2:rgba(245,224,195,0.55);--t3:rgba(245,224,195,0.28);--t4:rgba(245,224,195,0.08);
+  --ok:#7AC255;--okbg:rgba(122,194,85,0.12);
+}
+html{background:#080808;display:flex;flex-direction:column;align-items:center;padding:32px 16px 100px;min-height:100vh;-webkit-font-smoothing:antialiased}
+body{font-family:"DM Sans",sans-serif;width:390px;flex-shrink:0}
+.phone{width:390px;background:var(--page);border-radius:52px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.9),0 0 0 1px rgba(255,255,255,0.07),inset 0 0 0 10px #080808;position:relative;min-height:844px}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#080808;border-radius:0 0 20px 20px;z-index:100}
+.notch::after{content:"";position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:60px;height:5px;background:#141414;border-radius:3px}
+.sc{display:none;min-height:844px;position:relative;overflow:hidden;flex-direction:column}
+.sc.on{display:flex}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes pop{0%{transform:scale(0.82)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes checkIn{from{opacity:0;transform:scale(0) rotate(-180deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(-8px)}}
+.a{animation:up 0.55s cubic-bezier(.16,1,.3,1) both}
+.a1{animation-delay:.07s}.a2{animation-delay:.14s}.a3{animation-delay:.21s}.a4{animation-delay:.28s}.a5{animation-delay:.35s}.a6{animation-delay:.42s}
+.grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.4}
+.h1{font-family:"Playfair Display",serif;font-size:30px;font-weight:500;color:var(--dry);line-height:1.1;letter-spacing:-0.6px}
+.h1 em{font-style:italic;color:var(--ol)}
+.eyebrow{font-size:10px;font-weight:700;color:var(--o);letter-spacing:1.5px;text-transform:uppercase}
+.sub{font-size:13px;color:var(--t2);font-weight:300;line-height:1.7}
+.btn-p{width:100%;background:var(--o);color:var(--paper);font-family:"DM Sans",sans-serif;font-size:16px;font-weight:600;padding:18px;border-radius:16px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 28px rgba(196,92,26,0.38);touch-action:manipulation;transition:all 0.2s}
+.btn-p:active{background:#a34612;transform:scale(0.99);box-shadow:none}
+.btn-p svg,.back-btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;flex-shrink:0}
+.btn-txt{background:none;border:none;color:var(--t3);font-family:"DM Sans",sans-serif;font-size:13px;cursor:pointer;padding:10px 0;width:100%;text-align:center}
+.btn-txt em{color:var(--ol);font-style:normal}
+.bottom{padding:14px 24px 44px;position:sticky;bottom:0;z-index:20}
+.bg-fade{background:linear-gradient(to top,var(--page) 55%,transparent)}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--t3);font-family:"DM Sans",sans-serif;font-size:13px;cursor:pointer;padding:0}
+.prog-wrap{padding:14px 24px 6px}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.prog-lbl{font-size:10px;font-weight:700;color:var(--o);letter-spacing:1px;text-transform:uppercase}
+.prog-bar{height:2px;background:var(--t4);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--o),var(--ol));border-radius:2px;transition:width 0.6s cubic-bezier(.16,1,.3,1)}
+.content{padding:12px 24px 0;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.fl{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:5px;display:block}
+.inp{width:100%;background:var(--card);border:1px solid var(--b);border-radius:13px;padding:14px 16px;font-size:16px;color:var(--dry);font-family:"DM Sans",sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.inp:focus{border-color:var(--bm)}
+.inp::placeholder{color:var(--t3)}
+.sel-inp{width:100%;background:var(--card);border:1px solid var(--b);border-radius:13px;padding:14px 16px;font-size:15px;color:var(--dry);font-family:"DM Sans",sans-serif;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(245,224,195,0.28)' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.sel-inp:focus{border-color:var(--bm)}
+.sel-inp option{background:#161008;color:#F5E0C3}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field{margin-bottom:12px}
+.state-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:6px}
+.st{background:var(--card);border:1px solid var(--b);border-radius:11px;padding:11px 4px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:12px;font-weight:600;color:var(--t2);font-family:"DM Sans",sans-serif}
+.st.sel{background:rgba(196,92,26,0.12);border-color:var(--o);color:var(--dry);animation:pop 0.25s ease}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:0.8px;text-transform:uppercase;margin:14px 0 8px;display:block}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:"DM Sans",sans-serif;border:1px solid var(--b);background:var(--card);color:var(--t2);white-space:nowrap}
+.pill.sel{background:rgba(196,92,26,0.12);border-color:var(--o);color:var(--dry);animation:pop 0.2s ease}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2C1A0E,#1a0d06);border:1px solid var(--bm);border-radius:20px;padding:10px 18px;font-size:13px;color:var(--ol);font-weight:500;white-space:nowrap;z-index:500;display:none;box-shadow:0 8px 32px rgba(196,92,26,0.3)}
+.live-card{background:linear-gradient(140deg,var(--card),#1a0d06);border:1px solid var(--bm);border-radius:18px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden}
+.live-card::before{content:"";position:absolute;top:-24px;right:-24px;width:80px;height:80px;border-radius:50%;background:rgba(196,92,26,0.06)}
+.lc-top{display:flex;align-items:center;gap:12px}
+.lc-av{width:48px;height:48px;border-radius:50%;background:var(--o);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:"Playfair Display",serif;font-size:18px;font-weight:500;color:var(--paper);position:relative;cursor:pointer;transition:all 0.3s;border:2px solid transparent}
+.lc-av.hp{border-color:var(--ol)}
+.lc-av-badge{position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;background:var(--o);border-radius:50%;border:2px solid var(--card);display:none;align-items:center;justify-content:center;animation:checkIn 0.4s ease}
+.lc-av-badge svg{width:9px;height:9px;stroke:white;stroke-width:2.5;fill:none}
+.lc-name{font-family:"Playfair Display",serif;font-size:17px;font-weight:500;color:var(--dry);letter-spacing:-0.2px;line-height:1.2;min-height:20px}
+.lc-name.empty{color:var(--t3);font-style:italic;font-size:14px}
+.lc-build{display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--ol);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px}
+.pd{width:5px;height:5px;border-radius:50%;background:var(--o);animation:pulse 1.5s infinite;flex-shrink:0}
+.photo-ring{width:76px;height:76px;border-radius:50%;border:2px dashed var(--bm);display:flex;align-items:center;justify-content:center;background:var(--card);cursor:pointer;transition:all 0.3s;margin:0 auto 8px;position:relative}
+.photo-ring.hp{border-style:solid;border-color:var(--o);background:rgba(196,92,26,0.05)}
+.photo-ring-badge{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;background:var(--o);border-radius:50%;border:2px solid var(--page);display:none;align-items:center;justify-content:center;animation:checkIn 0.4s ease}
+.photo-ring-badge svg{width:10px;height:10px;stroke:white;stroke-width:2.5;fill:none}
+.photo-btns{display:flex;gap:8px;margin-top:10px}
+.photo-btn{flex:1;background:var(--card);border:1px solid var(--b);border-radius:13px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.2s}
+.photo-btn:active{border-color:var(--bm)}
+.photo-btn-icon svg{width:20px;height:20px;stroke:var(--ol);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.photo-btn-lbl{font-size:11px;color:var(--t2);margin-top:4px}
+.skip-txt{display:block;text-align:center;font-size:12px;color:var(--t3);margin-top:8px;cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;width:100%;padding:3px}
+.tmarker{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--b);border-radius:15px;padding:14px 16px;cursor:pointer;transition:all 0.2s;margin-bottom:8px}
+.tmarker.sel{border-color:var(--o);background:rgba(196,92,26,0.08)}
+.tm-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--t3);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.tmarker.sel .tm-check{background:var(--o);border-color:var(--o)}
+.tmarker.sel .tm-check::after{content:"";width:5px;height:4px;border-right:2px solid white;border-bottom:2px solid white;transform:rotate(45deg) translate(-0.5px,-1px);display:block}
+.tmarker-vibe{font-size:11px;color:var(--ol);font-style:italic;margin-top:4px;display:none;animation:slideUp 0.3s ease}
+.tmarker.sel .tmarker-vibe{display:block}
+.elev-svg{width:100%;height:38px}
+.slider-inp{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(196,92,26,0.2);outline:none;cursor:pointer;border-radius:3px;margin-top:4px}
+.slider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--o);box-shadow:0 2px 8px rgba(196,92,26,0.4);cursor:pointer}
+.slider-stat{background:rgba(196,92,26,0.08);border:1px solid var(--bm);border-radius:13px;padding:12px 14px;text-align:center;margin-top:10px}
+.sl-val{font-family:"Playfair Display",serif;font-size:28px;font-weight:500;color:var(--dry);letter-spacing:-0.5px;line-height:1}
+.sl-val em{font-style:normal;color:var(--ol)}
+.tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;touch-action:manipulation}
+.tile-icon svg{width:26px;height:26px;stroke:var(--t2);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+.tile-lbl{font-size:11px;color:var(--t2);font-weight:400;line-height:1.2;transition:color 0.2s}
+.tile.sel{background:rgba(196,92,26,0.12);border-color:var(--o);animation:pop 0.2s ease}
+.tile.sel .tile-lbl{color:var(--dry);font-weight:500}
+.tile.sel .tile-icon svg{stroke:var(--ol)}
+.badge-strip{display:inline-flex;align-items:center;gap:6px;background:rgba(196,92,26,0.08);border:1px solid var(--bm);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--ol);font-weight:600;margin-bottom:12px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.role-tile{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:16px 12px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;touch-action:manipulation}
+.role-tile.sel{background:rgba(196,92,26,0.12);border-color:var(--o);animation:pop 0.22s ease}
+.role-tile-icon{width:36px;height:36px;border-radius:10px;background:var(--t4);display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.role-tile-icon svg{width:16px;height:16px;stroke:var(--t2);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+.role-tile.sel .role-tile-icon{background:rgba(196,92,26,0.2)}
+.role-tile.sel .role-tile-icon svg{stroke:var(--ol)}
+.role-tile-lbl{font-size:12px;color:var(--t2);font-weight:400;line-height:1.25;transition:color 0.2s}
+.role-tile.sel .role-tile-lbl{color:var(--dry);font-weight:500}
+.role-primary-card{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--b);border-radius:13px;padding:12px 15px;cursor:pointer;transition:all 0.2s;margin-bottom:7px}
+.role-primary-card.sel{border-color:var(--o);background:rgba(196,92,26,0.1)}
+.role-primary-card .r-name{font-size:13px;color:var(--t2);flex:1;transition:color 0.2s}
+.role-primary-card.sel .r-name{color:var(--dry);font-weight:500}
+.pri-badge{font-size:9px;border-radius:4px;padding:2px 7px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;flex-shrink:0}
+.pri-badge.p{background:var(--o);color:white}
+.pri-badge.s{background:rgba(196,92,26,0.3);color:var(--ol)}
+.avail-card{border:1px solid var(--b);border-radius:16px;padding:16px;margin-bottom:10px;background:var(--card);cursor:pointer;transition:all 0.2s}
+.avail-card.av{border-color:var(--ok);background:var(--okbg)}
+.avail-card.na{border-color:rgba(196,92,26,0.4);background:rgba(196,92,26,0.06)}
+.avail-header{display:flex;align-items:center;gap:10px}
+.avail-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.avail-title{font-size:14px;font-weight:500;color:var(--dry);flex:1}
+.avail-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--t3);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.avail-card.av .avail-check,.avail-card.na .avail-check{background:var(--o);border-color:var(--o)}
+.avail-card.av .avail-check::after,.avail-card.na .avail-check::after{content:"";width:6px;height:5px;border-right:2px solid white;border-bottom:2px solid white;transform:rotate(45deg) translate(-0.5px,-1px);display:block}
+.avail-desc{font-size:12px;color:var(--t3);line-height:1.55;margin-top:8px;padding-left:18px}
+.toggle-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--b);border-radius:16px;padding:16px;margin-bottom:10px}
+.toggle-info{flex:1}
+.toggle-title{font-size:14px;font-weight:500;color:var(--dry);margin-bottom:3px}
+.toggle-desc{font-size:11px;color:var(--t3);line-height:1.5}
+.toggle-switch{width:44px;height:24px;background:var(--o);border-radius:12px;position:relative;flex-shrink:0;cursor:pointer;transition:background 0.2s}
+.toggle-switch.off{background:rgba(255,255,255,0.1)}
+.toggle-knob{width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;right:3px;transition:all 0.2s}
+.toggle-switch.off .toggle-knob{right:auto;left:3px}
+.comp-block{background:var(--card);border:1px solid var(--b);border-radius:17px;padding:16px;margin-bottom:12px}
+.comp-title{font-size:13px;font-weight:600;color:var(--dry);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.comp-title svg{width:15px;height:15px;stroke:var(--ol);stroke-width:1.8;fill:none;stroke-linecap:round}
+.comp-opts{display:flex;gap:7px;margin-bottom:10px}
+.comp-opt{flex:1;background:var(--card2);border:1px solid var(--b);border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;color:var(--t2);font-weight:400;transition:all 0.2s;font-family:"DM Sans",sans-serif}
+.comp-opt.sel{border-color:var(--o);background:rgba(196,92,26,0.1);color:var(--dry);font-weight:500}
+.comp-expiry{display:none}
+.comp-expiry.show{display:block}
+.reminder{display:inline-flex;align-items:center;gap:5px;background:var(--okbg);border:1px solid rgba(122,194,85,0.2);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--ok);font-weight:500;margin-top:7px}
+.reminder svg{width:12px;height:12px;stroke:var(--ok);stroke-width:2;fill:none;flex-shrink:0}
+.upload-block{border:1.5px dashed var(--bm);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.upload-block:active{background:rgba(196,92,26,0.05)}
+.upload-done{display:none;align-items:center;gap:10px;background:var(--okbg);border:1px solid rgba(122,194,85,0.2);border-radius:12px;padding:11px 14px;margin-top:8px}
+.upload-done svg{width:15px;height:15px;stroke:var(--ok);stroke-width:2;fill:none;flex-shrink:0}
+.upload-done-txt{font-size:13px;color:var(--ok);font-weight:500}
+.qual-row{display:grid;grid-template-columns:1fr auto auto;gap:7px;align-items:center;margin-bottom:8px}
+.qual-upload-mini{background:var(--card2);border:1px solid var(--b);border-radius:10px;padding:0 10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--t3);gap:4px;height:48px;white-space:nowrap;transition:all 0.2s}
+.qual-upload-mini svg{width:13px;height:13px;stroke:var(--t3);stroke-width:2;fill:none;flex-shrink:0}
+.qual-upload-mini.done{border-color:rgba(122,194,85,0.3);background:var(--okbg);color:var(--ok)}
+.qual-upload-mini.done svg{stroke:var(--ok)}
+.qual-remove{width:34px;height:48px;border-radius:10px;background:rgba(196,92,26,0.06);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s}
+.qual-remove svg{width:13px;height:13px;stroke:var(--t3);stroke-width:2;fill:none}
+.qual-remove:active{background:rgba(196,92,26,0.15)}
+.qual-add-btn{display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 0 2px}
+.qual-add-btn svg{width:14px;height:14px;stroke:var(--o);stroke-width:2;fill:none;stroke-linecap:round;flex-shrink:0}
+.qual-add-btn-txt{font-size:12px;color:var(--o);font-weight:600}
+.portal-note{background:rgba(196,92,26,0.05);border:1px solid var(--b);border-radius:13px;padding:12px 14px;font-size:12px;color:var(--t3);line-height:1.6;margin-bottom:14px}
+.portal-note strong{color:var(--t2);font-weight:500}
+.profile-card{background:linear-gradient(145deg,var(--card),#1a0d06);border:1px solid var(--bm);border-radius:22px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+.profile-card::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(196,92,26,0.06)}
+.pf-av{width:54px;height:54px;border-radius:50%;background:var(--o);display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:20px;font-weight:500;color:var(--paper);margin-bottom:11px}
+.pf-name{font-family:"Playfair Display",serif;font-size:19px;font-weight:500;color:var(--dry);margin-bottom:2px}
+.pf-role{font-size:12px;color:var(--t2);margin-bottom:11px}
+.pf-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.pf-tag{background:var(--t4);border:1px solid var(--b);border-radius:20px;padding:3px 10px;font-size:10px;color:var(--t2)}
+.pf-badges{display:flex;gap:6px;flex-wrap:wrap}
+.pf-badge{display:inline-flex;align-items:center;gap:4px;background:var(--okbg);border:1px solid rgba(122,194,85,0.2);border-radius:20px;padding:3px 9px;font-size:10px;color:var(--ok);font-weight:600}
+.pf-badge svg{width:10px;height:10px;stroke:var(--ok);stroke-width:2.5;fill:none}
+.pf-badge.pend{background:rgba(196,92,26,0.08);border-color:var(--b);color:var(--ol)}
+.comp-bar-wrap{margin-bottom:12px}
+.comp-bar-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.comp-bar-lbl{font-size:11px;color:var(--t3)}
+.comp-bar-pct{font-size:11px;color:var(--ol);font-weight:600}
+.comp-bar-track{height:4px;background:var(--t4);border-radius:4px;overflow:hidden}
+.comp-bar-fill{height:100%;background:linear-gradient(90deg,var(--o),var(--ol));border-radius:4px;width:0%;transition:width 1.4s cubic-bezier(.16,1,.3,1)}
+.nudge-card{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--b);border-radius:15px;padding:14px;margin-bottom:9px}
+.nudge-icon{width:36px;height:36px;border-radius:11px;background:rgba(196,92,26,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nudge-icon svg{width:16px;height:16px;stroke:var(--ol);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.nudge-title{font-size:13px;font-weight:500;color:var(--dry);margin-bottom:2px}
+.nudge-sub{font-size:11px;color:var(--t3);line-height:1.4}
+</style>
+</head>
+<body>
+<div style="text-align:center;margin-bottom:12px">
+  <div style="color:rgba(255,255,255,0.2);font-size:10px;letter-spacing:1px;text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:8px">Navigate with arrows or dots</div>
+  <div id="dots" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;max-width:300px;margin:0 auto"></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="phone">
+<div class="notch"></div>
+
+<!-- S0 SPLASH -->
+<div class="sc on" id="s0">
+  <div class="grain"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 50%,rgba(196,92,26,0.11) 0%,transparent 65%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(196,92,26,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(196,92,26,0.025) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse at 50%,black,transparent 75%);pointer-events:none"></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;position:relative;z-index:2">
+    <div class="a" style="width:88px;height:88px;background:var(--o);border-radius:26px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:48px;font-weight:500;color:var(--paper);box-shadow:0 24px 64px rgba(196,92,26,0.5);animation:float 3.5s ease-in-out infinite">K</div>
+    <div class="a a1" style="font-family:'Playfair Display',serif;font-size:30px;font-weight:500;color:var(--dry);letter-spacing:-0.5px;margin-top:18px">Kooee</div>
+    <div class="a a2" style="font-size:14px;color:var(--t2);font-weight:300;margin-top:8px;letter-spacing:0.2px">Connect. Develop. Thrive.</div>
+  </div>
+  <div class="bottom a a3">
+    <button class="btn-p" onclick="go(1)" style="margin-bottom:10px">Get started <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    <button class="btn-txt" onclick="go(1)">Already have an account? <em>Sign in</em></button>
+  </div>
+</div>
+
+<!-- S1 CHOOSE PATH -->
+<div class="sc" id="s1">
+  <div class="grain"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 90% 55% at 50% 25%,rgba(196,92,26,0.07) 0%,transparent 60%);pointer-events:none"></div>
+  <div style="flex:1;display:flex;flex-direction:column;padding:56px 24px 20px;position:relative;z-index:2;overflow:hidden">
+    <div class="eyebrow a" style="margin-bottom:12px">Welcome to Kooee</div>
+    <div class="h1 a a1" style="font-size:34px">How are you<br>joining us <em>today?</em></div>
+    <p class="sub a a2" style="margin-top:8px">Choose your path. Set up in minutes.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px;flex:1" class="a a2">
+      <div onclick="go(2)" style="position:relative;border-radius:24px;overflow:hidden;cursor:pointer;flex:1;min-height:162px;padding:24px;background:linear-gradient(140deg,#2C1A0E 0%,#180d05 100%);border:1px solid rgba(196,92,26,0.28);display:flex;flex-direction:column;justify-content:flex-end;touch-action:manipulation" ontouchstart="this.style.transform='scale(0.98)'" ontouchend="this.style.transform=''">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 85% 15%,rgba(196,92,26,0.18) 0%,transparent 60%);pointer-events:none"></div>
+        <div style="position:absolute;top:18px;right:18px;opacity:0.2"><svg width="58" height="46" viewBox="0 0 58 46" fill="none" stroke="#E8A265" stroke-width="2" stroke-linejoin="round"><polyline points="0,46 27,5 54,46"/><polyline points="27,46 42,23 58,46"/><polyline points="21,13 27,5 33,13"/></svg></div>
+        <div style="position:relative;z-index:2">
+          <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(196,92,26,0.15);border:1px solid rgba(196,92,26,0.3);border-radius:20px;padding:4px 10px;font-size:9px;font-weight:700;color:var(--ol);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px"><div style="width:5px;height:5px;border-radius:50%;background:var(--o);animation:pulse 2s infinite"></div>Instructors</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:500;color:var(--dry);line-height:1.1;letter-spacing:-0.3px;margin-bottom:6px">I&rsquo;m an <em style="color:var(--ol)">instructor</em></div>
+          <p style="font-size:12px;color:var(--t2);font-weight:300;line-height:1.5;max-width:180px">Find work, build your field record and get your PD funded.</p>
+        </div>
+        <div style="position:absolute;bottom:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(196,92,26,0.2);display:flex;align-items:center;justify-content:center;z-index:2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8A265" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div onclick="alert('Business onboarding coming soon.')" style="position:relative;border-radius:24px;overflow:hidden;cursor:pointer;flex:1;min-height:162px;padding:24px;background:linear-gradient(140deg,#0d1a08 0%,#080f05 100%);border:1px solid rgba(122,194,85,0.2);display:flex;flex-direction:column;justify-content:flex-end;touch-action:manipulation" ontouchstart="this.style.transform='scale(0.98)'" ontouchend="this.style.transform=''">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 85% 15%,rgba(122,194,85,0.1) 0%,transparent 60%);pointer-events:none"></div>
+        <div style="position:absolute;top:18px;right:18px;opacity:0.18"><svg width="48" height="50" viewBox="0 0 48 50" fill="none" stroke="#7AC255" stroke-width="2" stroke-linejoin="round"><rect x="6" y="7" width="36" height="43"/><rect x="13" y="15" width="8" height="8"/><rect x="27" y="15" width="8" height="8"/><rect x="13" y="27" width="8" height="8"/><rect x="27" y="27" width="8" height="8"/><rect x="17" y="37" width="14" height="13"/><line x1="0" y1="50" x2="48" y2="50"/></svg></div>
+        <div style="position:relative;z-index:2">
+          <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(122,194,85,0.1);border:1px solid rgba(122,194,85,0.2);border-radius:20px;padding:4px 10px;font-size:9px;font-weight:700;color:#7AC255;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px"><div style="width:5px;height:5px;border-radius:50%;background:#7AC255;animation:pulse 2s infinite;animation-delay:0.5s"></div>Providers</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:500;color:var(--dry);line-height:1.1;letter-spacing:-0.3px;margin-bottom:6px">I run <em style="color:#7AC255">programs</em></div>
+          <p style="font-size:12px;color:var(--t2);font-weight:300;line-height:1.5;max-width:180px">Find qualified instructors and staff your season.</p>
+        </div>
+        <div style="position:absolute;bottom:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(122,194,85,0.15);display:flex;align-items:center;justify-content:center;z-index:2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7AC255" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;padding:10px 0 40px;font-size:13px;color:var(--t3);position:relative;z-index:2">Already have an account? <a href="#" onclick="return false" style="color:var(--ol);text-decoration:none;font-weight:500">Sign in</a></div>
+</div>
+
+<!-- S2 INSTRUCTOR MOMENT -->
+<div class="sc" id="s2">
+  <div class="grain"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 120% 55% at 50% 55%,rgba(196,92,26,0.09) 0%,transparent 60%);pointer-events:none"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:220px;pointer-events:none;overflow:hidden">
+    <svg width="390" height="220" viewBox="0 0 390 220" preserveAspectRatio="none">
+      <defs><linearGradient id="ef" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C45C1A" stop-opacity="0.2"/><stop offset="100%" stop-color="#C45C1A" stop-opacity="0"/></linearGradient></defs>
+      <path d="M0,220 Q40,210 70,180 Q100,148 140,162 Q180,125 210,104 Q240,118 270,140 Q310,112 350,128 Q370,136 390,118 L390,220 Z" fill="url(#ef)"/>
+      <path d="M0,220 Q40,210 70,180 Q100,148 140,162 Q180,125 210,104 Q240,118 270,140 Q310,112 350,128 Q370,136 390,118" fill="none" stroke="rgba(196,92,26,0.35)" stroke-width="1.5"/>
+      <circle cx="210" cy="104" r="5" fill="#E8A265" opacity="0.8"/>
+    </svg>
+  </div>
+  <div style="position:relative;z-index:2;padding:52px 28px 0">
+    <button class="back-btn a" onclick="go(1)"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 28px 0;position:relative;z-index:2">
+    <div class="a a1" style="font-family:'Playfair Display',serif;font-size:52px;font-weight:500;color:var(--dry);line-height:1.04;letter-spacing:-1.8px;text-align:center">Let&rsquo;s build<br>your <em style="color:var(--ol)">trail.</em></div>
+  </div>
+  <div class="bottom bg-fade a a2" style="margin-top:auto">
+    <button class="btn-p" onclick="go(3)" style="margin-bottom:10px">Build my trail <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    <button class="btn-txt">Already have an account? <em>Sign in</em></button>
+  </div>
+</div>
+
+<!-- S3 IDENTITY — name + photo -->
+<div class="sc" id="s3">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 1 of 7 &mdash; Identity</span><button class="back-btn" onclick="go(2)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:14%"></div></div>
+  </div>
+  <div class="content">
+    <div class="live-card a">
+      <div class="lc-top">
+        <div class="lc-av" id="lc-av" onclick="tapPhoto()">
+          <span id="lc-av-inner">AT</span>
+          <div class="lc-av-badge" id="lc-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="lc-name empty" id="lc-name">Your name here...</div>
+          <div class="lc-build"><div class="pd"></div>Profile building</div>
+        </div>
+      </div>
+    </div>
+    <div class="a a1" style="text-align:center;margin-bottom:16px">
+      <div class="photo-ring" id="ph-ring" onclick="tapPhoto()">
+        <svg id="ph-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E8A265" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7l-2-4h-4l-2 4"/><circle cx="12" cy="14" r="3"/></svg>
+        <div class="photo-ring-badge" id="ph-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div style="font-size:13px;color:var(--t2);font-weight:300;margin-bottom:10px" id="ph-lbl">Put a face to the name</div>
+      <div class="photo-btns">
+        <div class="photo-btn" onclick="tapPhoto()">
+          <div class="photo-btn-icon" style="display:flex;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#E8A265" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7l-2-4h-4l-2 4"/><circle cx="12" cy="14" r="3"/></svg></div>
+          <div class="photo-btn-lbl">Take photo</div>
+        </div>
+        <div class="photo-btn" onclick="tapPhoto()">
+          <div class="photo-btn-icon" style="display:flex;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#E8A265" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-btn-lbl">Upload photo</div>
+        </div>
+      </div>
+      <button class="skip-txt" id="ph-skip" onclick="skipPhoto()">Add a photo later</button>
+    </div>
+    <div class="row2 a a2">
+      <div class="field"><label class="fl">First name</label><input class="inp" type="text" placeholder="Alex" id="fn" oninput="updateName()" autocomplete="given-name"></div>
+      <div class="field"><label class="fl">Last name</label><input class="inp" type="text" placeholder="Taylor" id="ln" oninput="updateName()" autocomplete="family-name"></div>
+    </div>
+    <div class="field a a3"><label class="fl">On program, people call me</label><input class="inp" type="text" placeholder="Preferred name" autocomplete="nickname"></div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(4)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S4 CONTACT -->
+<div class="sc" id="s4">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 1 of 7 &mdash; Contact</span><button class="back-btn" onclick="go(3)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:14%"></div></div>
+  </div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bm);border-radius:15px;padding:13px 15px;margin-bottom:18px" class="a">
+      <div style="width:38px;height:38px;border-radius:50%;background:var(--o);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:500;color:var(--paper);flex-shrink:0" id="s4-av">AT</div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:var(--dry)" id="s4-name">Alex Taylor</div><div style="font-size:11px;color:var(--t3)">Contact details</div></div>
+    </div>
+    <div class="field a a1"><label class="fl">Date of birth</label><input class="inp" type="date"></div>
+    <div class="field a a2"><label class="fl">Email address</label><input class="inp" type="email" placeholder="your@email.com" inputmode="email" autocomplete="email"></div>
+    <div class="field a a3"><label class="fl">Mobile number</label><input class="inp" type="tel" placeholder="+61" inputmode="tel" autocomplete="tel"></div>
+    <div class="field a a4">
+      <label class="fl">Home state</label>
+      <div class="state-grid">
+        <div class="st" onclick="this.classList.toggle('sel')">NSW</div><div class="st" onclick="this.classList.toggle('sel')">VIC</div>
+        <div class="st" onclick="this.classList.toggle('sel')">QLD</div><div class="st" onclick="this.classList.toggle('sel')">WA</div>
+        <div class="st" onclick="this.classList.toggle('sel')">SA</div><div class="st" onclick="this.classList.toggle('sel')">TAS</div>
+        <div class="st" onclick="this.classList.toggle('sel')">ACT</div><div class="st" onclick="this.classList.toggle('sel')">NT</div>
+      </div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(5)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S5 YOUR TRAIL -->
+<div class="sc" id="s5">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 2 of 7 &mdash; Your trail</span><button class="back-btn" onclick="go(4)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:28%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">Every day in the<br>field <em>counts.</em></div>
+    <p class="sub a a1" style="margin-bottom:18px">How far have you come?</p>
+    <div class="a a1">
+      <div class="tmarker" onclick="selMarker(this,0)"><div style="font-size:18px;flex-shrink:0">🌱</div><div style="flex:1"><div style="font-size:14px;color:var(--t2);transition:color 0.2s" class="tm-lbl">Just starting out</div><div style="font-size:11px;color:var(--t3)">0&ndash;1 year</div><div class="tmarker-vibe">Everyone starts somewhere. The trail goes from here.</div></div><div class="tm-check"></div></div>
+      <div class="tmarker" onclick="selMarker(this,1)"><div style="font-size:18px;flex-shrink:0">🥾</div><div style="flex:1"><div style="font-size:14px;color:var(--t2);transition:color 0.2s" class="tm-lbl">Finding my feet</div><div style="font-size:11px;color:var(--t3)">1&ndash;3 years</div><div class="tmarker-vibe">You&rsquo;re building something real. Keep going.</div></div><div class="tm-check"></div></div>
+      <div class="tmarker" onclick="selMarker(this,2)"><div style="font-size:18px;flex-shrink:0">🏕</div><div style="flex:1"><div style="font-size:14px;color:var(--t2);transition:color 0.2s" class="tm-lbl">In my stride</div><div style="font-size:11px;color:var(--t3)">3&ndash;6 years</div><div class="tmarker-vibe">In your stride &mdash; businesses will love this.</div></div><div class="tm-check"></div></div>
+      <div class="tmarker" onclick="selMarker(this,3)"><div style="font-size:18px;flex-shrink:0">⛰</div><div style="flex:1"><div style="font-size:14px;color:var(--t2);transition:color 0.2s" class="tm-lbl">Seasoned</div><div style="font-size:11px;color:var(--t3)">6&ndash;10 years</div><div class="tmarker-vibe">This is what quality looks like. Businesses know it.</div></div><div class="tm-check"></div></div>
+      <div class="tmarker" onclick="selMarker(this,4)"><div style="font-size:18px;flex-shrink:0">🏔</div><div style="flex:1"><div style="font-size:14px;color:var(--t2);transition:color 0.2s" class="tm-lbl">Veteran</div><div style="font-size:11px;color:var(--t3)">10+ years</div><div class="tmarker-vibe">The field knows you. Now Kooee will too.</div></div><div class="tm-check"></div></div>
+    </div>
+    <div style="margin-top:18px" class="a a2">
+      <label class="fl">Days in the field</label>
+      <svg class="elev-svg" viewBox="0 0 342 38" preserveAspectRatio="none">
+        <defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#C45C1A" stop-opacity="0.3"/><stop offset="100%" stop-color="#E8A265" stop-opacity="0.5"/></linearGradient></defs>
+        <path d="M0,38 Q30,36 55,26 Q80,16 100,28 Q130,6 160,2 Q190,10 210,20 Q240,2 270,14 Q300,26 342,8 L342,38 Z" fill="url(#eg)"/>
+        <path d="M0,38 Q30,36 55,26 Q80,16 100,28 Q130,6 160,2 Q190,10 210,20 Q240,2 270,14 Q300,26 342,8" fill="none" stroke="rgba(196,92,26,0.5)" stroke-width="1.5"/>
+      </svg>
+      <input class="slider-inp" type="range" min="0" max="500" value="80" id="dsl" oninput="updateSlider(this.value)">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px"><span>0</span><span>500+</span></div>
+      <div class="slider-stat">
+        <div class="sl-val" id="slv">80 <em>days</em></div>
+        <div style="font-size:12px;color:var(--t2);font-weight:300;margin-top:2px">Roughly <strong id="slg" style="color:var(--dry)">23</strong> school groups worth of experience</div>
+      </div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(6)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S6 SKILLS -->
+<div class="sc" id="s6">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 3 of 7 &mdash; Skills</span><button class="back-btn" onclick="go(5)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:42%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">What&rsquo;s in your <em>kit?</em></div>
+    <p class="sub a a1" style="margin-bottom:12px">Select everything you&rsquo;re qualified or confident to lead.</p>
+    <div class="badge-strip a a1" id="act-badge" style="margin-bottom:14px"><div class="pd"></div><span id="act-ct">0</span> activities selected</div>
+    <div class="tile-grid a a2">
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="11"/><path d="M8 11 Q8 16 6 20"/><path d="M16 11 Q16 16 18 20"/><path d="M8 15 Q12 13 16 15"/></svg></div><div class="tile-lbl">Abseiling</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/><circle cx="5" cy="12" r="2"/></svg></div><div class="tile-lbl">Archery</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17 Q8 10 12 12 Q16 14 21 8"/><path d="M3 20h18"/><path d="M7 20 Q8 17 10 17 Q12 17 13 20"/></svg></div><div class="tile-lbl">Bushwalking</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M12 12C9 8 4 8 3 11c1 4 5 6 9 5z"/><path d="M12 12c3-4 8-4 9-1c-1 4-5 6-9 5z"/></svg></div><div class="tile-lbl">Bush therapy</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><ellipse cx="12" cy="8" rx="5" ry="3"/><ellipse cx="12" cy="16" rx="5" ry="3"/></svg></div><div class="tile-lbl">Canoeing</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 3v18"/><path d="M20 3v18"/><path d="M4 12 Q9 9 12 12 Q15 15 20 12"/></svg></div><div class="tile-lbl">Canyoning</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 20 Q3 8 12 6 Q21 8 21 20"/><path d="M8 20 Q8 14 12 12 Q16 14 16 20"/><path d="M3 20h18"/></svg></div><div class="tile-lbl">Caving</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 18 Q8 14 12 16 Q16 18 20 14"/><circle cx="17" cy="10" r="2"/><path d="M17 12v3"/><path d="M14 14l3 1"/></svg></div><div class="tile-lbl">Fishing</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><line x1="8" y1="10.5" x2="8" y2="20"/><line x1="16" y1="10.5" x2="16" y2="20"/><line x1="5" y1="20" x2="19" y2="20"/></svg></div><div class="tile-lbl">High ropes</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 9l18 6"/><path d="M3 9 Q5 14 3 19"/><path d="M21 15 Q19 20 21 9" opacity="0.5"/><ellipse cx="12" cy="12" rx="3" ry="1.5" transform="rotate(18,12,12)"/></svg></div><div class="tile-lbl">Kayaking</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 15 Q7 12 12 15 Q17 18 21 15"/><path d="M3 19h18"/><line x1="5" y1="19" x2="5" y2="15"/><line x1="19" y1="19" x2="19" y2="15"/></svg></div><div class="tile-lbl">Low ropes</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17 L10 8 L14 11 L18 4"/><path d="M18 8 L20 4 L22 8"/></svg></div><div class="tile-lbl">MTB</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="3" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2" fill="var(--t2)" stroke="none"/></svg></div><div class="tile-lbl">Navigation</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M5 20 Q5 10 12 4 Q19 10 19 20"/><circle cx="9" cy="11" r="1.5" fill="var(--t2)" stroke="none"/><circle cx="15" cy="14" r="1.5" fill="var(--t2)" stroke="none"/><circle cx="12" cy="8" r="1.5" fill="var(--t2)" stroke="none"/></svg></div><div class="tile-lbl">Rock climbing</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17 L12 3 L21 17"/><path d="M12 3 L12 21"/><path d="M6 12 Q9 10 12 12 Q15 14 18 12"/></svg></div><div class="tile-lbl">Sailing</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 8 Q8 4 13 8 Q18 12 22 8"/><path d="M2 14 Q5 10 8 14 Q11 18 14 14 Q17 10 22 13"/><path d="M3 19h18"/></svg></div><div class="tile-lbl">Ski / Snow</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><path d="M12 10 Q8 12 8 17"/><path d="M12 10 Q16 12 16 17"/><path d="M8 17 Q10 15 12 17 Q14 19 16 17"/></svg></div><div class="tile-lbl">Snorkelling</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><path d="M12 7.5 L12 14"/><path d="M8 10 L16 10"/><path d="M3 19 Q8 15 12 18 Q16 21 21 17"/></svg></div><div class="tile-lbl">SUP</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M2 14 Q6 8 11 11 Q16 14 21 9"/><path d="M4 18 Q8 13 12 16 Q16 19 20 15"/><path d="M8 20 Q11 18 14 20"/></svg></div><div class="tile-lbl">Surfing</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><path d="M2 12 Q6 8 10 11 Q14 14 18 11 Q20 9 22 10"/><circle cx="6" cy="7" r="2"/><path d="M3 15 Q7 12 11 15 Q15 18 19 15"/></svg></div><div class="tile-lbl">Swimming</div></div>
+      <div class="tile" onclick="togTile(this)"><div class="tile-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div class="tile-lbl">First aid instr.</div></div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(7)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S7 ROLE -->
+<div class="sc" id="s7">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 4 of 7 &mdash; Role</span><button class="back-btn" onclick="go(6)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:57%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">Where do you sit<br>on the <em>team?</em></div>
+    <p class="sub a a1" style="margin-bottom:16px">Select all that apply, then set your primary and secondary role.</p>
+    <span class="sec-lbl a a1">Select your roles</span>
+    <div class="role-grid a a2">
+      <div class="role-tile" onclick="togRole(this,'gl')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="role-tile-lbl">Group Leader</div></div>
+      <div class="role-tile" onclick="togRole(this,'ai')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div class="role-tile-lbl">Activity Instructor</div></div>
+      <div class="role-tile" onclick="togRole(this,'sl')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="role-tile-lbl">Support / Logistics</div></div>
+      <div class="role-tile" onclick="togRole(this,'pc')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="role-tile-lbl">Program Coordinator</div></div>
+      <div class="role-tile" onclick="togRole(this,'ad')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20v-1a8 8 0 0116 0v1"/><path d="M16 11l2 2 4-4"/></svg></div><div class="role-tile-lbl">Assistant Director</div></div>
+      <div class="role-tile" onclick="togRole(this,'di')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="role-tile-lbl">Director</div></div>
+      <div class="role-tile" onclick="togRole(this,'cm')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="role-tile-lbl">Camp Manager</div></div>
+      <div class="role-tile" onclick="togRole(this,'oe')"><div class="role-tile-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div class="role-tile-lbl">Outdoor Ed Teacher</div></div>
+    </div>
+    <div id="pri-wrap" style="display:none">
+      <span class="sec-lbl">Primary role <span style="color:var(--t3);font-size:9px;font-weight:300;text-transform:none;letter-spacing:0">(pick one)</span></span>
+      <div id="pri-opts"></div>
+      <span class="sec-lbl">Secondary role <span style="color:var(--t3);font-size:9px;font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></span>
+      <div id="sec-opts"></div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(8)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S8 AVAILABILITY -->
+<div class="sc" id="s8">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 5 of 7 &mdash; Availability</span><button class="back-btn" onclick="go(7)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:71%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">When can businesses<br><em>reach you?</em></div>
+    <p class="sub a a1" style="margin-bottom:20px">You control when Kooees land in your inbox.</p>
+    <span class="sec-lbl a a1">Kooees when calendar is blocked</span>
+    <div class="toggle-row a a2" id="keep-toggle" onclick="togKeep()">
+      <div class="toggle-info">
+        <div class="toggle-title">Receive Kooees on blocked dates</div>
+        <div class="toggle-desc">You&rsquo;ll still get Kooees for dates you&rsquo;ve blocked on your calendar. You can accept or pass.</div>
+      </div>
+      <div class="toggle-switch" id="keep-sw"><div class="toggle-knob"></div></div>
+    </div>
+    <span class="sec-lbl a a3">States open to working in</span>
+    <div class="state-grid a a4">
+      <div class="st" onclick="this.classList.toggle('sel')">NSW</div><div class="st" onclick="this.classList.toggle('sel')">VIC</div>
+      <div class="st" onclick="this.classList.toggle('sel')">QLD</div><div class="st" onclick="this.classList.toggle('sel')">WA</div>
+      <div class="st" onclick="this.classList.toggle('sel')">SA</div><div class="st" onclick="this.classList.toggle('sel')">TAS</div>
+      <div class="st" onclick="this.classList.toggle('sel')">ACT</div><div class="st" onclick="this.classList.toggle('sel')">NT</div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(9)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S9 QUALS + LICENCES -->
+<div class="sc" id="s9">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 6a of 7 &mdash; Qualifications</span><button class="back-btn" onclick="go(8)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:82%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">Let&rsquo;s get you <em>verified.</em></div>
+    <p class="sub a a1" style="margin-bottom:12px">Verified instructors get found first.</p>
+    <div class="portal-note a a1"><strong>Tip:</strong> You can also upload all documents via the Kooee web portal at kooeeconnect.com.au</div>
+    <div class="comp-block a a2">
+      <div class="comp-title"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Formal qualifications</div>
+      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Cert III, IV, Diploma, Bachelor &mdash; what businesses look for first.</p>
+      <div id="qual-list">
+        <div class="qual-row">
+          <select class="sel-inp" style="font-size:13px;padding:12px 32px 12px 14px"><option value="" disabled selected>Select qualification</option><option>Certificate III Outdoor Recreation</option><option>Certificate IV Outdoor Recreation</option><option>Diploma of Outdoor Education</option><option>Advanced Diploma Outdoor Recreation</option><option>Bachelor of Outdoor Education</option><option>Bachelor of Education (Outdoor)</option><option>Graduate Diploma Outdoor Education</option><option>Other &mdash; enter manually</option></select>
+          <div class="qual-upload-mini" onclick="fakeQualUpload(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload</div>
+          <div class="qual-remove" style="opacity:0.25;cursor:default"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="qual-add-btn" onclick="addQual()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="qual-add-btn-txt">Add another qualification</span></div>
+    </div>
+    <div class="comp-block a a3">
+      <div class="comp-title"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Licences</div>
+      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Driver Licence, Bronze Medallion, 4WD, Boat Licence.</p>
+      <div id="lic-list">
+        <div class="qual-row">
+          <select class="sel-inp" style="font-size:13px;padding:12px 32px 12px 14px"><option value="" disabled selected>Select licence</option><option>Driver Licence</option><option>Bronze Medallion</option><option>4WD Licence</option><option>Boat Licence</option><option>Other &mdash; enter manually</option></select>
+          <div class="qual-upload-mini" onclick="fakeQualUpload(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload</div>
+          <div class="qual-remove" style="opacity:0.25;cursor:default"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="qual-add-btn" onclick="addLic()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="qual-add-btn-txt">Add another licence</span></div>
+    </div>
+    <div style="background:rgba(196,92,26,0.06);border:1px solid var(--b);border-radius:14px;padding:14px 16px;margin-bottom:12px" class="a a4">
+      <div style="font-size:13px;font-weight:500;color:var(--dry);margin-bottom:4px">Upload now is recommended</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.6">Businesses require verified documents before they can book you.</div>
+      <button onclick="go(10)" style="background:none;border:none;color:var(--ol);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:8px 0 0;display:block">Upload later from my profile &rarr;</button>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(10)">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S10 WWCC + FIRST AID -->
+<div class="sc" id="s10">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 6b of 7 &mdash; Compliance</span><button class="back-btn" onclick="go(9)" style="font-size:11px"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div>
+  </div>
+  <div class="content">
+    <div class="h1 a" style="margin-bottom:6px">Almost <em>there.</em></div>
+    <p class="sub a a1" style="margin-bottom:16px">Two more and you&rsquo;re live.</p>
+    <div class="comp-block a a2">
+      <div class="comp-title"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Working With Children Check</div>
+      <div class="comp-opts">
+        <div class="comp-opt" onclick="selComp(this,'wwcc','yes')">Yes, current</div>
+        <div class="comp-opt" onclick="selComp(this,'wwcc','applied')">Applied</div>
+        <div class="comp-opt" onclick="selComp(this,'wwcc','no')">No</div>
+      </div>
+      <div class="comp-expiry" id="wwcc-exp">
+        <label class="fl">State issued</label>
+        <div class="state-grid" style="margin-bottom:10px">
+          <div class="st" onclick="selOne(this,'wwcc-state')">NSW</div><div class="st" onclick="selOne(this,'wwcc-state')">VIC</div>
+          <div class="st" onclick="selOne(this,'wwcc-state')">QLD</div><div class="st" onclick="selOne(this,'wwcc-state')">WA</div>
+          <div class="st" onclick="selOne(this,'wwcc-state')">SA</div><div class="st" onclick="selOne(this,'wwcc-state')">TAS</div>
+          <div class="st" onclick="selOne(this,'wwcc-state')">ACT</div><div class="st" onclick="selOne(this,'wwcc-state')">NT</div>
+        </div>
+        <div class="upload-done" id="wwcc-done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="upload-done-txt">WWCC uploaded</span></div>
+        <div class="upload-block" id="wwcc-up" onclick="fakeUpload('wwcc')"><div style="font-size:13px;font-weight:500;color:var(--dry);margin-bottom:3px">Upload WWCC certificate</div><div style="font-size:11px;color:var(--t3)">Photo or PDF</div></div>
+      </div>
+    </div>
+    <div class="comp-block a a3">
+      <div class="comp-title"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>First Aid Certificate</div>
+      <div class="comp-opts">
+        <div class="comp-opt" onclick="selComp(this,'fa','yes')">Yes, current</div>
+        <div class="comp-opt" onclick="selComp(this,'fa','exp')">Expired</div>
+        <div class="comp-opt" onclick="selComp(this,'fa','no')">No</div>
+      </div>
+      <div class="comp-expiry" id="fa-exp">
+        <div class="field"><label class="fl">Level</label>
+          <select class="sel-inp" style="margin-bottom:10px">
+            <option value="" disabled selected>Select level</option>
+            <option>Provide First Aid (HLTAID011)</option>
+            <option>Remote First Aid (HLTAID009)</option>
+            <option>Remote First Aid (HLTAID015)</option>
+            <option>Advanced Resuscitation</option>
+            <option>Emergency First Aid Response (HLTAID010)</option>
+            <option>Mental Health First Aid</option>
+            <option>Other &mdash; enter manually</option>
+          </select>
+        </div>
+        <div class="field"><label class="fl">Expiry date</label><input class="inp" type="date" onchange="showReminder('fr')"></div>
+        <div class="reminder" id="fr" style="display:none"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Reminder set &mdash; 60 days before expiry</div>
+        <div class="upload-done" id="fa-done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="upload-done-txt">First Aid cert uploaded</span></div>
+        <div class="upload-block" id="fa-up" onclick="fakeUpload('fa')"><div style="font-size:13px;font-weight:500;color:var(--dry);margin-bottom:3px">Upload First Aid certificate</div><div style="font-size:11px;color:var(--t3)">Photo or PDF</div></div>
+      </div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="go(11)">Almost there <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- S11 REVEAL -->
+<div class="sc" id="s11">
+  <div class="grain"></div>
+  <div class="prog-wrap">
+    <div class="prog-row"><span class="prog-lbl">Step 7 of 7 &mdash; Your profile</span><span style="font-size:10px;color:var(--ok);font-weight:600">Done!</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+  </div>
+  <div class="content">
+    <div class="a" style="text-align:center;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:500;color:var(--dry);letter-spacing:-0.5px;line-height:1.1">Your trail<br>is <em style="color:var(--ol)">live.</em></div>
+      <p style="font-size:13px;color:var(--t2);font-weight:300;margin-top:8px">Here&rsquo;s how businesses see you.</p>
+    </div>
+    <div class="profile-card a a1">
+      <div class="pf-av">AT</div>
+      <div class="pf-name">Alex Taylor</div>
+      <div class="pf-role">Group Leader &middot; NSW</div>
+      <div class="pf-tags"><div class="pf-tag">Abseiling</div><div class="pf-tag">Bushwalking</div><div class="pf-tag">Canoeing</div><div class="pf-tag">+3 more</div></div>
+      <div class="pf-badges">
+        <div class="pf-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>WWCC</div>
+        <div class="pf-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>First Aid</div>
+        <div class="pf-badge pend">Photo pending</div>
+      </div>
+    </div>
+    <div class="comp-bar-wrap a a2">
+      <div class="comp-bar-row"><span class="comp-bar-lbl">Profile completion</span><span class="comp-bar-pct">72%</span></div>
+      <div class="comp-bar-track"><div class="comp-bar-fill" id="cbar"></div></div>
+    </div>
+    <p style="font-size:12px;color:var(--t3);font-style:italic;margin-bottom:16px;text-align:center" class="a a2">Upload your qualifications to reach 100% and get found first.</p>
+    <div class="nudge-card a a3"><div class="nudge-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><div class="nudge-title">You&rsquo;re live right now</div><div class="nudge-sub">Businesses can already see your profile. Keep availability updated.</div></div></div>
+    <div class="nudge-card a a4"><div class="nudge-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div><div class="nudge-title">Your first Kooee could arrive today</div><div class="nudge-sub">You&rsquo;ll be notified the moment a business reaches out.</div></div></div>
+    <div class="nudge-card a a5"><div class="nudge-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div><div class="nudge-title">Upload your qualifications</div><div class="nudge-sub">Required before businesses can book you. Add from your profile.</div></div></div>
+    <div style="height:80px"></div>
+  </div>
+  <div class="bottom bg-fade">
+    <button class="btn-p" onclick="alert('Welcome to Kooee!')" style="background:linear-gradient(135deg,var(--o),#7a3208)">Explore the platform <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+</div>
+
+<div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:200">
+  <button onclick="prev()" style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">&#8592;</button>
+  <button onclick="next()" style="width:42px;height:42px;border-radius:50%;background:rgba(196,92,26,0.85);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">&#8594;</button>
+</div>
+
+<script>
+let cur=0;
+const ids=["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11"];
+const total=ids.length;
+const dotsEl=document.getElementById("dots");
+ids.forEach((_,i)=>{
+  const d=document.createElement("div");
+  d.style.cssText="height:5px;border-radius:3px;background:rgba(255,255,255,0.15);cursor:pointer;transition:all 0.3s;width:5px;flex-shrink:0";
+  d.onclick=()=>go(i);
+  dotsEl.appendChild(d);
+});
+updDots();
+function go(n){
+  if(n<0||n>=total)return;
+  document.getElementById(ids[cur]).classList.remove("on");
+  cur=n;
+  const sc=document.getElementById(ids[cur]);
+  sc.classList.add("on");
+  sc.querySelectorAll(".a").forEach(el=>{el.style.animation="none";el.offsetHeight;el.style.animation="";});
+  updDots();
+  sc.scrollTop=0;
+  if(n===11){setTimeout(()=>{const b=document.getElementById("cbar");if(b)b.style.width="72%";},400);}
+}
+function next(){go(Math.min(cur+1,total-1));}
+function prev(){go(Math.max(cur-1,0));}
+function updDots(){
+  dotsEl.querySelectorAll("div").forEach((d,i)=>{
+    d.style.background=i===cur?"#E8A265":"rgba(255,255,255,0.15)";
+    d.style.width=i===cur?"16px":"5px";
+  });
+}
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.style.display="block";t.style.animation="toastIn 0.3s ease both";
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.style.animation="toastOut 0.3s ease both";setTimeout(()=>t.style.display="none",300);},2500);
+}
+function updateName(){
+  const f=document.getElementById("fn").value.trim();
+  const l=document.getElementById("ln").value.trim();
+  const full=(f+" "+l).trim();
+  const init=(f?f[0]:"")+(l?l[0]:"");
+  const lcn=document.getElementById("lc-name");
+  const lci=document.getElementById("lc-av-inner");
+  const s4n=document.getElementById("s4-name");
+  const s4a=document.getElementById("s4-av");
+  if(full){lcn.textContent=full;lcn.classList.remove("empty");if(init){lci.textContent=init.toUpperCase();if(s4n)s4n.textContent=full;if(s4a)s4a.textContent=init.toUpperCase();}}
+  else{lcn.textContent="Your name here...";lcn.classList.add("empty");lci.textContent="AT";}
+}
+let hasPhoto=false;
+function tapPhoto(){
+  if(!hasPhoto){
+    hasPhoto=true;
+    document.getElementById("ph-ring").classList.add("hp");
+    document.getElementById("ph-badge").style.display="flex";
+    document.getElementById("lc-av").classList.add("hp");
+    document.getElementById("lc-badge").style.display="flex";
+    document.getElementById("ph-lbl").textContent="Looking good! Tap to change.";
+    document.getElementById("ph-lbl").style.color="var(--ol)";
+    document.getElementById("ph-skip").style.display="none";
+    showToast("Photo added. Businesses love a face!");
+  }
+}
+function skipPhoto(){const s=document.getElementById("ph-skip");s.textContent="Added from profile later.";s.style.cursor="default";s.onclick=null;}
+function selMarker(el){
+  document.querySelectorAll(".tmarker").forEach(m=>{m.classList.remove("sel");const l=m.querySelector(".tm-lbl");if(l)l.style.color="var(--t2)";});
+  el.classList.add("sel");
+  const l=el.querySelector(".tm-lbl");if(l)l.style.color="var(--dry)";
+}
+function updateSlider(v){
+  document.getElementById("slv").innerHTML=v+" <em>days</em>";
+  document.getElementById("slg").textContent=Math.round(v/3.5);
+}
+let actCount=0;
+function togTile(el){
+  el.classList.toggle("sel");
+  actCount=document.querySelectorAll("#s6 .tile.sel").length;
+  document.getElementById("act-ct").textContent=actCount;
+  if(actCount===5)showToast("5 activities — you're versatile.");
+  else if(actCount===10)showToast("10 activities — businesses will love this!");
+  else if(actCount===15)showToast("15 activities. That's serious range.");
+}
+const roleNms={gl:"Group Leader",ai:"Activity Instructor",sl:"Support / Logistics",pc:"Program Coordinator",ad:"Assistant Director",di:"Director",cm:"Camp Manager",oe:"Outdoor Ed Teacher"};
+let selRoles=[],primaryRole=null,secondaryRole=null;
+function togRole(tile,id){
+  tile.classList.toggle("sel");
+  selRoles=selRoles.includes(id)?selRoles.filter(r=>r!==id):[...selRoles,id];
+  if((id==="di"||id==="cm")&&tile.classList.contains("sel"))showToast(id==="di"?"Leadership level. Businesses trust this.":"Camp Manager — high demand on Kooee.");
+  buildPrimary();
+}
+function buildPrimary(){
+  const pw=document.getElementById("pri-wrap");
+  const po=document.getElementById("pri-opts");
+  const so=document.getElementById("sec-opts");
+  if(!selRoles.length){pw.style.display="none";return;}
+  pw.style.display="block";
+  po.innerHTML=selRoles.map(r=>`<div class="role-primary-card${primaryRole===r?" sel":""}" onclick="selPri('${r}')"><span class="r-name">${roleNms[r]}</span><span class="pri-badge p">Primary</span></div>`).join("");
+  so.innerHTML=selRoles.map(r=>`<div class="role-primary-card${secondaryRole===r?" sel":""}" onclick="selSec('${r}')"><span class="r-name">${roleNms[r]}</span><span class="pri-badge s">2nd</span></div>`).join("");
+}
+function selPri(id){primaryRole=primaryRole===id?null:id;buildPrimary();}
+function selSec(id){secondaryRole=secondaryRole===id?null:id;buildPrimary();}
+let availState="open";
+function selAvail(type){
+  availState=type;
+  const open=document.getElementById("av-open");
+  const na=document.getElementById("av-na");
+  open.className="avail-card"+(type==="open"?" av":"");
+  na.className="avail-card"+(type==="na"?" na":"");
+}
+let keepOn=true;
+function togKeep(){
+  keepOn=!keepOn;
+  const sw=document.getElementById("keep-sw");
+  sw.className="toggle-switch"+(keepOn?"":" off");
+}
+function selOne(el,grp){
+  el.closest(".state-grid").querySelectorAll(".st").forEach(s=>s.classList.remove("sel"));
+  el.classList.add("sel");
+}
+function selComp(btn,group,val){
+  btn.closest(".comp-block").querySelectorAll(".comp-opt").forEach(b=>b.classList.remove("sel"));
+  btn.classList.add("sel");
+  const exp=document.getElementById(group+"-exp");
+  if(val==="yes"||val==="exp")exp.classList.add("show");else exp.classList.remove("show");
+}
+function showReminder(id){document.getElementById(id).style.display="inline-flex";}
+function fakeUpload(g){
+  document.getElementById(g+"-up").style.display="none";
+  document.getElementById(g+"-done").style.display="flex";
+  showToast("Verified — businesses trust this.");
+}
+function fakeQualUpload(btn){
+  btn.classList.add("done");
+  while(btn.firstChild)btn.removeChild(btn.firstChild);
+  const chk=document.createElement("span");
+  chk.textContent="✓ ";
+  chk.style.cssText="font-size:13px;color:var(--ok)";
+  const txt=document.createTextNode("Done");
+  btn.appendChild(chk);btn.appendChild(txt);
+  showToast("Qualification uploaded. Profile strength up.");
+}
+function addRow(listId,placeholder,opts){
+  const list=document.getElementById(listId);
+  const row=document.createElement("div");
+  row.className="qual-row";row.style.marginTop="8px";
+  const sel=document.createElement("select");
+  sel.className="sel-inp";sel.style.cssText="font-size:13px;padding:12px 32px 12px 14px";
+  const defOpt=document.createElement("option");
+  defOpt.disabled=true;defOpt.selected=true;defOpt.textContent=placeholder;
+  sel.appendChild(defOpt);
+  opts.forEach(function(o){const op=document.createElement("option");op.textContent=o;sel.appendChild(op);});
+  const upBtn=document.createElement("div");
+  upBtn.className="qual-upload-mini";
+  upBtn.textContent="Upload";
+  upBtn.onclick=function(){fakeQualUpload(this);};
+  const rmBtn=document.createElement("div");
+  rmBtn.className="qual-remove";
+  rmBtn.innerHTML="&times;";
+  rmBtn.style.cssText="width:34px;height:48px;border-radius:10px;background:rgba(196,92,26,0.06);border:1px solid rgba(196,92,26,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:rgba(245,224,195,0.3);flex-shrink:0";
+  rmBtn.onclick=function(){row.remove();};
+  row.appendChild(sel);row.appendChild(upBtn);row.appendChild(rmBtn);
+  list.appendChild(row);
+}
+function addQual(){addRow("qual-list","Select qualification",["Certificate III Outdoor Recreation","Certificate IV Outdoor Recreation","Diploma of Outdoor Education","Advanced Diploma Outdoor Recreation","Bachelor of Outdoor Education","Graduate Diploma Outdoor Education","Other — enter manually"]);}
+function addLic(){addRow("lic-list","Select licence",["Driver Licence","Bronze Medallion","4WD Licence","Boat Licence","Other — enter manually"]);}
+</script>
+</body>
+</html>

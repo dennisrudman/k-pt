@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee — Design Prototypes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --page:#0D0806;--card:#161008;--card2:#1C130A;--bark:#2C1A0E;--dusk:#3D2510;
+  --o:#C45C1A;--ol:#E8A265;--dry:rgba(245,224,195,0.9);--dry2:rgba(245,224,195,0.55);--dry3:rgba(245,224,195,0.28);
+  --b:rgba(196,92,26,0.15);--bm:rgba(196,92,26,0.32);
+}
+html,body{min-height:100%;font-family:"DM Sans",sans-serif;background:var(--page);color:var(--dry);-webkit-font-smoothing:antialiased}
+body{padding:48px 24px 80px;max-width:900px;margin:0 auto}
+
+/* HEADER */
+.site-header{display:flex;align-items:center;gap:14px;margin-bottom:56px}
+.logo-k{width:42px;height:42px;background:var(--o);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:22px;font-weight:700;color:white;flex-shrink:0}
+.logo-text{font-family:"Playfair Display",serif;font-size:22px;font-weight:500;color:var(--dry);letter-spacing:-0.3px}
+.logo-sub{font-size:11px;color:var(--dry3);margin-top:2px;font-weight:300;letter-spacing:0.3px}
+.header-badge{margin-left:auto;display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:20px;background:rgba(196,92,26,0.12);border:1px solid var(--b);font-size:10px;font-weight:600;color:var(--o);letter-spacing:0.5px;text-transform:uppercase}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-bar{width:3px;height:14px;background:var(--o);border-radius:2px;flex-shrink:0}
+.section-title{font-size:10px;font-weight:700;color:var(--dry3);letter-spacing:1.2px;text-transform:uppercase}
+.section-note{font-size:11px;color:var(--dry3);margin-left:auto;font-weight:300}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card-grid.single{grid-template-columns:1fr}
+@media(max-width:600px){.card-grid{grid-template-columns:1fr}}
+
+.proto-card{background:var(--card);border:1px solid var(--b);border-radius:13px;padding:20px 22px;display:flex;flex-direction:column;gap:0;transition:border-color 0.15s}
+.proto-card:hover{border-color:var(--bm)}
+.proto-card.primary{border-color:var(--bm)}
+
+.card-type{font-size:9px;font-weight:700;color:var(--o);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.card-type-dot{width:6px;height:6px;border-radius:50%;background:var(--o);flex-shrink:0}
+.card-type.ref{color:var(--dry3)}
+.card-type.ref .card-type-dot{background:var(--dry3)}
+
+.card-title{font-family:"Playfair Display",serif;font-size:17px;font-weight:500;color:var(--dry);letter-spacing:-0.2px;margin-bottom:4px;line-height:1.3}
+.card-desc{font-size:12px;color:var(--dry2);line-height:1.6;margin-bottom:14px;font-weight:300;flex:1}
+
+.card-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.chip{display:inline-flex;height:20px;padding:0 8px;border-radius:5px;background:var(--bark);border:1px solid var(--b);font-size:10px;font-weight:500;color:var(--dry2);align-items:center}
+
+.card-link{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 16px;border-radius:8px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;transition:background 0.15s;align-self:flex-start}
+.card-link:hover{background:#a34612}
+.card-link svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none}
+.card-link.ghost{background:transparent;border:1px solid var(--bm);color:var(--dry2)}
+.card-link.ghost:hover{background:var(--bark);color:var(--dry)}
+
+/* NOTES CALLOUT */
+.notes-block{background:var(--card2);border:1px solid var(--b);border-left:3px solid var(--o);border-radius:0 10px 10px 0;padding:13px 16px;margin-bottom:10px;font-size:12px;color:var(--dry2);line-height:1.65}
+.notes-block strong{color:var(--dry);font-weight:600}
+
+/* FOOTER */
+.site-footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--b);display:flex;justify-content:space-between;align-items:center}
+.footer-text{font-size:11px;color:var(--dry3)}
+.footer-link{font-size:11px;color:var(--dry3);text-decoration:none}
+.footer-link:hover{color:var(--dry2)}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="logo-k">K</div>
+  <div>
+    <div class="logo-text">Kooee</div>
+    <div class="logo-sub">Design prototypes · Confidential</div>
+  </div>
+  <div class="header-badge">Internal only</div>
+</div>
+
+<!-- ══ NEW PROTOTYPES ══ -->
+<div class="section">
+  <div class="section-hd">
+    <div class="section-bar"></div>
+    <div class="section-title">Latest prototypes — May 2026</div>
+    <div class="section-note">Click into panels and flows to see full interactivity</div>
+  </div>
+
+  <div class="notes-block" style="margin-bottom:16px">
+    <strong>For the dev:</strong> All files are self-contained HTML. No build step, no dependencies. Google Fonts load from CDN. Everything interactive is vanilla JS inline. The files below cover pre-launch landing pages, register flows, and the business and instructor portals.
+  </div>
+
+  <div class="card-grid">
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Pre-launch · Instructor facing</div>
+      <div class="card-title">Instructor landing page</div>
+      <div class="card-desc">Public-facing pre-launch page for instructors. 6-question survey flow + interest registration. Dark theme. Neutral language throughout.</div>
+      <div class="card-chips">
+        <span class="chip">Dark theme</span>
+        <span class="chip">Survey flow</span>
+        <span class="chip">Sign up</span>
+      </div>
+      <a class="card-link" href="kooee_instructor_landing_1.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Pre-launch · Business facing</div>
+      <div class="card-title">Business landing page</div>
+      <div class="card-desc">Public-facing pre-launch page for outdoor education providers. Hero, stats, pain points, calculator, plans, FAQ, signup. Stat placeholders (X%) to be updated with instructor survey data. No prices shown publicly.</div>
+      <div class="card-chips">
+        <span class="chip">Dark theme</span>
+        <span class="chip">Stat placeholders</span>
+        <span class="chip">No prices</span>
+      </div>
+      <a class="card-link" href="kooee_business_landing_28.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Instructor app · Register flow</div>
+      <div class="card-title">Instructor register flow</div>
+      <div class="card-desc">7-step mobile onboarding flow for new instructors. Covers role, qualifications, location, availability, and states. Business side will be a login screen only — no register flow needed on business app.</div>
+      <div class="card-chips">
+        <span class="chip">7 steps</span>
+        <span class="chip">Mobile</span>
+        <span class="chip">Quals</span>
+        <span class="chip">Availability toggle</span>
+      </div>
+      <a class="card-link" href="kooee_app_flow_6.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Business portal · Register flow</div>
+      <div class="card-title">Business register flow</div>
+      <div class="card-desc">5-step business onboarding. Light warm theme. Steps: Organisation, Primary contact, Password, Plan selection, Confirm. No CSS animations.</div>
+      <div class="card-chips">
+        <span class="chip">5 steps</span>
+        <span class="chip">Light theme</span>
+        <span class="chip">Plan selection</span>
+      </div>
+      <a class="card-link" href="kooee_business_onboarding_12.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Business portal · Roster</div>
+      <div class="card-title">Instructor onboarding — business side</div>
+      <div class="card-desc">Business roster page showing how providers onboard instructors and send documents. <strong>Click Bulk send</strong> (top right) to see bulk document send flow with recipient selection. <strong>Click Profile</strong> on any instructor to open the onboarding panel — Documents, Modules, and Templates tabs. <strong>Click Profile on Casey Lowe</strong> (Onboarding 50%) to see the Track docs status view.</div>
+      <div class="card-chips">
+        <span class="chip">Bulk send</span>
+        <span class="chip">Doc upload</span>
+        <span class="chip">Track status</span>
+        <span class="chip">Templates</span>
+      </div>
+      <a class="card-link" href="kooee_roster_4_2.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card">
+      <div class="card-type"><div class="card-type-dot"></div>Instructor portal · Providers</div>
+      <div class="card-title">Instructor onboarding — instructor side</div>
+      <div class="card-desc">Instructor view of connected providers. Under <strong>Connected Providers</strong>: click <strong>Profile on Ridgeline Outdoor Ed</strong> to see a fully completed onboarding with all docs viewable and an amend option. Click <strong>Complete onboarding</strong> or <strong>Profile on Summit Trail Co.</strong> to see incomplete onboarding — two docs pending, interactive sign and upload, progress bar updates live.</div>
+      <div class="card-chips">
+        <span class="chip">Completed onboarding</span>
+        <span class="chip">In-progress onboarding</span>
+        <span class="chip">Sign doc</span>
+        <span class="chip">File upload</span>
+      </div>
+      <a class="card-link" href="kooee_instructor_providers_6.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ MOBILE PORTALS ══ -->
+<div class="section">
+  <div class="section-hd">
+    <div class="section-bar"></div>
+    <div class="section-title">Mobile web portals — primary dev reference</div>
+  </div>
+
+  <div class="card-grid">
+
+    <div class="proto-card primary">
+      <div class="card-type"><div class="card-type-dot"></div>Primary · Mobile web</div>
+      <div class="card-title">Business portal</div>
+      <div class="card-desc">Complete mobile portal for outdoor education businesses. Dark mode, hamburger nav, all screens built.</div>
+      <div class="card-chips">
+        <span class="chip">Overview</span>
+        <span class="chip">Staff search</span>
+        <span class="chip">Roster</span>
+        <span class="chip">Inbox</span>
+        <span class="chip">Programs</span>
+        <span class="chip">Reports</span>
+      </div>
+      <a class="card-link" href="kooee_business_mobile.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div class="proto-card primary">
+      <div class="card-type"><div class="card-type-dot"></div>Primary · Mobile web</div>
+      <div class="card-title">Instructor portal</div>
+      <div class="card-desc">Complete mobile portal for outdoor instructors. Base camp, programs, availability, field record, PD credits and providers.</div>
+      <div class="card-chips">
+        <span class="chip">Base camp</span>
+        <span class="chip">Programs</span>
+        <span class="chip">Availability</span>
+        <span class="chip">Providers</span>
+        <span class="chip">Field record</span>
+        <span class="chip">PD credits</span>
+      </div>
+      <a class="card-link" href="kooee_instructor_mobile.html" target="_blank">
+        Open prototype <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ EARLIER ══ -->
+<div class="section">
+  <div class="section-hd">
+    <div class="section-bar" style="background:var(--dry3)"></div>
+    <div class="section-title" style="color:var(--dry3)">Earlier prototypes — reference only</div>
+  </div>
+
+  <div class="card-grid">
+
+    <div class="proto-card" style="opacity:0.6">
+      <div class="card-type ref">Reference only</div>
+      <div class="card-title" style="font-size:15px">Business app</div>
+      <div class="card-desc">Earlier business app mockup. Use Business portal above as primary reference.</div>
+      <a class="card-link ghost" href="kooee_business_app.html" target="_blank">Open</a>
+    </div>
+
+    <div class="proto-card" style="opacity:0.6">
+      <div class="card-type ref">Reference only</div>
+      <div class="card-title" style="font-size:15px">Instructor app</div>
+      <div class="card-desc">Earlier instructor app mockup. Use Instructor portal above as primary reference.</div>
+      <a class="card-link ghost" href="kooee_app_v2.html" target="_blank">Open</a>
+    </div>
+
+    <div class="proto-card" style="opacity:0.6">
+      <div class="card-type ref">Reference only</div>
+      <div class="card-title" style="font-size:15px">Desktop web portal</div>
+      <div class="card-desc">Original desktop prototype. Business and instructor portals side by side.</div>
+      <a class="card-link ghost" href="kooee_v4.html" target="_blank">Open</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="site-footer">
+  <div class="footer-text">Kooee · Internal design prototype · Not for distribution</div>
+  <a class="footer-link" href="https://github.com/dennisrudman/k-pt">github.com/dennisrudman/k-pt</a>
+</div>
+
+</body>
+</html>

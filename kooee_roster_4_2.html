@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roster — Kooee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F0EA;--surface:#FFFFFF;--border:#E4DBD1;--border2:#C8B8A8;
+  --text:#1A1008;--text2:#6B5540;--text3:#A8907A;
+  --ok:#3D8B37;--ok-bg:rgba(61,139,55,0.09);--ok-border:rgba(61,139,55,0.2);
+  --o:#C45C1A;--o-bg:rgba(196,92,26,0.08);--o-border:rgba(196,92,26,0.22);
+  --warn:#B85000;--warn-bg:rgba(184,80,0,0.08);--warn-border:rgba(184,80,0,0.2);
+  --red:#C0392B;--red-bg:rgba(192,57,43,0.08);--red-border:rgba(192,57,43,0.2);
+  --sb:#1C120A;--sb-border:rgba(196,92,26,0.14);
+  --sb-text:rgba(245,224,195,0.9);--sb-text2:rgba(245,224,195,0.45);--sb-text3:rgba(245,224,195,0.22);
+  --sb-act:rgba(196,92,26,0.18);--sb-act-border:rgba(196,92,26,0.35);
+}
+html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--sb);color:var(--text);-webkit-font-smoothing:antialiased}
+body{display:flex;overflow:hidden}
+
+/* ══════════ SIDEBAR ══════════ */
+.sidebar{width:218px;flex-shrink:0;background:var(--sb);display:flex;flex-direction:column;border-right:1px solid var(--sb-border)}
+.sb-top{padding:18px 16px 14px;border-bottom:1px solid var(--sb-border)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-k{width:34px;height:34px;background:var(--o);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:18px;font-weight:700;color:white;flex-shrink:0}
+.sb-brand-name{font-size:14px;font-weight:600;color:var(--sb-text);letter-spacing:-0.2px}
+.sb-brand-sub{font-size:10px;color:var(--sb-text3);margin-top:1px}
+.sb-org{display:inline-flex;background:rgba(196,92,26,0.18);border:1px solid rgba(196,92,26,0.28);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--o)}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:700;color:var(--sb-text3);letter-spacing:1.2px;text-transform:uppercase;padding:12px 10px 5px}
+.sb-sec:first-child{padding-top:5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:1px;transition:background 0.12s}
+.sb-item:hover{background:rgba(245,224,195,0.05)}
+.sb-item.act{background:var(--sb-act);border:1px solid var(--sb-act-border)}
+.sb-item svg{width:14px;height:14px;stroke:var(--sb-text2);stroke-width:1.8;fill:none;stroke-linecap:round;flex-shrink:0}
+.sb-item.act svg{stroke:var(--o)}
+.sb-item-lbl{font-size:13px;color:var(--sb-text2);flex:1}
+.sb-item.act .sb-item-lbl{color:var(--sb-text);font-weight:600}
+.sb-badge{min-width:18px;height:18px;border-radius:9px;background:var(--o);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;padding:0 5px}
+.sb-foot{padding:14px 12px;border-top:1px solid var(--sb-border)}
+.sb-user{display:flex;align-items:center;gap:9px}
+.sb-av{width:32px;height:32px;border-radius:50%;background:#7A4A28;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:11px;color:white;font-style:italic;flex-shrink:0}
+.sb-user-name{font-size:12px;font-weight:600;color:var(--sb-text);line-height:1.2}
+.sb-user-plan{font-size:10px;color:var(--sb-text3);margin-top:1px}
+
+/* ══════════ BODY ══════════ */
+.body-wrap{flex:1;display:flex;overflow:hidden;background:var(--bg)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* TOPBAR */
+.topbar{height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;flex-shrink:0;gap:12px}
+.topbar-info{flex:1}
+.topbar-hello{font-family:"Playfair Display",serif;font-size:17px;font-weight:500;color:var(--text);letter-spacing:-0.3px;line-height:1}
+.topbar-date{font-size:11px;color:var(--text3);margin-top:2px}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.notif-pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:20px;background:var(--o-bg);border:1px solid var(--o-border);font-size:12px;font-weight:600;color:var(--o);cursor:pointer;white-space:nowrap}
+.notif-dot{width:6px;height:6px;border-radius:50%;background:var(--o)}
+
+/* BUTTONS */
+.btn-ghost{height:32px;padding:0 13px;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.12s;white-space:nowrap}
+.btn-ghost:hover{border-color:var(--text3);background:var(--bg)}
+.btn-ghost svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
+.btn-ghost.bulk-on{background:var(--o);color:white;border-color:var(--o)}
+.btn-ghost.bulk-on:hover{background:#a34612}
+.btn-primary{height:32px;padding:0 13px;border-radius:7px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background 0.12s;white-space:nowrap}
+.btn-primary:hover{background:#a34612}
+.btn-primary svg{width:12px;height:12px;stroke:currentColor;stroke-width:2.5;fill:none}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+.info-banner{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 16px;font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:14px}
+.alert-bar{display:flex;align-items:center;gap:12px;background:#FFF9F5;border:1px solid var(--o-border);border-left:3px solid var(--o);border-radius:10px;padding:11px 15px;margin-bottom:14px}
+.alert-dot{width:7px;height:7px;border-radius:50%;background:var(--o);flex-shrink:0}
+.alert-text{font-size:13px;font-weight:600;color:var(--o);flex:1}
+.btn-alert{height:28px;padding:0 12px;border-radius:6px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.search-row{display:flex;gap:8px;margin-bottom:14px}
+.search-wrap{flex:1;position:relative}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:var(--text3);stroke-width:2;fill:none;pointer-events:none}
+.search-inp{width:100%;height:36px;border:1px solid var(--border);border-radius:8px;padding:0 12px 0 34px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none;transition:border-color 0.12s}
+.search-inp:focus{border-color:var(--border2)}
+.search-inp::placeholder{color:var(--text3)}
+.btn-filter{height:36px;padding:0 13px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.btn-filter svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none}
+
+/* ROSTER */
+.roster-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.roster-row{display:flex;align-items:center;gap:13px;padding:15px 18px;border-bottom:1px solid var(--border);transition:background 0.12s}
+.roster-row:last-child{border-bottom:none}
+.roster-row:hover{background:#FDFAF7}
+.roster-row.row-active{background:#FDF8F3;box-shadow:inset 2px 0 0 var(--o)}
+
+.r-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;background:var(--surface);transition:all 0.12s}
+.r-cb.vis{display:flex}
+.r-cb.on{background:var(--o);border-color:var(--o)}
+.r-cb.on::after{content:"";width:5px;height:4px;border-right:2px solid white;border-bottom:2px solid white;transform:rotate(45deg) translate(-0.5px,-0.5px)}
+
+.r-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:14px;font-weight:500;color:white;flex-shrink:0;font-style:italic}
+.r-av.dim{filter:grayscale(0.55);opacity:0.72}
+.r-info{flex:1;min-width:0}
+.r-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.r-sub{font-size:11px;color:var(--text3);font-weight:300;margin-bottom:7px}
+.r-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-flex;align-items:center;height:21px;padding:0 9px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid;white-space:nowrap}
+.t-avail{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.t-na{background:var(--bg);color:var(--text3);border-color:var(--border2)}
+.t-clear{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.t-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-border)}
+.t-red{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.t-ob{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.t-ob-prog{background:var(--o-bg);color:var(--o);border-color:var(--o-border)}
+.t-skill{background:var(--bg);color:var(--text2);border-color:var(--border)}
+
+.r-btns{display:flex;gap:6px;flex-shrink:0}
+.btn-profile{height:28px;padding:0 13px;border-radius:7px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.12s}
+.btn-profile:hover{background:#a34612}
+.btn-profile.muted{background:rgba(196,92,26,0.42)}
+.btn-msg{height:28px;padding:0 11px;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.12s}
+.btn-msg:hover{border-color:var(--text3)}
+.roster-foot{padding:11px 18px;font-size:11px;color:var(--text3);font-style:italic;border-top:1px solid var(--border);background:var(--surface)}
+
+/* ══════════ PANEL ══════════ */
+.panel{width:400px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:none;flex-direction:column;overflow:hidden}
+.panel.open{display:flex}
+
+.p-hd{padding:17px 20px 13px;border-bottom:1px solid var(--border);flex-shrink:0}
+.p-hd-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.p-hd-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:2px}
+.p-hd-sub{font-size:11px;color:var(--text3)}
+.p-close{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.12s}
+.p-close:hover{border-color:var(--border2);background:var(--bg)}
+.p-close svg{width:10px;height:10px;stroke:var(--text3);stroke-width:2;fill:none}
+
+/* Instructor mini card */
+.inst-card{display:flex;align-items:center;gap:11px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:13px 20px}
+.i-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:13px;font-weight:500;color:white;flex-shrink:0;font-style:italic}
+.i-av.dim{filter:grayscale(0.55);opacity:0.72}
+.i-name{font-size:13px;font-weight:600;color:var(--text)}
+.i-quals{font-size:11px;color:var(--text3);margin-top:1px}
+.verified{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px;border-radius:20px;background:var(--ok-bg);border:1px solid var(--ok-border);color:var(--ok);font-size:10px;font-weight:700;flex-shrink:0}
+.verified svg{width:9px;height:9px;stroke:var(--ok);stroke-width:2.5;fill:none}
+
+/* Tabs */
+.p-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 20px;flex-shrink:0}
+.p-tab{height:36px;padding:0 4px;margin-right:16px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all 0.12s;white-space:nowrap}
+.p-tab:hover{color:var(--text2)}
+.p-tab.act{color:var(--o);border-bottom-color:var(--o);font-weight:600}
+
+.p-body{flex:1;overflow-y:auto;padding:16px 20px}
+.p-foot{padding:13px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.btn-send{width:100%;height:42px;border-radius:10px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.12s}
+.btn-send:hover{background:#a34612}
+.btn-send:disabled{background:var(--border2);cursor:not-allowed}
+.btn-send svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+
+/* Panel content */
+.sec-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;display:block}
+.div{height:1px;background:var(--border);margin:13px 0}
+
+.upload-zone{border:1.5px dashed var(--border2);border-radius:10px;padding:22px 18px;text-align:center;cursor:pointer;transition:all 0.12s;margin-bottom:6px}
+.upload-zone:hover{border-color:var(--o);background:var(--o-bg)}
+.upload-zone svg{width:20px;height:20px;stroke:var(--text3);stroke-width:1.6;fill:none;margin-bottom:7px;stroke-linecap:round}
+.upload-zone:hover svg{stroke:var(--o)}
+.uz-t{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}
+.uz-s{font-size:11px;color:var(--text3);line-height:1.5}
+
+.added-item{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 12px;margin-bottom:7px}
+.ai-icon{width:28px;height:28px;border-radius:7px;background:var(--o-bg);border:1px solid var(--o-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-icon svg{width:12px;height:12px;stroke:var(--o);stroke-width:1.8;fill:none;stroke-linecap:round}
+.ai-info{flex:1;min-width:0}
+.ai-name{font-size:12px;font-weight:600;color:var(--text)}
+.ai-type{font-size:10px;color:var(--text3);margin-top:1px}
+.ai-rm{width:20px;height:20px;border-radius:5px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-rm:hover{background:var(--bg);border-color:var(--border2)}
+.ai-rm svg{width:9px;height:9px;stroke:var(--text3);stroke-width:2;fill:none}
+
+.tmpl-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:7px;cursor:pointer;transition:all 0.12s;background:var(--surface)}
+.tmpl-row:hover{border-color:var(--border2);background:var(--bg)}
+.tmpl-row.sel{border-color:var(--o);background:var(--o-bg)}
+.tmpl-icon{width:28px;height:28px;border-radius:7px;background:var(--o-bg);border:1px solid var(--o-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tmpl-icon svg{width:12px;height:12px;stroke:var(--o);stroke-width:1.8;fill:none;stroke-linecap:round}
+.tmpl-info{flex:1;min-width:0}
+.tmpl-name{font-size:12px;font-weight:600;color:var(--text)}
+.tmpl-meta{font-size:10px;color:var(--text3);margin-top:1px}
+.tmpl-arr svg{width:13px;height:13px;stroke:var(--text3);stroke-width:2;fill:none}
+.tmpl-row.sel .tmpl-arr svg{stroke:var(--o)}
+.tmpl-add{display:inline-flex;align-items:center;gap:6px;color:var(--o);font-size:12px;font-weight:600;cursor:pointer;padding:5px 0}
+.tmpl-add svg{width:12px;height:12px;stroke:var(--o);stroke-width:2.5;fill:none;stroke-linecap:round}
+
+.track-item{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:7px;background:var(--surface)}
+.tr-icon{width:28px;height:28px;border-radius:7px;background:var(--o-bg);border:1px solid var(--o-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tr-icon svg{width:12px;height:12px;stroke:var(--o);stroke-width:1.8;fill:none;stroke-linecap:round}
+.tr-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.tr-type{font-size:10px;color:var(--text3);margin-bottom:6px}
+.tr-st{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid}
+.tr-st.done{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.tr-st.viewed{background:var(--o-bg);color:var(--o);border-color:var(--o-border)}
+.tr-st.await{background:var(--bg);color:var(--text3);border-color:var(--border2)}
+
+.msg-area{width:100%;border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-family:"DM Sans",sans-serif;font-size:12px;color:var(--text);resize:none;outline:none;background:var(--surface);min-height:72px;line-height:1.6;transition:border-color 0.12s}
+.msg-area:focus{border-color:var(--border2)}
+.msg-area::placeholder{color:var(--text3)}
+
+/* BULK PANEL */
+.bulk-hd-box{padding:13px 20px 0}
+.bulk-to{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
+.bulk-to span{color:var(--o)}
+.bulk-hint{font-size:12px;color:var(--text3);margin-bottom:10px}
+.rec-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.rec-row:last-child{border-bottom:none}
+.rec-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:9px;font-weight:500;color:white;flex-shrink:0;font-style:italic}
+.rec-name{font-size:12px;font-weight:500;color:var(--text);flex:1}
+.rec-rm{width:20px;height:20px;border-radius:5px;border:1px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.rec-rm:hover{background:var(--bg)}
+.rec-rm svg{width:9px;height:9px;stroke:var(--text3);stroke-width:2;fill:none}
+
+.type-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.type-card{border:1.5px solid var(--border);border-radius:10px;padding:13px 10px;text-align:center;cursor:pointer;transition:all 0.12s;background:var(--surface)}
+.type-card:hover{border-color:var(--border2)}
+.type-card.sel{border-color:var(--o);background:var(--o-bg)}
+.type-card svg{width:18px;height:18px;stroke:var(--text3);stroke-width:1.8;fill:none;margin-bottom:5px;stroke-linecap:round}
+.type-card.sel svg{stroke:var(--o)}
+.tc-lbl{font-size:12px;font-weight:600;color:var(--text2)}
+.type-card.sel .tc-lbl{color:var(--o)}
+.tc-sub{font-size:10px;color:var(--text3);margin-top:2px}
+
+.f-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;display:block}
+.f-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);outline:none;background:var(--surface);transition:border-color 0.12s;margin-bottom:12px}
+.f-input:focus{border-color:var(--border2)}
+.f-input::placeholder{color:var(--text3)}
+.f-sel{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);outline:none;background:var(--surface);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A8907A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;margin-bottom:12px;cursor:pointer}
+
+.upload-sm{border:1.5px dashed var(--border2);border-radius:9px;padding:14px;text-align:center;cursor:pointer;transition:all 0.12s;margin-bottom:12px}
+.upload-sm:hover{border-color:var(--o);background:var(--o-bg)}
+.upload-sm svg{width:16px;height:16px;stroke:var(--text3);stroke-width:1.8;fill:none;margin-bottom:4px}
+.upload-sm:hover svg{stroke:var(--o)}
+.upload-sm-t{font-size:12px;color:var(--text2)}
+.upload-sm-s{font-size:10px;color:var(--text3);margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="sb-logo">
+      <div class="sb-k">K</div>
+      <div>
+        <div class="sb-brand-name">Kooee</div>
+        <div class="sb-brand-sub">Business portal</div>
+      </div>
+    </div>
+    <div class="sb-org">Ridgeline Outdoor Ed</div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-sec">Overview</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="sb-item-lbl">Operations</span>
+    </div>
+    <div class="sb-item act" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <span class="sb-item-lbl">Roster</span>
+      <div class="sb-badge">2</div>
+    </div>
+    <div class="sb-sec">Programs</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="sb-item-lbl">Program creator</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="sb-item-lbl">Catalogue</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span class="sb-item-lbl">Adverts</span>
+      <div class="sb-badge">2</div>
+    </div>
+    <div class="sb-sec">People</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="sb-item-lbl">Staff search</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span class="sb-item-lbl">Kooee inbox</span>
+      <div class="sb-badge">2</div>
+    </div>
+    <div class="sb-sec">Reporting</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span class="sb-item-lbl">Reports</span>
+    </div>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av">RL</div>
+      <div>
+        <div class="sb-user-name">Admin · Rachel</div>
+        <div class="sb-user-plan">Growth · $250/mo</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BODY ══════════ -->
+<div class="body-wrap">
+<div class="main">
+
+  <div class="topbar">
+    <div class="topbar-info">
+      <div class="topbar-hello">Hello, Rachel</div>
+      <div class="topbar-date">Monday, 28 April 2026 · Ridgeline Outdoor Ed</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="notif-pill"><div class="notif-dot"></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        2 new Kooees
+      </div>
+      <button class="btn-ghost" id="bulk-btn" onclick="toggleBulk()">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Bulk send
+      </button>
+      <button class="btn-primary">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add to roster
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="info-banner">Your roster contains instructors who have completed at least one verified program with your organisation. All profile data, qualifications and onboarding records are on file.</div>
+
+    <div class="alert-bar">
+      <div class="alert-dot"></div>
+      <div class="alert-text">Compliance alert — 2 instructors require attention</div>
+      <button class="btn-alert" onclick="filterCompliance()">Filter by issue</button>
+    </div>
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-inp" type="text" placeholder="Search by name, qualification or location..." oninput="doSearch(this.value)">
+      </div>
+      <button class="btn-filter">
+        <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        Filters
+      </button>
+    </div>
+
+    <div class="roster-wrap">
+
+      <!-- Alex Torres -->
+      <div class="roster-row" id="row-at" data-name="alex torres" data-comp="1">
+        <div class="r-cb" id="cb-at" onclick="toggleCb('at')"></div>
+        <div class="r-av" style="background:#B8845A">AT</div>
+        <div class="r-info">
+          <div class="r-name">Alex Torres</div>
+          <div class="r-sub">Melbourne, VIC · Greater Melbourne · 14 programs with ROE</div>
+          <div class="r-tags">
+            <span class="tag t-avail">Available</span>
+            <span class="tag t-warn">First Aid expiring</span>
+            <span class="tag t-skill">GL</span><span class="tag t-skill">AI</span><span class="tag t-skill">ALP</span>
+            <span class="tag t-ob">Onboarded</span>
+          </div>
+        </div>
+        <div class="r-btns">
+          <button class="btn-profile" onclick="openOnboard('at')">Profile</button>
+          <button class="btn-msg">Message</button>
+        </div>
+      </div>
+
+      <!-- Jordan Mills -->
+      <div class="roster-row" id="row-jm" data-name="jordan mills" data-comp="0">
+        <div class="r-cb" id="cb-jm" onclick="toggleCb('jm')"></div>
+        <div class="r-av" style="background:#C4845A">JM</div>
+        <div class="r-info">
+          <div class="r-name">Jordan Mills</div>
+          <div class="r-sub">Geelong, VIC · Geelong &amp; Surf Coast · 10 programs with ROE</div>
+          <div class="r-tags">
+            <span class="tag t-avail">Available</span>
+            <span class="tag t-clear">All clear</span>
+            <span class="tag t-skill">GL</span><span class="tag t-skill">CI</span><span class="tag t-skill">ALP</span>
+            <span class="tag t-ob">Onboarded</span>
+          </div>
+        </div>
+        <div class="r-btns">
+          <button class="btn-profile" onclick="openOnboard('jm')">Profile</button>
+          <button class="btn-msg">Message</button>
+        </div>
+      </div>
+
+      <!-- Casey Lowe -->
+      <div class="roster-row" id="row-cl" data-name="casey lowe" data-comp="1">
+        <div class="r-cb" id="cb-cl" onclick="toggleCb('cl')"></div>
+        <div class="r-av dim" style="background:#8A8A8A">CL</div>
+        <div class="r-info">
+          <div class="r-name">Casey Lowe</div>
+          <div class="r-sub">Ballarat, VIC · Ballarat &amp; Central Highlands · 6 programs with ROE</div>
+          <div class="r-tags">
+            <span class="tag t-na">Unavailable to 10 May</span>
+            <span class="tag t-red">First Aid expired</span>
+            <span class="tag t-skill">GL</span><span class="tag t-skill">AI</span>
+            <span class="tag t-ob-prog">Onboarding 50%</span>
+          </div>
+        </div>
+        <div class="r-btns">
+          <button class="btn-profile muted" onclick="openTrack('cl')">Profile</button>
+          <button class="btn-msg">Message</button>
+        </div>
+      </div>
+
+      <!-- Morgan Park -->
+      <div class="roster-row" id="row-mp" data-name="morgan park" data-comp="0">
+        <div class="r-cb" id="cb-mp" onclick="toggleCb('mp')"></div>
+        <div class="r-av" style="background:#B87A4A">MP</div>
+        <div class="r-info">
+          <div class="r-name">Morgan Park</div>
+          <div class="r-sub">Bendigo, VIC · Bendigo &amp; Central VIC · 4 programs with ROE</div>
+          <div class="r-tags">
+            <span class="tag t-avail">Available</span>
+            <span class="tag t-clear">All clear</span>
+            <span class="tag t-skill">GL</span><span class="tag t-skill">MTB</span><span class="tag t-skill">RCI</span>
+            <span class="tag t-ob">Onboarded</span>
+          </div>
+        </div>
+        <div class="r-btns">
+          <button class="btn-profile" onclick="openOnboard('mp')">Profile</button>
+          <button class="btn-msg">Message</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="roster-foot">Instructors are automatically added to your roster after completing a verified program via Kooee.</div>
+  </div>
+</div><!-- /main -->
+
+<!-- ══════════ PANEL ══════════ -->
+<div class="panel" id="panel">
+
+  <!-- ── ONBOARD PANEL ── -->
+  <div id="p-onboard" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div><div class="p-hd-title">Onboard instructor</div><div class="p-hd-sub">Send documents and modules for them to complete</div></div>
+        <button class="p-close" onclick="closePanel()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="inst-card">
+      <div class="i-av" id="ob-av" style="background:#B8845A">AT</div>
+      <div style="flex:1"><div class="i-name" id="ob-name">Alex Torres</div><div class="i-quals" id="ob-quals">GL · AI · ALP</div></div>
+      <div class="verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Kooee verified</div>
+    </div>
+    <div class="p-tabs" id="ob-tabs">
+      <div class="p-tab act" data-panel="ob-docs">Documents</div>
+      <div class="p-tab" data-panel="ob-mods">Modules</div>
+      <div class="p-tab" data-panel="ob-tmpls">Templates</div>
+    </div>
+    <div class="p-body">
+      <div id="ob-docs">
+        <div class="sec-lbl" style="margin-bottom:9px">Documents to send</div>
+        <div id="ob-doc-list"></div>
+        <div class="upload-zone" onclick="addDoc('ob-doc-list','doc')">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <div class="uz-t">Add a document</div>
+          <div class="uz-s">Upload a file for the instructor to sign, complete or acknowledge</div>
+        </div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" id="ob-msg" placeholder="Add a personal note — e.g. 'Hi Alex, please complete the documents below before your first program on 1 July.'"></textarea>
+      </div>
+      <div id="ob-mods" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Modules and videos</div>
+        <div id="ob-mod-list"></div>
+        <div class="upload-zone" onclick="addDoc('ob-mod-list','mod')">
+          <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          <div class="uz-t">Add a video or module</div>
+          <div class="uz-s">Link to a training video or online module for them to complete</div>
+        </div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" placeholder="Add a personal note..."></textarea>
+      </div>
+      <div id="ob-tmpls" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Saved templates</div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:11px;line-height:1.55">Select a template. Fill in instructor-specific details before sending.</p>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Season contract 2026</div><div class="tmpl-meta">Sign + return · Last used 12 May</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Code of conduct</div><div class="tmpl-meta">Read + acknowledge · Last used 3 May</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Emergency contact form</div><div class="tmpl-meta">Complete + upload · Last used 28 Apr</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Tax file number declaration</div><div class="tmpl-meta">Complete + upload · Last used 1 Apr</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-add" onclick="alert('Template creator coming soon')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Save new template</div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" placeholder="Add a personal note..."></textarea>
+      </div>
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" onclick="closePanel()">Send onboarding packet <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── TRACK PANEL ── -->
+  <div id="p-track" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div><div class="p-hd-title">Onboarding status</div><div class="p-hd-sub">Track document and module completion</div></div>
+        <button class="p-close" onclick="closePanel()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="inst-card">
+      <div class="i-av dim" style="background:#8A8A8A">CL</div>
+      <div style="flex:1"><div class="i-name">Casey Lowe</div><div class="i-quals">GL · AI</div></div>
+      <div class="verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Kooee verified</div>
+    </div>
+    <div class="p-tabs" id="tr-tabs">
+      <div class="p-tab act" data-panel="tr-docs">Documents</div>
+      <div class="p-tab" data-panel="tr-mods">Modules</div>
+      <div class="p-tab" data-panel="tr-tmpls">Templates</div>
+    </div>
+    <div class="p-body">
+      <div id="tr-docs">
+        <div class="sec-lbl" style="margin-bottom:9px">Documents sent</div>
+        <div class="track-item">
+          <div class="tr-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="tr-name">Season contract 2026</div><div class="tr-type">Sign + return</div><span class="tr-st viewed">Viewed</span></div>
+        </div>
+        <div class="track-item">
+          <div class="tr-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="tr-name">Code of conduct</div><div class="tr-type">Read + acknowledge</div><span class="tr-st done">Completed</span></div>
+        </div>
+        <div class="track-item">
+          <div class="tr-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="tr-name">Emergency contact form</div><div class="tr-type">Complete + upload</div><span class="tr-st await">Awaiting action</span></div>
+        </div>
+        <div id="tr-doc-added"></div>
+        <div class="upload-zone" onclick="addDoc('tr-doc-added','doc')" style="margin-top:4px">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <div class="uz-t">Add a document</div>
+          <div class="uz-s">Upload a file for the instructor to sign, complete or acknowledge</div>
+        </div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" placeholder="Add a note..."></textarea>
+      </div>
+      <div id="tr-mods" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Modules sent</div>
+        <div class="track-item">
+          <div class="tr-icon"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg></div>
+          <div><div class="tr-name">Staff induction module</div><div class="tr-type">Watch and confirm · 18 min</div><span class="tr-st await">Awaiting action</span></div>
+        </div>
+        <div id="tr-mod-added"></div>
+        <div class="upload-zone" onclick="addDoc('tr-mod-added','mod')" style="margin-top:4px">
+          <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          <div class="uz-t">Add a video or module</div>
+          <div class="uz-s">Link to a training video or online module</div>
+        </div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" placeholder="Add a note..."></textarea>
+      </div>
+      <div id="tr-tmpls" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Saved templates</div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:11px;line-height:1.55">Send another document to Casey using a saved template.</p>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Season contract 2026</div><div class="tmpl-meta">Sign + return · Last used 12 May</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-row" onclick="this.classList.toggle('sel')"><div class="tmpl-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tmpl-info"><div class="tmpl-name">Bank details form</div><div class="tmpl-meta">Complete + upload · Last used 28 Apr</div></div><div class="tmpl-arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        <div class="tmpl-add" onclick="alert('Template creator coming soon')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Save new template</div>
+        <div class="div"></div>
+        <div class="sec-lbl">Message (optional)</div>
+        <textarea class="msg-area" placeholder="Add a note..."></textarea>
+      </div>
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" onclick="closePanel()">Send onboarding packet <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── BULK SEND PANEL ── -->
+  <div id="p-bulk" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div class="p-hd-title">Bulk send</div>
+        <button class="p-close" onclick="closeBulk()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="p-body">
+      <div class="bulk-hd-box" style="padding:0 0 12px">
+        <div class="bulk-to">Sending to <span id="bulk-ct">0 selected</span></div>
+        <div class="bulk-hint" id="bulk-hint">Select instructors from the roster to add them here.</div>
+        <div id="bulk-recs"></div>
+      </div>
+      <div class="div" style="margin:0 0 13px"></div>
+
+      <div class="sec-lbl" style="margin-bottom:9px">What are you sending?</div>
+      <div class="type-cards">
+        <div class="type-card sel" id="tc-doc" onclick="setBulkType('doc')">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="tc-lbl">Document</div><div class="tc-sub">Contract, form or info</div>
+        </div>
+        <div class="type-card" id="tc-mod" onclick="setBulkType('mod')">
+          <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          <div class="tc-lbl">Module / Video</div><div class="tc-sub">Training or induction</div>
+        </div>
+      </div>
+
+      <div id="bulk-doc-fields">
+        <label class="f-lbl">Document name</label>
+        <input class="f-input" type="text" placeholder="e.g. Season contract 2026">
+        <label class="f-lbl">Upload file</label>
+        <div class="upload-sm" onclick="alert('File browser opens here')">
+          <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+          <div class="upload-sm-t">PDF or DOCX — click to browse</div>
+        </div>
+        <label class="f-lbl">Required action</label>
+        <select class="f-sel">
+          <option>Read and acknowledge</option>
+          <option>Sign and return</option>
+          <option>Complete and upload</option>
+          <option>Information only</option>
+        </select>
+      </div>
+
+      <div id="bulk-mod-fields" style="display:none">
+        <label class="f-lbl">Module or video title</label>
+        <input class="f-input" type="text" placeholder="e.g. Staff induction 2026">
+        <label class="f-lbl">Link or file</label>
+        <input class="f-input" type="text" placeholder="https:// or upload a file">
+      </div>
+
+      <label class="f-lbl">Message (optional)</label>
+      <textarea class="msg-area" placeholder="Add a note to all selected instructors..."></textarea>
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" id="bulk-send-btn" disabled onclick="closeBulk()">
+        Send to selected instructors
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /panel -->
+</div><!-- /body-wrap -->
+
+<script>
+const iData={
+  at:{name:'Alex Torres',quals:'GL · AI · ALP',av:'AT',color:'#B8845A'},
+  jm:{name:'Jordan Mills',quals:'GL · CI · ALP',av:'JM',color:'#C4845A'},
+  cl:{name:'Casey Lowe',quals:'GL · AI',av:'CL',color:'#8A8A8A',dim:true},
+  mp:{name:'Morgan Park',quals:'GL · MTB · RCI',av:'MP',color:'#B87A4A'},
+};
+
+// ─── SIDEBAR ───
+function navClick(el){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
+  el.classList.add('act');
+}
+
+// ─── FILTERS ───
+function filterCompliance(){
+  document.querySelectorAll('.roster-row').forEach(r=>{
+    r.style.display=r.dataset.comp==='1'?'':'none';
+  });
+}
+function doSearch(v){
+  const q=v.toLowerCase();
+  document.querySelectorAll('.roster-row').forEach(r=>{
+    r.style.display=r.dataset.name.includes(q)?'':'none';
+  });
+}
+
+// ─── BULK MODE ───
+let bulkOn=false, checked=new Set();
+
+function toggleBulk(){
+  bulkOn=!bulkOn;
+  const btn=document.getElementById('bulk-btn');
+  if(bulkOn){
+    btn.classList.add('bulk-on');
+    btn.innerHTML='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Cancel';
+    document.querySelectorAll('.r-cb').forEach(c=>c.classList.add('vis'));
+    // open bulk panel right away
+    closeAllPanels();
+    document.getElementById('panel').classList.add('open');
+    document.getElementById('p-bulk').style.display='flex';
+  } else {
+    btn.classList.remove('bulk-on');
+    btn.innerHTML='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Bulk send';
+    document.querySelectorAll('.r-cb').forEach(c=>{c.classList.remove('vis','on')});
+    document.querySelectorAll('.roster-row').forEach(r=>r.classList.remove('row-active'));
+    checked.clear();
+    closeAllPanels();
+  }
+}
+
+function closeBulk(){ toggleBulk(); }
+
+function toggleCb(id){
+  if(!bulkOn) return;
+  const cb=document.getElementById('cb-'+id);
+  const row=document.getElementById('row-'+id);
+  if(checked.has(id)){
+    checked.delete(id);
+    cb.classList.remove('on');
+    row.classList.remove('row-active');
+  } else {
+    checked.add(id);
+    cb.classList.add('on');
+    row.classList.add('row-active');
+  }
+  updateBulkPanel();
+}
+
+function updateBulkPanel(){
+  const ct=document.getElementById('bulk-ct');
+  const hint=document.getElementById('bulk-hint');
+  const recs=document.getElementById('bulk-recs');
+  const btn=document.getElementById('bulk-send-btn');
+  const n=checked.size;
+  ct.textContent=n+' selected';
+  ct.style.color=n>0?'var(--o)':'var(--text3)';
+  hint.style.display=n===0?'block':'none';
+  recs.innerHTML='';
+  checked.forEach(id=>{
+    const d=iData[id];
+    const row=document.createElement('div');
+    row.className='rec-row';
+    row.innerHTML=`<div class="rec-av" style="background:${d.color}">${d.av}</div>
+      <div class="rec-name">${d.name}</div>
+      <button class="rec-rm" onclick="removeRec('${id}')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+    recs.appendChild(row);
+  });
+  btn.disabled=n===0;
+}
+
+function removeRec(id){
+  checked.delete(id);
+  document.getElementById('cb-'+id).classList.remove('on');
+  document.getElementById('row-'+id).classList.remove('row-active');
+  updateBulkPanel();
+}
+
+function setBulkType(type){
+  document.getElementById('tc-doc').classList.toggle('sel',type==='doc');
+  document.getElementById('tc-mod').classList.toggle('sel',type==='mod');
+  document.getElementById('bulk-doc-fields').style.display=type==='doc'?'':'none';
+  document.getElementById('bulk-mod-fields').style.display=type==='mod'?'':'none';
+}
+
+// ─── PANELS ───
+function openOnboard(id){
+  if(bulkOn) return;
+  closeAllPanels();
+  const d=iData[id];
+  document.getElementById('ob-av').textContent=d.av;
+  document.getElementById('ob-av').style.background=d.color;
+  document.getElementById('ob-name').textContent=d.name;
+  document.getElementById('ob-quals').textContent=d.quals;
+  document.getElementById('ob-doc-list').innerHTML='';
+  document.getElementById('ob-mod-list').innerHTML='';
+  switchTabs('ob-tabs','ob-docs');
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('p-onboard').style.display='flex';
+  highlightRow(id);
+}
+
+function openTrack(id){
+  if(bulkOn) return;
+  closeAllPanels();
+  document.getElementById('tr-doc-added').innerHTML='';
+  if(document.getElementById('tr-mod-added')) document.getElementById('tr-mod-added').innerHTML='';
+  switchTabs('tr-tabs','tr-docs');
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('p-track').style.display='flex';
+  highlightRow(id);
+}
+
+function highlightRow(id){
+  document.querySelectorAll('.roster-row').forEach(r=>r.classList.remove('row-active'));
+  document.getElementById('row-'+id).classList.add('row-active');
+}
+
+function closePanel(){
+  closeAllPanels();
+  document.querySelectorAll('.roster-row').forEach(r=>r.classList.remove('row-active'));
+}
+
+function closeAllPanels(){
+  document.getElementById('panel').classList.remove('open');
+  ['p-onboard','p-track','p-bulk'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+}
+
+// ─── TABS ───
+function switchTabs(tabsId, activeTabPanel){
+  const tabsEl=document.getElementById(tabsId);
+  tabsEl.querySelectorAll('.p-tab').forEach(t=>{
+    t.classList.remove('act');
+    const target=document.getElementById(t.dataset.panel);
+    if(target) target.style.display='none';
+    if(t.dataset.panel===activeTabPanel){
+      t.classList.add('act');
+      if(target) target.style.display='';
+    }
+  });
+}
+
+// Wire tab clicks
+['ob-tabs','tr-tabs'].forEach(tabsId=>{
+  const el=document.getElementById(tabsId);
+  el.querySelectorAll('.p-tab').forEach(tab=>{
+    tab.addEventListener('click',function(){
+      switchTabs(tabsId, this.dataset.panel);
+    });
+  });
+});
+
+// ─── ADD DOCS ───
+const docNames=['Code of conduct','Bank details form','Tax file number declaration','Dietary and medical form','Casual employment agreement'];
+const modNames=['Staff induction module','Safeguarding and child safety','Emergency procedures'];
+let dc=0, mc=0;
+
+function addDoc(containerId, type){
+  const container=document.getElementById(containerId);
+  if(!container) return;
+  const name=type==='doc'?docNames[dc++%docNames.length]:modNames[mc++%modNames.length];
+  const typeLabel=type==='doc'?'Read and acknowledge':'Watch and confirm';
+  const iconPath=type==='doc'
+    ?'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>'
+    :'<path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>';
+  const div=document.createElement('div');
+  div.className='added-item';
+  div.innerHTML=`<div class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--o)" stroke-width="1.8" stroke-linecap="round">${iconPath}</svg></div>
+    <div class="ai-info"><div class="ai-name">${name}</div><div class="ai-type">${typeLabel}</div></div>
+    <button class="ai-rm" onclick="this.closest('.added-item').remove()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  container.appendChild(div);
+}
+</script>
+</body>
+</html>

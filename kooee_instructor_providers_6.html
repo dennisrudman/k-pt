@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Providers — Kooee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F0EA;--surface:#FFFFFF;--border:#E4DBD1;--border2:#C8B8A8;
+  --text:#1A1008;--text2:#6B5540;--text3:#A8907A;
+  --ok:#3D8B37;--ok-bg:rgba(61,139,55,0.09);--ok-border:rgba(61,139,55,0.2);
+  --o:#C45C1A;--o-bg:rgba(196,92,26,0.08);--o-border:rgba(196,92,26,0.22);
+  --warn:#B85000;--warn-bg:rgba(184,80,0,0.08);--warn-border:rgba(184,80,0,0.2);
+  --sb:#1C120A;--sb-border:rgba(196,92,26,0.14);
+  --sb-text:rgba(245,224,195,0.9);--sb-text2:rgba(245,224,195,0.45);--sb-text3:rgba(245,224,195,0.22);
+  --sb-act:rgba(196,92,26,0.2);--sb-act-border:rgba(196,92,26,0.38);
+}
+html,body{height:100%;font-family:"DM Sans",sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+body{display:flex;overflow:hidden;background:var(--sb)}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:218px;flex-shrink:0;background:var(--sb);display:flex;flex-direction:column;border-right:1px solid var(--sb-border)}
+.sb-top{padding:18px 16px 14px;border-bottom:1px solid var(--sb-border)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.sb-k{width:34px;height:34px;background:var(--o);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:18px;font-weight:700;color:white;flex-shrink:0}
+.sb-brand-name{font-size:14px;font-weight:600;color:var(--sb-text);letter-spacing:-0.2px}
+.sb-brand-sub{font-size:10px;color:var(--sb-text3);margin-top:1px}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:700;color:var(--sb-text3);letter-spacing:1.2px;text-transform:uppercase;padding:12px 10px 5px}
+.sb-sec:first-child{padding-top:6px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:1px;transition:background 0.12s;position:relative}
+.sb-item:hover{background:rgba(245,224,195,0.05)}
+.sb-item.act{background:var(--sb-act);border:1px solid var(--sb-act-border)}
+.sb-item svg{width:14px;height:14px;stroke:var(--sb-text2);stroke-width:1.8;fill:none;stroke-linecap:round;flex-shrink:0}
+.sb-item.act svg{stroke:var(--o)}
+.sb-item-lbl{font-size:13px;color:var(--sb-text2);flex:1}
+.sb-item.act .sb-item-lbl{color:var(--sb-text);font-weight:600}
+.sb-badge{min-width:18px;height:18px;border-radius:9px;background:var(--o);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;padding:0 5px}
+.sb-foot{padding:14px 12px;border-top:1px solid var(--sb-border)}
+.sb-user{display:flex;align-items:center;gap:9px}
+.sb-av{width:32px;height:32px;border-radius:50%;background:#8A6040;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:11px;color:white;font-style:italic;flex-shrink:0}
+.sb-user-info{min-width:0}
+.sb-user-name{font-size:12px;font-weight:600;color:var(--sb-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-plan{font-size:10px;color:var(--sb-text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ═══ BODY ═══ */
+.body-wrap{flex:1;display:flex;overflow:hidden;background:var(--bg)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* TOPBAR */
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;flex-shrink:0;gap:12px}
+.topbar-info{flex:1}
+.topbar-hello{font-family:"Playfair Display",serif;font-size:18px;font-weight:500;color:var(--text);letter-spacing:-0.3px;line-height:1}
+.topbar-date{font-size:11px;color:var(--text3);margin-top:2px}
+.notif-pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:20px;background:var(--o-bg);border:1px solid var(--o-border);font-size:12px;font-weight:600;color:var(--o);cursor:pointer;white-space:nowrap}
+.notif-dot{width:6px;height:6px;border-radius:50%;background:var(--o)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+
+/* SEARCH ROW */
+.search-row{display:flex;gap:8px;margin-bottom:20px}
+.search-wrap{flex:1;position:relative}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:var(--text3);stroke-width:2;fill:none;pointer-events:none}
+.search-inp{width:100%;height:38px;border:1px solid var(--border);border-radius:9px;padding:0 12px 0 34px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none;transition:border-color 0.12s}
+.search-inp:focus{border-color:var(--border2)}
+.search-inp::placeholder{color:var(--text3)}
+.f-sel{height:38px;padding:0 28px 0 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--text2);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23A8907A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+
+/* SECTION HEADERS */
+.section-hd{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+
+/* PROVIDER GRID */
+.prov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+
+/* PROVIDER CARD */
+.prov-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:18px;transition:border-color 0.15s;cursor:default}
+.prov-card:hover{border-color:var(--border2)}
+.prov-card.card-active{border-color:var(--o)}
+.prov-top{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.prov-av{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:15px;font-weight:700;color:white;flex-shrink:0;font-style:italic}
+.prov-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.prov-loc{font-size:11px;color:var(--text3)}
+.prov-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid;white-space:nowrap}
+.t-act{background:var(--bg);color:var(--text2);border-color:var(--border)}
+.t-conn{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.t-conn::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ok);margin-right:4px}
+.t-ob{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.t-ob-need{background:var(--o-bg);color:var(--o);border-color:var(--o-border)}
+.t-skill{background:var(--bg);color:var(--text2);border-color:var(--border)}
+.prov-meta{font-size:11px;color:var(--text3);margin-bottom:13px}
+.prov-btns{display:flex;gap:7px;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn-dark{height:30px;padding:0 13px;border-radius:7px;border:none;background:var(--text);color:white;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.12s;white-space:nowrap}
+.btn-dark:hover{background:#2c1a08}
+.btn-ghost{height:30px;padding:0 12px;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.btn-ghost:hover{border-color:var(--text3)}
+.btn-primary{height:30px;padding:0 13px;border-radius:7px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.12s;white-space:nowrap}
+.btn-primary:hover{background:#a34612}
+.btn-link{height:30px;padding:0 12px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--o);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.btn-link:hover{background:var(--o-bg)}
+
+/* ═══ PANEL ═══ */
+.panel{width:410px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:none;flex-direction:column;overflow:hidden}
+.panel.open{display:flex}
+
+.p-hd{padding:17px 20px 13px;border-bottom:1px solid var(--border);flex-shrink:0}
+.p-hd-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.p-hd-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:2px}
+.p-hd-sub{font-size:11px;color:var(--text3)}
+.p-close{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.12s}
+.p-close:hover{border-color:var(--border2);background:var(--bg)}
+.p-close svg{width:10px;height:10px;stroke:var(--text3);stroke-width:2;fill:none}
+
+/* Provider mini card in panel */
+.prov-mini{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin:13px 20px}
+.pm-av{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;font-size:13px;font-weight:700;color:white;flex-shrink:0;font-style:italic}
+.pm-name{font-size:13px;font-weight:600;color:var(--text)}
+.pm-loc{font-size:11px;color:var(--text3);margin-top:1px}
+.pm-badge{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid;flex-shrink:0}
+.pm-badge.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.pm-badge.warn{background:var(--o-bg);color:var(--o);border-color:var(--o-border)}
+
+/* Tabs */
+.p-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 20px;flex-shrink:0}
+.p-tab{height:36px;padding:0 4px;margin-right:16px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all 0.12s;white-space:nowrap}
+.p-tab:hover{color:var(--text2)}
+.p-tab.act{color:var(--o);border-bottom-color:var(--o);font-weight:600}
+
+.p-body{flex:1;overflow-y:auto;padding:16px 20px}
+.p-foot{padding:13px 20px;border-top:1px solid var(--border);flex-shrink:0}
+
+/* SECTION LABEL */
+.sec-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;display:block}
+.div{height:1px;background:var(--border);margin:13px 0}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:16px}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.prog-lbl{font-size:12px;color:var(--text2);font-weight:500}
+.prog-pct{font-size:12px;color:var(--o);font-weight:600}
+.prog-track{height:5px;background:var(--bg);border-radius:5px;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--o),#E8A265);border-radius:5px}
+
+/* DOC ROWS — completed */
+.doc-row{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--border);border-radius:9px;margin-bottom:7px;background:var(--surface)}
+.doc-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-icon.ok{background:var(--ok-bg);border:1px solid var(--ok-border)}
+.doc-icon.ok svg{stroke:var(--ok)}
+.doc-icon.pend{background:var(--o-bg);border:1px solid var(--o-border)}
+.doc-icon.pend svg{stroke:var(--o)}
+.doc-icon svg{width:13px;height:13px;stroke-width:1.8;fill:none;stroke-linecap:round}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.doc-type{font-size:10px;color:var(--text3)}
+.doc-status{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid;flex-shrink:0}
+.doc-status.done{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
+.doc-status.pending{background:var(--o-bg);color:var(--o);border-color:var(--o-border)}
+.doc-status.view{background:var(--bg);color:var(--text2);border-color:var(--border2);cursor:pointer}
+.doc-status.view:hover{border-color:var(--text3);color:var(--text)}
+
+/* ACTION DOC ROWS — incomplete */
+.action-row{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px;background:var(--surface)}
+.action-row-top{display:flex;align-items:center;gap:10px;padding:12px 13px}
+.action-row-body{padding:0 13px 13px;padding-left:53px}
+.ar-title{font-size:12px;font-weight:600;color:var(--text)}
+.ar-type{font-size:10px;color:var(--text3);margin-top:1px}
+.ar-done{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--ok);margin-left:auto;flex-shrink:0}
+.ar-done svg{width:12px;height:12px;stroke:var(--ok);stroke-width:2.5;fill:none;flex-shrink:0}
+.upload-sm{border:1.5px dashed var(--border2);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:all 0.12s}
+.upload-sm:hover{border-color:var(--o);background:var(--o-bg)}
+.upload-sm svg{width:15px;height:15px;stroke:var(--text3);stroke-width:1.8;fill:none;margin-bottom:4px;stroke-linecap:round}
+.upload-sm:hover svg{stroke:var(--o)}
+.upload-sm-t{font-size:11px;font-weight:500;color:var(--text2)}
+.upload-sm-s{font-size:10px;color:var(--text3);margin-top:1px}
+.sign-area{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:all 0.12s}
+.sign-area:hover{border-color:var(--o)}
+.sign-area svg{width:20px;height:20px;stroke:var(--text3);stroke-width:1.6;fill:none;margin-bottom:5px;stroke-linecap:round}
+.sign-area:hover svg{stroke:var(--o)}
+.sign-area-t{font-size:12px;font-weight:500;color:var(--text2)}
+.sign-area-s{font-size:10px;color:var(--text3);margin-top:2px}
+.ack-btn{width:100%;height:36px;border-radius:8px;border:1px solid var(--border2);background:transparent;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.12s}
+.ack-btn:hover{border-color:var(--o);color:var(--o);background:var(--o-bg)}
+.acked{width:100%;height:36px;border-radius:8px;border:1px solid var(--ok-border);background:var(--ok-bg);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:600;color:var(--ok);display:flex;align-items:center;justify-content:center;gap:6px;cursor:default}
+.acked svg{width:12px;height:12px;stroke:var(--ok);stroke-width:2.5;fill:none}
+
+/* CATALOGUE */
+.cat-prog{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:9px;margin-bottom:7px;background:var(--surface);transition:border-color 0.12s;cursor:pointer}
+.cat-prog:hover{border-color:var(--border2)}
+.cat-date{width:44px;height:44px;border-radius:8px;background:var(--o-bg);border:1px solid var(--o-border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.cat-day{font-family:"Playfair Display",serif;font-size:16px;font-weight:500;color:var(--o);line-height:1}
+.cat-mon{font-size:9px;font-weight:700;color:var(--o);letter-spacing:0.5px;text-transform:uppercase}
+.cat-info{flex:1;min-width:0}
+.cat-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.cat-meta{font-size:11px;color:var(--text3)}
+.cat-tag{height:20px;padding:0 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--bg);border:1px solid var(--border);color:var(--text2);display:inline-flex;align-items:center;flex-shrink:0}
+
+/* SEND KOOEE PANEL */
+.kooee-form{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.kf-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;display:block}
+.kf-select{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);outline:none;background:var(--surface);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23A8907A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;margin-bottom:10px}
+.kf-msg{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:"DM Sans",sans-serif;font-size:12px;color:var(--text);resize:none;outline:none;background:var(--surface);min-height:64px;line-height:1.6}
+.kf-msg:focus{border-color:var(--border2)}
+.kf-msg::placeholder{color:var(--text3)}
+.btn-send{width:100%;height:42px;border-radius:10px;border:none;background:var(--o);color:white;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.12s}
+.btn-send:hover{background:#a34612}
+.btn-send svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="sb-logo">
+      <div class="sb-k">K</div>
+      <div>
+        <div class="sb-brand-name">Kooee</div>
+        <div class="sb-brand-sub">Instructor portal</div>
+      </div>
+    </div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-sec">Main</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="sb-item-lbl">Base camp</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="sb-item-lbl">Availability</span>
+    </div>
+    <div class="sb-sec">In the field</div>
+    <div class="sb-item act" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="sb-item-lbl">Providers</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="sb-item-lbl">Programs</span>
+      <div class="sb-badge">3</div>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span class="sb-item-lbl">Field record</span>
+    </div>
+    <div class="sb-sec">Growth</div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <span class="sb-item-lbl">PD credits</span>
+    </div>
+    <div class="sb-item" onclick="navClick(this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span class="sb-item-lbl">Training camp</span>
+    </div>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av">AT</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">Alex Torres</div>
+        <div class="sb-user-plan">Premium · $4.99/mo · Profile &amp;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BODY ═══ -->
+<div class="body-wrap">
+<div class="main">
+
+  <div class="topbar">
+    <div class="topbar-info">
+      <div class="topbar-hello">Hello, Alex</div>
+      <div class="topbar-date">Monday, 28 April 2026</div>
+    </div>
+    <div class="notif-pill"><div class="notif-dot"></div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      3 alerts
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-inp" type="text" placeholder="Search providers by name or activity...">
+      </div>
+      <select class="f-sel"><option>All locations</option><option>Melbourne, VIC</option><option>Bright, VIC</option><option>Ballarat, VIC</option></select>
+      <select class="f-sel"><option>All activities</option><option>Abseiling</option><option>Alpine</option><option>MTB</option><option>Bushcraft</option></select>
+    </div>
+
+    <!-- NEW CONNECTIONS -->
+    <div class="section-hd">New Connections</div>
+    <div class="prov-grid">
+
+      <div class="prov-card" id="card-ta">
+        <div class="prov-top">
+          <div class="prov-av" style="background:#4A7FA3">TA</div>
+          <div>
+            <div class="prov-name">Trailhead Adventures</div>
+            <div class="prov-loc">Melbourne, VIC</div>
+          </div>
+        </div>
+        <div class="prov-tags">
+          <span class="tag t-act">Abseiling</span>
+          <span class="tag t-act">Bushcraft</span>
+          <span class="tag t-skill">GL</span>
+        </div>
+        <div class="prov-meta">12 programs/year · Est. 2010</div>
+        <div class="prov-btns">
+          <button class="btn-dark" onclick="openKooee('ta')">Send a Kooee</button>
+          <button class="btn-ghost">View profile</button>
+        </div>
+      </div>
+
+      <div class="prov-card" id="card-hc">
+        <div class="prov-top">
+          <div class="prov-av" style="background:#3D2A1A">HC</div>
+          <div>
+            <div class="prov-name">Highcountry Expeditions</div>
+            <div class="prov-loc">Bright, VIC</div>
+          </div>
+        </div>
+        <div class="prov-tags">
+          <span class="tag t-act">Alpine</span>
+          <span class="tag t-act">MTB</span>
+          <span class="tag t-skill">ALP</span>
+        </div>
+        <div class="prov-meta">9 programs/year · Est. 2013</div>
+        <div class="prov-btns">
+          <button class="btn-dark" onclick="openKooee('hc')">Send a Kooee</button>
+          <button class="btn-ghost">View profile</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONNECTED PROVIDERS -->
+    <div class="section-hd">Connected Providers</div>
+    <div class="prov-grid">
+
+      <!-- Ridgeline — FULLY ONBOARDED -->
+      <div class="prov-card" id="card-ro">
+        <div class="prov-top">
+          <div class="prov-av" style="background:#4A8060">RO</div>
+          <div>
+            <div class="prov-name">Ridgeline Outdoor Ed</div>
+            <div class="prov-loc">Melbourne, VIC</div>
+          </div>
+        </div>
+        <div class="prov-tags">
+          <span class="tag t-conn">Connected</span>
+          <span class="tag t-ob">Onboarded</span>
+          <span class="tag t-skill">GL</span>
+          <span class="tag t-skill">AI</span>
+        </div>
+        <div class="prov-btns">
+          <button class="btn-link" onclick="openProvider('ro','catalogue')">View catalogue</button>
+          <button class="btn-ghost" onclick="openProvider('ro','onboarding')">Profile</button>
+        </div>
+      </div>
+
+      <!-- Summit Trail — ONBOARDING INCOMPLETE -->
+      <div class="prov-card" id="card-st">
+        <div class="prov-top">
+          <div class="prov-av" style="background:#B8A060">ST</div>
+          <div>
+            <div class="prov-name">Summit Trail Co.</div>
+            <div class="prov-loc">Ballarat, VIC</div>
+          </div>
+        </div>
+        <div class="prov-tags">
+          <span class="tag t-conn">Connected</span>
+          <span class="tag t-ob-need">Onboarding needed</span>
+          <span class="tag t-skill">MTB</span>
+        </div>
+        <div class="prov-btns">
+          <button class="btn-link" onclick="openProvider('st','catalogue')">View catalogue</button>
+          <button class="btn-ghost" onclick="openProvider('st','onboarding')">Profile</button>
+          <button class="btn-primary" onclick="openProvider('st','onboarding')">Complete onboarding</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div><!-- /main -->
+
+<!-- ═══ RIGHT PANEL ═══ -->
+<div class="panel" id="panel">
+
+  <!-- ── RIDGELINE: FULLY ONBOARDED ── -->
+  <div id="p-ro" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div><div class="p-hd-title">Ridgeline Outdoor Ed</div><div class="p-hd-sub">Melbourne, VIC · Connected provider</div></div>
+        <button class="p-close" onclick="closePanel()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="prov-mini">
+      <div class="pm-av" style="background:#4A8060">RO</div>
+      <div style="flex:1"><div class="pm-name">Ridgeline Outdoor Ed</div><div class="pm-loc">GL · AI · Abseiling · Bushwalking</div></div>
+      <span class="pm-badge ok">Onboarded</span>
+    </div>
+    <div class="p-tabs" id="ro-tabs">
+      <div class="p-tab" data-panel="ro-onboarding">Onboarding</div>
+      <div class="p-tab" data-panel="ro-catalogue">Catalogue</div>
+      <div class="p-tab" data-panel="ro-profile">Profile</div>
+    </div>
+    <div class="p-body">
+
+      <!-- ONBOARDING TAB — completed, view/amend -->
+      <div id="ro-onboarding" style="display:none">
+        <div style="background:var(--ok-bg);border:1px solid var(--ok-border);border-radius:9px;padding:10px 13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span style="font-size:12px;font-weight:600;color:var(--ok)">All documents completed</span>
+        </div>
+        <div class="sec-lbl" style="margin-bottom:9px">Your documents</div>
+
+        <div class="doc-row">
+          <div class="doc-icon ok"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="doc-info"><div class="doc-name">Season contract 2026</div><div class="doc-type">Signed · 3 Mar 2026</div></div>
+          <span class="doc-status view" onclick="alert('Opens signed document PDF')">View</span>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon ok"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="doc-info"><div class="doc-name">Code of conduct</div><div class="doc-type">Acknowledged · 3 Mar 2026</div></div>
+          <span class="doc-status view" onclick="alert('Opens code of conduct PDF')">View</span>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon ok"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="doc-info"><div class="doc-name">Bank details form</div><div class="doc-type">Uploaded · 4 Mar 2026</div></div>
+          <span class="doc-status view" onclick="alert('Opens submitted form')">View</span>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon ok"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="doc-info"><div class="doc-name">Emergency contact details</div><div class="doc-type">Uploaded · 4 Mar 2026</div></div>
+          <span class="doc-status view" onclick="alert('Opens submitted form')">View</span>
+        </div>
+        <div class="doc-row">
+          <div class="doc-icon ok"><svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg></div>
+          <div class="doc-info"><div class="doc-name">Staff induction module</div><div class="doc-type">Completed · 5 Mar 2026</div></div>
+          <span class="doc-status view" onclick="alert('Opens module record')">View</span>
+        </div>
+
+        <div class="div"></div>
+        <div class="sec-lbl" style="margin-bottom:6px">Need to update something?</div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.55">Changed bank details or emergency contact? Send an updated form directly to Ridgeline.</p>
+        <button class="btn-ghost" style="width:100%;justify-content:center;height:36px" onclick="alert('Opens amend flow')">Request to amend a document</button>
+      </div>
+
+      <!-- CATALOGUE TAB -->
+      <div id="ro-catalogue" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Upcoming programs</div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">12</div><div class="cat-mon">Jun</div></div>
+          <div class="cat-info"><div class="cat-name">Blue Mountains Abseiling</div><div class="cat-meta">3 days · 180 students · Blue Mountains, NSW</div></div>
+          <span class="cat-tag">GL needed</span>
+        </div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">1</div><div class="cat-mon">Jul</div></div>
+          <div class="cat-info"><div class="cat-name">Murrumbidgee Valley Camp</div><div class="cat-meta">4 days · 140 students · Kosciuszko, NSW</div></div>
+          <span class="cat-tag">AI needed</span>
+        </div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">14</div><div class="cat-mon">Jul</div></div>
+          <div class="cat-info"><div class="cat-name">Snowy Mountains DofE</div><div class="cat-meta">5 days · 60 students · Snowy Mountains, NSW</div></div>
+          <span class="cat-tag">GL needed</span>
+        </div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">28</div><div class="cat-mon">Jul</div></div>
+          <div class="cat-info"><div class="cat-name">Barrington Tops Bushcraft</div><div class="cat-meta">3 days · 120 students · Barrington Tops, NSW</div></div>
+          <span class="cat-tag">GL needed</span>
+        </div>
+        <div class="div"></div>
+        <button class="btn-primary" style="width:100%;justify-content:center;height:36px">Send a Kooee for a program</button>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div id="ro-profile" style="display:none">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">About Ridgeline Outdoor Ed</div>
+          <p style="font-size:12px;color:var(--text2);line-height:1.65">Ridgeline runs school outdoor education programs across NSW and VIC. Specialists in abseiling, bushwalking, and multi-day expeditions. 14 programs completed with you.</p>
+        </div>
+        <div class="sec-lbl" style="margin-bottom:8px">Details</div>
+        <div style="font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Location</span><span>Melbourne, VIC</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Programs/year</span><span>18</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Programs with you</span><span>14</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Est.</span><span>2008</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Status</span><span style="color:var(--ok);font-weight:600">Onboarded</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" onclick="alert('Opens Kooee send flow')">
+        Send a Kooee
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SUMMIT TRAIL: INCOMPLETE ONBOARDING ── -->
+  <div id="p-st" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div><div class="p-hd-title">Summit Trail Co.</div><div class="p-hd-sub">Ballarat, VIC · Onboarding in progress</div></div>
+        <button class="p-close" onclick="closePanel()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="prov-mini">
+      <div class="pm-av" style="background:#B8A060">ST</div>
+      <div style="flex:1"><div class="pm-name">Summit Trail Co.</div><div class="pm-loc">MTB · Alpine · Bright, VIC</div></div>
+      <span class="pm-badge warn">2 pending</span>
+    </div>
+    <div class="p-tabs" id="st-tabs">
+      <div class="p-tab" data-panel="st-onboarding">Onboarding</div>
+      <div class="p-tab" data-panel="st-catalogue">Catalogue</div>
+      <div class="p-tab" data-panel="st-profile">Profile</div>
+    </div>
+    <div class="p-body">
+
+      <!-- ONBOARDING TAB — incomplete -->
+      <div id="st-onboarding" style="display:none">
+        <div class="prog-wrap">
+          <div class="prog-row"><span class="prog-lbl">Onboarding progress</span><span class="prog-pct">50%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:50%"></div></div>
+        </div>
+
+        <div class="sec-lbl" style="margin-bottom:9px">Your documents</div>
+
+        <!-- Completed: Code of conduct -->
+        <div class="action-row">
+          <div class="action-row-top">
+            <div class="doc-icon ok" style="width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--ok-bg);border:1px solid var(--ok-border)">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--ok)" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div><div class="ar-title">Code of conduct</div><div class="ar-type">Read + acknowledge</div></div>
+            <div class="ar-done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Done</div>
+          </div>
+        </div>
+
+        <!-- Completed: Staff induction -->
+        <div class="action-row">
+          <div class="action-row-top">
+            <div class="doc-icon ok" style="width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--ok-bg);border:1px solid var(--ok-border)">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--ok)" stroke-width="1.8" stroke-linecap="round"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+            </div>
+            <div><div class="ar-title">Staff induction module</div><div class="ar-type">Watch and confirm · 18 min</div></div>
+            <div class="ar-done"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Done</div>
+          </div>
+        </div>
+
+        <!-- Pending: Season contract — sign -->
+        <div class="action-row" style="border-color:var(--o-border)">
+          <div class="action-row-top">
+            <div class="doc-icon pend" style="width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--o-bg);border:1px solid var(--o-border)">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--o)" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div style="flex:1"><div class="ar-title">Season contract 2026</div><div class="ar-type">Sign and return</div></div>
+            <span style="font-size:10px;font-weight:600;color:var(--o);background:var(--o-bg);border:1px solid var(--o-border);padding:3px 9px;border-radius:20px;flex-shrink:0">Action needed</span>
+          </div>
+          <div class="action-row-body">
+            <div class="sign-area" onclick="signDoc(this)">
+              <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <div class="sign-area-t">Tap to sign and return</div>
+              <div class="sign-area-s">Your signature will be applied to the document</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending: Bank details — upload -->
+        <div class="action-row" id="bank-row" style="border-color:var(--o-border)">
+          <div class="action-row-top">
+            <div class="doc-icon pend" style="width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--o-bg);border:1px solid var(--o-border)">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--o)" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div style="flex:1"><div class="ar-title">Bank details form</div><div class="ar-type">Complete and upload</div></div>
+            <span style="font-size:10px;font-weight:600;color:var(--o);background:var(--o-bg);border:1px solid var(--o-border);padding:3px 9px;border-radius:20px;flex-shrink:0">Action needed</span>
+          </div>
+          <div class="action-row-body">
+            <div class="upload-sm" onclick="uploadDoc('bank-row')">
+              <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+              <div class="upload-sm-t">Upload completed form</div>
+              <div class="upload-sm-s">PDF, JPG or PNG</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CATALOGUE TAB -->
+      <div id="st-catalogue" style="display:none">
+        <div class="sec-lbl" style="margin-bottom:9px">Upcoming programs</div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">8</div><div class="cat-mon">Jun</div></div>
+          <div class="cat-info"><div class="cat-name">Mt Buller MTB Camp</div><div class="cat-meta">4 days · 110 students · Mt Buller, VIC</div></div>
+          <span class="cat-tag">MTB needed</span>
+        </div>
+        <div class="cat-prog">
+          <div class="cat-date"><div class="cat-day">22</div><div class="cat-mon">Jun</div></div>
+          <div class="cat-info"><div class="cat-name">Grampians Alpine Experience</div><div class="cat-meta">3 days · 80 students · Grampians, VIC</div></div>
+          <span class="cat-tag">ALP needed</span>
+        </div>
+        <div style="background:var(--o-bg);border:1px solid var(--o-border);border-radius:9px;padding:11px 13px;margin-top:4px">
+          <div style="font-size:12px;font-weight:600;color:var(--o);margin-bottom:3px">Complete onboarding to apply</div>
+          <div style="font-size:11px;color:var(--text3);line-height:1.5">You need to finish your onboarding with Summit Trail before you can send a Kooee for their programs.</div>
+        </div>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div id="st-profile" style="display:none">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">About Summit Trail Co.</div>
+          <p style="font-size:12px;color:var(--text2);line-height:1.65">Summit Trail Co. specialises in alpine and MTB programs across Victoria. Known for high-standard safety practices and instructor support. Growing their instructor network for the 2026 season.</p>
+        </div>
+        <div class="sec-lbl" style="margin-bottom:8px">Details</div>
+        <div style="font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Location</span><span>Ballarat, VIC</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Programs/year</span><span>12</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Programs with you</span><span>0 (new connection)</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Est.</span><span>2016</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Status</span><span style="color:var(--o);font-weight:600">Onboarding 50%</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" onclick="switchToTab('st-tabs','st-onboarding')">
+        Complete onboarding
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SEND A KOOEE PANEL ── -->
+  <div id="p-kooee" style="display:none;flex-direction:column;height:100%">
+    <div class="p-hd">
+      <div class="p-hd-row">
+        <div><div class="p-hd-title" id="kooee-title">Send a Kooee</div><div class="p-hd-sub">Express your interest in working with this provider</div></div>
+        <button class="p-close" onclick="closePanel()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="prov-mini">
+      <div class="pm-av" id="kooee-av" style="background:#4A7FA3">TA</div>
+      <div><div class="pm-name" id="kooee-name">Trailhead Adventures</div><div class="pm-loc" id="kooee-loc">Melbourne, VIC</div></div>
+    </div>
+    <div class="p-body">
+      <div class="kooee-form">
+        <label class="kf-label">Your availability</label>
+        <select class="kf-select">
+          <option>Available from now</option>
+          <option>Available from June 2026</option>
+          <option>Available from July 2026</option>
+          <option>Flexible — discuss with provider</option>
+        </select>
+        <label class="kf-label">Roles you can fill</label>
+        <select class="kf-select">
+          <option>Group Leader (GL)</option>
+          <option>Activity Instructor (AI)</option>
+          <option>Director</option>
+          <option>Multiple roles</option>
+        </select>
+        <label class="kf-label">Message (optional)</label>
+        <textarea class="kf-msg" placeholder="Introduce yourself — what activities you lead, your experience, anything relevant to this provider..."></textarea>
+      </div>
+      <p style="font-size:11px;color:var(--text3);line-height:1.55;text-align:center">The provider will see your full profile, qualifications and availability when they receive your Kooee.</p>
+    </div>
+    <div class="p-foot">
+      <button class="btn-send" onclick="closePanel()">
+        Send Kooee
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /panel -->
+</div><!-- /body-wrap -->
+
+<script>
+// ─── SIDEBAR ───
+function navClick(el){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
+  el.classList.add('act');
+}
+
+// ─── PROVIDER DATA ───
+const kooeeData={
+  ta:{name:'Trailhead Adventures',loc:'Melbourne, VIC',av:'TA',color:'#4A7FA3'},
+  hc:{name:'Highcountry Expeditions',loc:'Bright, VIC',av:'HC',color:'#3D2A1A'},
+};
+
+// ─── PANEL OPEN/CLOSE ───
+function closeAllPanels(){
+  document.getElementById('panel').classList.remove('open');
+  ['p-ro','p-st','p-kooee'].forEach(id=>document.getElementById(id).style.display='none');
+  document.querySelectorAll('.prov-card').forEach(c=>c.classList.remove('card-active'));
+}
+
+function closePanel(){ closeAllPanels(); }
+
+function openProvider(id, tab){
+  closeAllPanels();
+  document.getElementById('panel').classList.add('open');
+  const panelId='p-'+id;
+  document.getElementById(panelId).style.display='flex';
+  document.getElementById('card-'+id).classList.add('card-active');
+  // Switch to correct tab
+  const tabsId=id+'-tabs';
+  const tabPanelId=id+'-'+tab;
+  switchToTab(tabsId, tabPanelId);
+}
+
+function openKooee(id){
+  closeAllPanels();
+  const d=kooeeData[id];
+  document.getElementById('kooee-title').textContent='Send a Kooee to '+d.name;
+  document.getElementById('kooee-av').textContent=d.av;
+  document.getElementById('kooee-av').style.background=d.color;
+  document.getElementById('kooee-name').textContent=d.name;
+  document.getElementById('kooee-loc').textContent=d.loc;
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('p-kooee').style.display='flex';
+  document.getElementById('card-'+id).classList.add('card-active');
+}
+
+// ─── TABS ───
+function switchToTab(tabsId, activePanelId){
+  const tabsEl=document.getElementById(tabsId);
+  tabsEl.querySelectorAll('.p-tab').forEach(t=>{
+    t.classList.remove('act');
+    const target=document.getElementById(t.dataset.panel);
+    if(target) target.style.display='none';
+    if(t.dataset.panel===activePanelId){
+      t.classList.add('act');
+      if(target) target.style.display='';
+    }
+  });
+}
+
+// Wire tab clicks
+['ro-tabs','st-tabs'].forEach(tabsId=>{
+  const el=document.getElementById(tabsId);
+  if(!el) return;
+  el.querySelectorAll('.p-tab').forEach(tab=>{
+    tab.addEventListener('click',function(){
+      switchToTab(tabsId, this.dataset.panel);
+    });
+  });
+});
+
+// ─── SIGN DOC ───
+function signDoc(el){
+  const row=el.closest('.action-row');
+  const body=row.querySelector('.action-row-body');
+  const status=row.querySelector('span[style*="Action needed"]');
+  body.innerHTML='<div class="acked"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Signed and returned</div>';
+  if(status){status.textContent='Done';status.style.cssText='font-size:10px;font-weight:600;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-border);padding:3px 9px;border-radius:20px;flex-shrink:0';}
+  row.style.borderColor='var(--ok-border)';
+  updateProgress();
+}
+
+// ─── UPLOAD DOC ───
+function uploadDoc(rowId){
+  const row=document.getElementById(rowId);
+  const body=row.querySelector('.action-row-body');
+  const status=row.querySelector('span[style*="Action needed"]');
+  body.innerHTML='<div class="acked"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Uploaded successfully</div>';
+  if(status){status.textContent='Done';status.style.cssText='font-size:10px;font-weight:600;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-border);padding:3px 9px;border-radius:20px;flex-shrink:0';}
+  row.style.borderColor='var(--ok-border)';
+  updateProgress();
+}
+
+// ─── PROGRESS ───
+function updateProgress(){
+  const pending=document.querySelectorAll('#st-onboarding .action-row[style*="o-border"]').length;
+  const total=4;
+  const done=total-pending;
+  const pct=Math.round((done/total)*100);
+  document.querySelector('#st-onboarding .prog-pct').textContent=pct+'%';
+  document.querySelector('#st-onboarding .prog-fill').style.width=pct+'%';
+  const badge=document.querySelector('#p-st .pm-badge');
+  if(pct===100){
+    badge.textContent='Onboarded';
+    badge.className='pm-badge ok';
+    document.querySelector('.prov-card#card-st .tag.t-ob-need').textContent='Onboarded';
+    document.querySelector('.prov-card#card-st .tag.t-ob-need').className='tag t-ob';
+    const btn=document.querySelector('#p-st .p-foot .btn-send');
+    btn.innerHTML='Send a Kooee <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+  } else {
+    badge.textContent=(total-done)+' pending';
+  }
+}
+</script>
+</body>
+</html>

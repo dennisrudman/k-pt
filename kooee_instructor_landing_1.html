@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooee — For Instructors</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{fontFamily:{serif:['Playfair Display','Georgia','serif'],sans:['DM Sans','sans-serif']}}}}</script>
+<style>
+*{box-sizing:border-box}
+:root{--o:#C45C1A;--ol:#E8A265;--bark:#2C1A0E;--dry:#F5E0C3;--paper:#FBF7F2;--page:#0D0806;--card:#161008;--card2:#1C130A;--b:rgba(196,92,26,0.15);--bm:rgba(196,92,26,0.32);--t2:rgba(245,224,195,0.55);--t3:rgba(245,224,195,0.28)}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--page);color:var(--dry);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.35}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+@keyframes si{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:up 0.9s cubic-bezier(.16,1,.3,1) both}
+.fu1{animation-delay:.08s}.fu2{animation-delay:.16s}.fu3{animation-delay:.24s}.fu4{animation-delay:.36s}
+.pd{animation:pulse 2s ease infinite}
+.rv{opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+.nav-blur{background:rgba(13,8,6,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--b)}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 80% 65% at 50% 38%,rgba(196,92,26,0.09) 0%,transparent 65%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(196,92,26,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(196,92,26,0.025) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 5%,transparent 72%);mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 5%,transparent 72%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:600;color:var(--ol);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--o);flex-shrink:0}
+.eyebrow-c{justify-content:center}.eyebrow-c::before{display:none}.eyebrow-c::after{content:'';width:28px;height:1px;background:var(--o);flex-shrink:0}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--o);color:var(--paper);font-family:'DM Sans',sans-serif;font-weight:600;border-radius:13px;transition:all 0.25s;border:none;cursor:pointer}
+.btn-p:hover{background:#a34612;transform:translateY(-2px)}
+.btn-p:disabled{opacity:0.28;cursor:not-allowed;transform:none}
+.btn-g{display:inline-flex;align-items:center;color:var(--t2);font-family:'DM Sans',sans-serif;border-radius:13px;transition:all 0.25s;border:1px solid var(--b)}
+.btn-g:hover{border-color:var(--bm);color:var(--dry);background:rgba(196,92,26,0.06)}
+.back-btn{font-size:13px;color:var(--t3);font-weight:300;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;padding:0}
+.back-btn:hover{opacity:0.7}
+
+/* PROBLEM CARDS */
+.pc{background:var(--card);border:1px solid var(--b);border-radius:20px;padding:32px;transition:border-color 0.3s,transform 0.3s;position:relative;overflow:hidden}
+.pc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,92,26,0.4),transparent);opacity:0;transition:opacity 0.3s}
+.pc:hover{border-color:var(--bm);transform:translateY(-4px)}
+.pc:hover::after{opacity:1}
+.pc-label{font-size:10px;font-weight:700;color:var(--o);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
+.pc-headline{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:var(--dry);line-height:1.25;letter-spacing:-0.3px;margin-bottom:12px}
+.pc-headline em{font-style:italic;color:var(--ol)}
+.pc-body{font-size:13px;color:var(--t2);font-weight:300;line-height:1.8}
+
+/* SOLUTION SECTION */
+.sol-bg{background:linear-gradient(160deg,#2C1A0E 0%,#1e1208 40%,#2a1a0c 100%);border-top:1px solid rgba(196,92,26,0.2);border-bottom:1px solid rgba(196,92,26,0.2);position:relative;overflow:hidden}
+.sol-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(196,92,26,0.12) 0%,transparent 65%);pointer-events:none}
+.feat-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid rgba(196,92,26,0.2);margin-bottom:12px;transition:border-color 0.3s}
+.feat-row:hover{border-color:rgba(196,92,26,0.45)}
+.feat-row:last-child{margin-bottom:0}
+.feat-content{padding:36px 40px;display:flex;flex-direction:column;justify-content:center;background:rgba(245,224,195,0.04)}
+.feat-visual{padding:36px 40px;display:flex;align-items:center;justify-content:center;background:rgba(196,92,26,0.06);position:relative;overflow:hidden}
+.feat-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(196,92,26,0.08) 0%,transparent 70%);pointer-events:none}
+.feat-answer{font-size:10px;font-weight:700;color:rgba(232,162,101,0.6);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.feat-answer::before{content:'';width:16px;height:1px;background:rgba(232,162,101,0.4)}
+.feat-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--dry);line-height:1.25;letter-spacing:-0.3px;margin-bottom:12px}
+.feat-headline em{font-style:italic;color:var(--ol)}
+.feat-body{font-size:13px;color:var(--t2);font-weight:300;line-height:1.8;margin-bottom:18px}
+.feat-tag{display:inline-flex;background:rgba(196,92,26,0.15);border:1px solid rgba(196,92,26,0.3);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:700;color:var(--ol);letter-spacing:0.6px;text-transform:uppercase}
+
+/* MOCK UIs */
+.mock-record{background:rgba(22,16,8,0.8);border:1px solid rgba(196,92,26,0.2);border-radius:14px;padding:20px;width:100%;max-width:240px}
+.mock-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(196,92,26,0.1)}
+.mock-row:last-child{border-bottom:none}
+.mock-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mock-text{font-size:11px;color:rgba(245,224,195,0.5);font-weight:300}
+.mock-auto{font-size:9px;color:rgba(196,92,26,0.7);font-weight:600;margin-left:auto;text-transform:uppercase;letter-spacing:0.5px}
+.mock-wallet{background:linear-gradient(135deg,#C45C1A,#7a3208);border-radius:14px;padding:20px;width:100%;max-width:220px;position:relative;overflow:hidden}
+.mock-wallet::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.mock-wallet-val{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;color:white;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.mock-wallet-lbl{font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px}
+.mock-wallet-bar{height:4px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden}
+.mock-wallet-fill{height:100%;width:60%;background:rgba(255,255,255,0.5);border-radius:2px}
+.mock-map{width:100%;max-width:260px;background:rgba(22,16,8,0.7);border:1px solid rgba(196,92,26,0.2);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.mock-provider{display:flex;align-items:center;gap:10px;background:rgba(196,92,26,0.1);border-radius:10px;padding:10px 12px}
+.mock-init{width:32px;height:32px;border-radius:8px;background:rgba(196,92,26,0.3);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--ol);flex-shrink:0}
+.mock-pname{font-size:12px;color:var(--dry);font-weight:500}
+.mock-ploc{font-size:10px;color:rgba(245,224,195,0.4)}
+.mock-platform{width:100%;max-width:240px;display:flex;flex-direction:column;gap:8px}
+.mock-item{background:rgba(22,16,8,0.7);border:1px solid rgba(196,92,26,0.15);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.mock-item svg{width:14px;height:14px;stroke:var(--ol);stroke-width:2;fill:none;stroke-linecap:round;flex-shrink:0}
+.mock-item-text{font-size:12px;color:rgba(245,224,195,0.6);font-weight:300}
+.mock-item-status{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:0.5px}
+.ok{color:#7AC255}.warn{color:#E8A265}
+
+/* HOW IT WORKS */
+.step-line{position:absolute;left:23px;top:48px;bottom:-24px;width:1px;background:linear-gradient(to bottom,rgba(196,92,26,0.3),transparent)}
+
+/* SURVEY */
+.q-opt{display:flex;align-items:flex-start;gap:14px;background:var(--card2);border:1px solid var(--b);border-radius:13px;padding:16px 18px;cursor:pointer;transition:all 0.2s;font-size:15px;color:var(--t2);font-weight:300;line-height:1.55;text-align:left;font-family:'DM Sans',sans-serif;width:100%}
+.q-opt:hover{border-color:var(--bm);background:rgba(196,92,26,0.06);color:var(--dry)}
+.q-opt.sel{border-color:var(--o);background:rgba(196,92,26,0.12);color:var(--dry)}
+.q-opt.sel .dot{background:var(--o);border-color:var(--o)}
+.q-opt.sel .dot::after{opacity:1}
+.dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--t3);flex-shrink:0;margin-top:2px;position:relative;transition:all 0.2s}
+.dot::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:var(--paper);top:50%;left:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity 0.2s}
+.multi .dot{border-radius:5px}
+.multi .dot::after{width:10px;height:8px;border-radius:0;background:none;border-right:2px solid var(--paper);border-bottom:2px solid var(--paper);transform:translate(-50%,-62%) rotate(45deg)}
+.qc,.bk,.ec,.ty{display:none;animation:si 0.35s ease both}
+.qc.on,.bk.on,.ec.on,.ty.on{display:block}
+.fi{width:100%;background:var(--card2);border:1px solid var(--b);border-radius:12px;padding:14px 18px;font-size:15px;color:var(--dry);outline:none;font-family:'DM Sans',sans-serif;transition:border-color 0.2s}
+.fi:focus{border-color:var(--bm)}
+.fi::placeholder{color:var(--t3)}
+
+@media(max-width:860px){
+  .hide-mob{display:none}
+  .feat-row,.prob-grid,.how-grid{grid-template-columns:1fr}
+  .hero-bar-wrap{flex-direction:column}
+  .hero-bar-item{border-right:none!important;border-bottom:1px solid var(--b)}
+  .hero-bar-item:last-child{border-bottom:none}
+  .f-form{flex-direction:column}
+  .ec-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-blur fixed top-0 left-0 right-0 z-50 h-16 px-6 md:px-12 flex items-center justify-between">
+  <a href="#" class="flex items-center gap-3 no-underline">
+    <div class="w-8 h-8 rounded-lg flex items-center justify-center font-serif font-bold" style="background:var(--o);color:var(--paper);font-size:17px">K</div>
+    <span class="font-serif text-lg font-medium" style="color:var(--dry);letter-spacing:-0.3px">Kooee</span>
+    <span class="text-xs ml-1 pl-3 hide-mob" style="color:var(--t3);border-left:1px solid var(--b)">for instructors</span>
+  </a>
+  <a href="#signup" class="btn-p text-sm px-5 py-2" style="border-radius:9px;font-size:13px">Get early access</a>
+</nav>
+
+<!-- HERO -->
+<section class="relative flex flex-col items-center justify-center text-center overflow-hidden" style="min-height:100vh;padding:80px 6% 48px">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="fu inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6 text-xs font-semibold tracking-widest uppercase z-10" style="background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.28);color:var(--ol)">
+    <span class="w-2 h-2 rounded-full pd" style="background:var(--o);display:inline-block"></span>
+    Early access open now &mdash; be one of the first
+  </div>
+  <h1 class="fu fu1 font-serif font-medium z-10 relative" style="font-size:clamp(40px,6.5vw,80px);line-height:1.04;letter-spacing:-2px;max-width:880px;margin-bottom:20px;color:var(--dry)">
+    You keep the<br>industry <em style="color:var(--ol)">alive.</em><br>We built this<br>for <em style="color:var(--ol)">you.</em>
+  </h1>
+  <p class="fu fu2 font-light z-10" style="font-size:clamp(15px,1.6vw,18px);color:var(--t2);line-height:1.75;max-width:520px;margin-bottom:36px">
+    Kooee connects outdoor instructors with businesses that need them, and invests in keeping good people in the field for longer.
+  </p>
+  <div class="fu fu3 flex items-center gap-4 flex-wrap justify-center z-10" style="margin-bottom:52px">
+    <a href="#survey" class="btn-p text-base px-8 py-4" style="font-size:16px;box-shadow:0 8px 36px rgba(196,92,26,0.35)">
+      Help us build it right
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#problem" class="btn-g text-base px-8 py-4" style="font-size:16px">See what we&rsquo;re building</a>
+  </div>
+  <div class="fu fu4 flex border rounded-2xl overflow-hidden hero-bar-wrap z-10" style="border-color:var(--b);background:rgba(22,16,8,0.85);backdrop-filter:blur(12px)">
+    <div class="hero-bar-item px-8 py-4 text-center border-r" style="border-color:var(--b)">
+      <div class="font-serif text-2xl font-medium mb-1" style="color:var(--dry)">200<em style="font-style:normal;color:var(--ol)">+ and counting</em></div>
+      <div class="text-xs uppercase tracking-wider" style="color:var(--t3)">Instructors already in</div>
+    </div>
+    <div class="hero-bar-item px-8 py-4 text-center border-r" style="border-color:var(--b)">
+      <div class="font-serif text-2xl font-medium mb-1" style="color:var(--dry)"><em style="font-style:normal;color:var(--ol)">Free</em> to join</div>
+      <div class="text-xs uppercase tracking-wider" style="color:var(--t3)">No credit card needed</div>
+    </div>
+    <div class="hero-bar-item px-8 py-4 text-center">
+      <div class="font-serif text-2xl font-medium mb-1" style="color:var(--dry)">Jul <em style="font-style:normal;color:var(--ol)">&rsquo;26</em></div>
+      <div class="text-xs uppercase tracking-wider" style="color:var(--t3)">Platform launch</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="px-6 md:px-12 py-24" id="problem">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="text-center rv" style="margin-bottom:56px">
+      <div class="eyebrow eyebrow-c">Why we&rsquo;re building this</div>
+      <h2 class="font-serif font-medium" style="font-size:clamp(30px,3.8vw,48px);line-height:1.12;letter-spacing:-0.8px;color:var(--dry);max-width:640px;margin:0 auto">
+        The industry has a <em style="color:var(--ol)">problem</em> hiding in plain sight.
+      </h2>
+    </div>
+    <div class="grid grid-cols-2 gap-4 prob-grid">
+      <div class="pc rv">
+        <div class="pc-label">Your past</div>
+        <div class="pc-headline">You have no proof of<br>what you&rsquo;ve <em>built.</em></div>
+        <p class="pc-body">No verified logbook. No formal record of your programs, your qualifications in action, or your time in the field. Years of experience, nothing to show for it.</p>
+      </div>
+      <div class="pc rv d1">
+        <div class="pc-label">Your growth</div>
+        <div class="pc-headline">You&rsquo;ve funded every<br>qualification <em>yourself.</em></div>
+        <p class="pc-body">Professional development in the outdoor sector has always been self-funded. Kooee changes that.</p>
+      </div>
+      <div class="pc rv d2">
+        <div class="pc-label">Your options</div>
+        <div class="pc-headline">Your season runs on<br><em>word of mouth.</em></div>
+        <p class="pc-body">Facebook groups and &ldquo;I worked with them, here&rsquo;s the number.&rdquo; The right businesses are out there. There&rsquo;s just no single place to find them.</p>
+      </div>
+      <div class="pc rv d3">
+        <div class="pc-label">Your admin</div>
+        <div class="pc-headline">Everything you need<br>is <em>everywhere.</em></div>
+        <p class="pc-body">Scattered emails, manual calendar entries, and somewhere a first aid certificate quietly expiring. It&rsquo;s all scattered. Nothing connects.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="sol-bg py-24 px-6 md:px-12" id="solution">
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:1">
+    <div class="text-center rv" style="margin-bottom:56px">
+      <div class="eyebrow eyebrow-c">Here&rsquo;s what changes</div>
+      <h2 class="font-serif font-medium" style="font-size:clamp(30px,3.8vw,48px);line-height:1.12;letter-spacing:-0.8px;color:var(--dry);max-width:580px;margin:0 auto 14px">
+        What you've always needed.<br>All in <em style="color:var(--ol)">one platform.</em>
+      </h2>
+      <p class="font-light mx-auto" style="font-size:15px;color:var(--t2);line-height:1.8;max-width:440px">Every problem has a direct answer. This is what Kooee gives you from day one.</p>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="feat-row rv">
+      <div class="feat-content">
+        <div class="feat-answer">Your past, answered</div>
+        <div class="feat-headline">Every program you complete,<br><em>logged automatically.</em></div>
+        <p class="feat-body">A verified, portable career record that builds without effort. Add personal adventures too. Export it as a PDF any time.</p>
+        <div><div class="feat-tag">Field record</div></div>
+      </div>
+      <div class="feat-visual">
+        <div class="mock-record">
+          <div style="font-size:10px;color:rgba(245,224,195,0.3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;font-weight:600">Field record</div>
+          <div class="mock-row"><div class="mock-dot" style="background:#7AC255"></div><div class="mock-text">Budawang &mdash; DofE, 4 days</div><div class="mock-auto">Auto</div></div>
+          <div class="mock-row"><div class="mock-dot" style="background:#7AC255"></div><div class="mock-text">Shoalhaven River &mdash; Canoe, 3 days</div><div class="mock-auto">Auto</div></div>
+          <div class="mock-row"><div class="mock-dot" style="background:rgba(196,92,26,0.5)"></div><div class="mock-text">Larapinta &mdash; Hike, 12 days</div><div style="font-size:9px;color:rgba(245,224,195,0.3);margin-left:auto">Manual</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="feat-row rv">
+      <div class="feat-visual">
+        <div class="mock-wallet">
+          <div class="mock-wallet-lbl">PD wallet</div>
+          <div class="mock-wallet-val">34</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:16px">credits available</div>
+          <div class="mock-wallet-bar"><div class="mock-wallet-fill"></div></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:8px">Contributed by every program you work</div>
+        </div>
+      </div>
+      <div class="feat-content">
+        <div class="feat-answer">Your growth, answered</div>
+        <div class="feat-headline">Every program day, the business<br>contributes to your <em>development.</em></div>
+        <p class="feat-body">Credits build in your wallet and redeem at approved training providers. Your growth, finally funded by someone other than you.</p>
+        <div><div class="feat-tag">PD credits</div></div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="feat-row rv">
+      <div class="feat-content">
+        <div class="feat-answer">Your options, answered</div>
+        <div class="feat-headline">Find businesses. Be found.<br>Build the season <em>you want.</em></div>
+        <p class="feat-body">Browse programs, send a Kooee to introduce yourself, and connect with providers beyond your existing network.</p>
+        <div><div class="feat-tag">Marketplace</div></div>
+      </div>
+      <div class="feat-visual">
+        <div class="mock-map">
+          <div style="font-size:10px;color:rgba(245,224,195,0.3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:600">Discover providers</div>
+          <div class="mock-provider">
+            <div class="mock-init">OE</div>
+            <div><div class="mock-pname">Outdoor Ed South</div><div class="mock-ploc">Nowra &middot; 4 programs available</div></div>
+            <button style="margin-left:auto;background:var(--o);color:white;border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;cursor:pointer">Kooee</button>
+          </div>
+          <div class="mock-provider">
+            <div class="mock-init">WS</div>
+            <div><div class="mock-pname">Wild Schools Co.</div><div class="mock-ploc">Bouddi &middot; 1 program available</div></div>
+            <div style="display:flex;flex-direction:column;gap:3px;margin-left:auto">
+              <button style="background:rgba(59,109,17,0.3);color:#7AC255;border:1px solid rgba(59,109,17,0.4);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;cursor:pointer">Accept</button>
+              <button style="background:rgba(196,50,50,0.15);color:rgba(220,80,80,0.7);border:1px solid rgba(196,50,50,0.25);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;cursor:pointer">Pass</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="feat-row rv">
+      <div class="feat-visual">
+        <div class="mock-platform">
+          <div class="mock-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><div class="mock-item-text">Availability calendar</div><div class="mock-item-status ok">Synced</div></div>
+          <div class="mock-item"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><div class="mock-item-text">WWCC &mdash; NSW</div><div class="mock-item-status ok">Valid</div></div>
+          <div class="mock-item"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg><div class="mock-item-text">First aid expiry</div><div class="mock-item-status warn">42 days</div></div>
+          <div class="mock-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><div class="mock-item-text">Field record</div><div class="mock-item-status ok">Synced</div></div>
+        </div>
+      </div>
+      <div class="feat-content">
+        <div class="feat-answer">Your admin, answered</div>
+        <div class="feat-headline">One place for <em>everything.</em></div>
+        <p class="feat-body">Calendar, compliance, qualifications, programs and expiry alerts, all connected, all automatic. Nothing slips through.</p>
+        <div><div class="feat-tag">Platform</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="px-6 md:px-12 py-24" style="background:var(--card);border-top:1px solid var(--b);border-bottom:1px solid var(--b)" id="how">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="text-center rv" style="margin-bottom:56px">
+      <div class="eyebrow eyebrow-c">How it works</div>
+      <h2 class="font-serif font-medium" style="font-size:clamp(28px,3.8vw,48px);line-height:1.1;letter-spacing:-1px;color:var(--dry);margin-bottom:14px">
+        Your season, <em style="color:var(--ol)">simplified</em>
+      </h2>
+      <p class="font-light mx-auto" style="font-size:16px;color:var(--t2);line-height:1.75;max-width:480px">
+        From your first profile to PD credits landing in your wallet, Kooee works for you every step of the way.
+      </p>
+    </div>
+    <div style="max-width:560px;margin:0 auto">
+      <div class="relative flex gap-6 pb-10 rv">
+        <div class="flex flex-col items-center flex-shrink-0"><div class="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-paper text-lg z-10" style="background:var(--o)">1</div><div class="step-line"></div></div>
+        <div class="pt-2"><h3 class="font-serif font-medium mb-2" style="font-size:20px;letter-spacing:-0.3px;color:var(--dry)">Upload your <em style="color:var(--ol)">profile</em></h3><p class="font-light text-sm" style="color:var(--t2);line-height:1.7">Qualifications, WWCC, activity types and availability. Five minutes. Businesses can find you from day one.</p></div>
+      </div>
+      <div class="relative flex gap-6 pb-10 rv d1">
+        <div class="flex flex-col items-center flex-shrink-0"><div class="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-paper text-lg z-10" style="background:var(--o)">2</div><div class="step-line"></div></div>
+        <div class="pt-2"><h3 class="font-serif font-medium mb-2" style="font-size:20px;letter-spacing:-0.3px;color:var(--dry)">Set your <em style="color:var(--ol)">availability</em></h3><p class="font-light text-sm" style="color:var(--t2);line-height:1.7">Mark your calendar ahead of time, set your current status, and lock out dates you&rsquo;re unavailable. Confirmed programs block automatically. Businesses see exactly when and where you&rsquo;re open before they reach out.</p></div>
+      </div>
+      <div class="relative flex gap-6 pb-10 rv d2">
+        <div class="flex flex-col items-center flex-shrink-0"><div class="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-paper text-lg z-10" style="background:var(--o)">3</div><div class="step-line"></div></div>
+        <div class="pt-2"><h3 class="font-serif font-medium mb-2" style="font-size:20px;letter-spacing:-0.3px;color:var(--dry)">Send or receive a <em style="color:var(--ol)">Kooee</em></h3><p class="font-light text-sm" style="color:var(--t2);line-height:1.7">A business finds you and sends a Kooee, or you browse and send one to them. Accept, pass or reach out. Full briefing arrives the moment you confirm.</p></div>
+      </div>
+      <div class="relative flex gap-6 pb-10 rv">
+        <div class="flex flex-col items-center flex-shrink-0"><div class="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-paper text-lg z-10" style="background:var(--o)">4</div><div class="step-line"></div></div>
+        <div class="pt-2"><h3 class="font-serif font-medium mb-2" style="font-size:20px;letter-spacing:-0.3px;color:var(--dry)">Complete the program, your <em style="color:var(--ol)">field record</em> updates</h3><p class="font-light text-sm" style="color:var(--t2);line-height:1.7">Run the program. The moment it&rsquo;s done, Kooee logs it, date, location, activity, employer, duration. Add your own notes. No paperwork, no follow-up, no chasing anyone for records.</p></div>
+      </div>
+      <div class="relative flex gap-6 rv d1">
+        <div class="flex flex-col items-center flex-shrink-0"><div class="w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-paper text-lg z-10" style="background:var(--o)">5</div></div>
+        <div class="pt-2"><h3 class="font-serif font-medium mb-2" style="font-size:20px;letter-spacing:-0.3px;color:var(--dry)"><em style="color:var(--ol)">PD credits</em> land in your wallet</h3><p class="font-light text-sm" style="color:var(--t2);line-height:1.7">The business contributes automatically. Credits build and redeem at approved training providers for the courses you actually want.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SURVEY -->
+<section class="px-6 md:px-12 py-24" style="background:#120D07;border-top:1px solid var(--b)" id="survey">
+  <div style="max-width:700px;margin:0 auto">
+    <div class="text-center rv" style="margin-bottom:48px">
+      <div class="eyebrow eyebrow-c">Help us build it right</div>
+      <h2 class="font-serif font-medium" style="font-size:clamp(26px,3.8vw,46px);line-height:1.1;letter-spacing:-0.8px;color:var(--dry);margin-bottom:14px">
+        6 questions.<br>Your voice <em style="color:var(--ol)">shapes this.</em>
+      </h2>
+      <p class="font-light mx-auto" style="font-size:15px;color:var(--t2);line-height:1.8;max-width:500px;margin-bottom:14px">
+        We&rsquo;re talking to instructors before we build. Your answers directly influence the platform and become the data we show businesses about what the industry is doing to the people who run it.
+      </p>
+      <div class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs" style="background:rgba(196,92,26,0.06);border:1px solid var(--b);color:var(--t3)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Your answers are completely anonymous
+      </div>
+    </div>
+    <div style="margin-bottom:32px">
+      <div class="flex justify-between" style="margin-bottom:8px">
+        <span class="text-xs font-medium" style="color:var(--t3)" id="pl">Question 1 of 6</span>
+        <span class="text-xs font-semibold" style="color:var(--o)" id="pp">0%</span>
+      </div>
+      <div class="h-px rounded-full overflow-hidden" style="background:rgba(196,92,26,0.1)">
+        <div class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,var(--o),var(--ol));width:0%" id="pf"></div>
+      </div>
+    </div>
+
+    <div class="qc on rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q1">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 1 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">If a business you worked for directly invested in your professional development, would you be more likely to stay in outdoor education long-term?</div>
+      <div class="flex flex-col gap-2">
+        <button class="q-opt" data-q="1" data-v="a"><div class="dot"></div>Yes, significantly more likely</button>
+        <button class="q-opt" data-q="1" data-v="b"><div class="dot"></div>Yes, it would make a real difference</button>
+        <button class="q-opt" data-q="1" data-v="c"><div class="dot"></div>Possibly, depends on the investment</button>
+        <button class="q-opt" data-q="1" data-v="d"><div class="dot"></div>No, other factors matter more to me</button>
+      </div>
+      <div class="flex justify-end mt-6"><button class="btn-p px-6 py-3 text-sm" id="n1" disabled onclick="nxt(1)">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="qc rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q2">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 2 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">Have you ever seriously considered leaving outdoor education due to a lack of professional support or development opportunities?</div>
+      <div class="flex flex-col gap-2">
+        <button class="q-opt" data-q="2" data-v="a"><div class="dot"></div>Yes, I&rsquo;ve already left a business for this reason</button>
+        <button class="q-opt" data-q="2" data-v="b"><div class="dot"></div>Yes, I&rsquo;ve seriously considered leaving the industry entirely</button>
+        <button class="q-opt" data-q="2" data-v="c"><div class="dot"></div>Not yet, but it crosses my mind</button>
+        <button class="q-opt" data-q="2" data-v="d"><div class="dot"></div>No, I&rsquo;ve felt well supported</button>
+      </div>
+      <div class="flex items-center justify-between mt-6"><button class="back-btn" onclick="prv(2)">&#8592; Back</button><button class="btn-p px-6 py-3 text-sm" id="n2" disabled onclick="nxt(2)">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="qc rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q3">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 3 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">Do you feel recognised as a skilled professional within the outdoor education industry?</div>
+      <div class="flex flex-col gap-2">
+        <button class="q-opt" data-q="3" data-v="a"><div class="dot"></div>A skilled professional, my expertise is genuinely recognised</button>
+        <button class="q-opt" data-q="3" data-v="b"><div class="dot"></div>Somewhere in between, appreciated but not truly seen</button>
+        <button class="q-opt" data-q="3" data-v="c"><div class="dot"></div>Just a roster spot, available when needed, forgotten otherwise</button>
+        <button class="q-opt" data-q="3" data-v="d"><div class="dot"></div>Invisible, the program matters, the person running it doesn&rsquo;t</button>
+      </div>
+      <div class="flex items-center justify-between mt-6"><button class="back-btn" onclick="prv(3)">&#8592; Back</button><button class="btn-p px-6 py-3 text-sm" id="n3" disabled onclick="nxt(3)">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="bk rounded-3xl p-14 text-center" style="background:linear-gradient(135deg,rgba(196,92,26,0.09),rgba(44,26,14,0.6));border:1px solid var(--bm)" id="brk">
+      <div class="eyebrow eyebrow-c" style="margin-bottom:16px">Halfway there</div>
+      <h3 class="font-serif font-medium mb-4" style="font-size:26px;line-height:1.2;letter-spacing:-0.3px;color:var(--dry)">This is the data the industry <em style="color:var(--ol)">needs to see.</em></h3>
+      <p class="font-light mb-8 mx-auto" style="font-size:15px;color:var(--t2);line-height:1.8;max-width:360px">Three more. These look at access, opportunity and what would keep you in outdoor education long-term.</p>
+      <button class="btn-p px-8 py-4 text-base mx-auto" style="display:inline-flex;box-shadow:0 8px 36px rgba(196,92,26,0.35)" onclick="contBrk()">Keep going <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+
+    <div class="qc rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q4">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 4 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">If professional development courses were more affordable and accessible around your seasonal schedule, how much more would you pursue?</div>
+      <div class="flex flex-col gap-2">
+        <button class="q-opt" data-q="4" data-v="a"><div class="dot"></div>A lot more, cost and availability are my main barriers right now</button>
+        <button class="q-opt" data-q="4" data-v="b"><div class="dot"></div>Somewhat more, it&rsquo;s a factor among others</button>
+        <button class="q-opt" data-q="4" data-v="c"><div class="dot"></div>About the same, I already access what I need</button>
+        <button class="q-opt" data-q="4" data-v="d"><div class="dot"></div>I&rsquo;m not looking for more training currently</button>
+      </div>
+      <div class="flex items-center justify-between mt-6"><button class="back-btn" onclick="prv(4)">&#8592; Back</button><button class="btn-p px-6 py-3 text-sm" id="n4" disabled onclick="nxt(4)">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="qc rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q5">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 5 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">If there was an easy way to find and connect with more outdoor education businesses looking for your skills, would you take on more work?</div>
+      <div class="flex flex-col gap-2">
+        <button class="q-opt" data-q="5" data-v="a"><div class="dot"></div>Yes, I&rsquo;d work significantly more if opportunities were easier to find</button>
+        <button class="q-opt" data-q="5" data-v="b"><div class="dot"></div>Yes, I lose work simply because I don&rsquo;t know who&rsquo;s looking</button>
+        <button class="q-opt" data-q="5" data-v="c"><div class="dot"></div>Probably, depends on the timing and programs</button>
+        <button class="q-opt" data-q="5" data-v="d"><div class="dot"></div>No, I already have as much work as I want</button>
+      </div>
+      <div class="flex items-center justify-between mt-6"><button class="back-btn" onclick="prv(5)">&#8592; Back</button><button class="btn-p px-6 py-3 text-sm" id="n5" disabled onclick="nxt(5)">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="qc rounded-3xl p-9" style="background:var(--card);border:1px solid var(--b)" id="q6">
+      <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--o);letter-spacing:1.2px">Question 6 of 6</div>
+      <div class="font-serif font-medium mb-6" style="font-size:21px;line-height:1.42;letter-spacing:-0.3px;color:var(--dry)">What would most change your likelihood of still being in outdoor education in five years?</div>
+      <div class="flex flex-col gap-2 multi">
+        <button class="q-opt" data-q="6" data-v="a"><div class="dot"></div>Businesses investing in my professional development</button>
+        <button class="q-opt" data-q="6" data-v="b"><div class="dot"></div>A formal career record that builds automatically and travels with me</button>
+        <button class="q-opt" data-q="6" data-v="c"><div class="dot"></div>More consistent and reliable work across the season</button>
+        <button class="q-opt" data-q="6" data-v="d"><div class="dot"></div>Feeling like a professional, not just a casual booking</button>
+        <button class="q-opt" data-q="6" data-v="e"><div class="dot"></div>Better pay</button>
+        <button class="q-opt" data-q="6" data-v="f"><div class="dot"></div>Nothing, I&rsquo;m already committed long-term</button>
+      </div>
+      <p class="text-xs italic mt-3" style="color:var(--t3)">Select all that apply</p>
+      <div class="flex items-center justify-between mt-6"><button class="back-btn" onclick="prv(6)">&#8592; Back</button><button class="btn-p px-6 py-3 text-sm" id="n6" disabled onclick="showCap()">Last step <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <div class="ec rounded-3xl p-9" style="background:var(--card);border:1px solid var(--bm)" id="ec">
+      <div class="flex items-center gap-2 text-xs mb-5 font-light" style="color:var(--t3)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Your survey answers are completely anonymous and never linked to the details below. Entirely optional.
+      </div>
+      <h3 class="font-serif font-medium mb-2" style="font-size:24px;letter-spacing:-0.3px;color:var(--dry)">Get your spot as a <em style="color:var(--ol)">founding instructor</em></h3>
+      <p class="font-light mb-6" style="font-size:14px;color:var(--t2);line-height:1.7">First instructors in get 6 months of free Premium, the full field record, PD wallet, availability calendar and everything else. We&rsquo;ll be in touch before July.</p>
+      <div class="flex flex-col gap-3 mb-4 ec-row-wrap">
+        <div class="grid grid-cols-2 gap-3 ec-row"><input class="fi" type="text" placeholder="First name" id="ef"><input class="fi" type="text" placeholder="Last name" id="el"></div>
+        <input class="fi" type="email" placeholder="Email address" id="ee">
+        <input class="fi" type="tel" placeholder="Mobile (optional)" id="ep">
+      </div>
+      <button class="w-full btn-p justify-center py-4 text-base" onclick="subEmail()">Claim my spot</button>
+      <p class="text-center text-xs font-light mt-3" style="color:var(--t3)">No spam. No commitment. Just early access to a platform built around you.</p>
+    </div>
+
+    <div class="ty rounded-3xl p-14 text-center" style="background:var(--card);border:1px solid var(--bm)" id="ty">
+      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style="background:rgba(196,92,26,0.1)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3 class="font-serif font-medium mb-4" style="font-size:32px;letter-spacing:-0.5px;color:var(--dry)">You&rsquo;re in, <em style="color:var(--ol)" id="tyn">welcome</em>.</h3>
+      <p class="font-light mx-auto mb-5" style="font-size:16px;color:var(--t2);line-height:1.8;max-width:360px">You&rsquo;re one of the first instructors in the Kooee founding cohort. We&rsquo;ll be in touch before July with everything you need.</p>
+      <p class="font-light" style="font-size:14px;color:var(--t2)"><strong style="color:var(--dry);font-weight:600">Know another instructor?</strong> Send them this page. The more voices we hear, the better this gets for everyone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDING CTA -->
+<section class="px-6 md:px-12 py-24 text-center" id="signup">
+  <div style="max-width:640px;margin:0 auto" class="rv">
+    <div class="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-7 text-xs font-semibold tracking-widest uppercase" style="background:rgba(196,92,26,0.1);border:1px solid rgba(196,92,26,0.25);color:var(--ol)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Founding Instructor offer
+    </div>
+    <h2 class="font-serif font-medium mb-5" style="font-size:clamp(30px,5vw,56px);line-height:1.06;letter-spacing:-1.2px;color:var(--dry)">
+      Join the first <em style="color:var(--ol)">200.</em><br>Shape what comes next.
+    </h2>
+    <p class="font-light mx-auto mb-5" style="font-size:16px;color:var(--t2);line-height:1.85;max-width:440px">
+      Kooee launches July 2026. The first instructors in get 6 months of free Premium and help shape a platform the industry has needed for a long time.
+    </p>
+    <p class="font-light mx-auto mb-8" style="font-size:14px;color:var(--t3);max-width:440px">
+      200+ instructors have already joined the movement. Be part of what comes next.
+    </p>
+    <div class="flex justify-center gap-6 flex-wrap mb-8" style="font-size:14px;color:var(--t2)">
+      <div class="flex items-center gap-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>6 months free Premium</div>
+      <div class="flex items-center gap-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Field record from day one</div>
+      <div class="flex items-center gap-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ol)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Direct input into the product</div>
+    </div>
+    <div class="flex gap-3 mx-auto mb-4 f-form" style="max-width:440px">
+      <input class="fi flex-1" type="email" placeholder="Your email address" id="fe">
+      <button class="btn-p px-6 py-4 whitespace-nowrap text-sm" onclick="footerSub()">Get early access</button>
+    </div>
+    <p class="text-sm font-light" style="color:var(--t3)">Already took the survey? <a href="#survey" style="color:var(--ol);text-decoration:none">Your spot is saved.</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="px-6 md:px-12 py-10 flex items-center justify-between flex-wrap gap-5" style="border-top:1px solid var(--b)">
+  <a href="#" class="flex items-center gap-2 no-underline">
+    <div class="w-7 h-7 rounded-lg flex items-center justify-center font-serif font-bold text-sm" style="background:var(--o);color:var(--paper)">K</div>
+    <span class="font-serif text-base font-medium" style="color:var(--dry)">Kooee</span>
+  </a>
+  <div class="flex gap-6">
+    <a href="#" class="text-sm no-underline transition-opacity hover:opacity-70" style="color:var(--t3)">Privacy</a>
+    <a href="#" class="text-sm no-underline transition-opacity hover:opacity-70" style="color:var(--t3)">Contact</a>
+    <a href="#survey" class="text-sm no-underline transition-opacity hover:opacity-70" style="color:var(--t3)">Take the survey</a>
+  </div>
+  <span class="text-xs" style="color:var(--t3)">&copy; 2026 Kooee Pty Ltd</span>
+</footer>
+
+<script>
+const ans={};
+const mq=[6];
+document.querySelectorAll('.q-opt').forEach(b=>{
+  b.addEventListener('click',function(){
+    const q=this.dataset.q,v=this.dataset.v,isM=mq.includes(+q);
+    if(isM){
+      if(!ans[q])ans[q]=[];
+      if(this.classList.contains('sel')){this.classList.remove('sel');ans[q]=ans[q].filter(x=>x!==v);}
+      else{this.classList.add('sel');if(!ans[q].includes(v))ans[q].push(v);}
+      const nb=document.getElementById('n'+q);if(nb)nb.disabled=!ans[q].length;
+    }else{
+      document.querySelectorAll('[data-q="'+q+'"]').forEach(o=>o.classList.remove('sel'));
+      this.classList.add('sel');ans[q]=v;
+      const nb=document.getElementById('n'+q);if(nb)nb.disabled=false;
+    }
+  });
+});
+function sp(q,l){const p=Math.round((q/6)*100);document.getElementById('pf').style.width=p+'%';document.getElementById('pp').textContent=p+'%';document.getElementById('pl').textContent=l||('Question '+q+' of 6');}
+function sh(id){const e=document.getElementById(id);if(e){e.style.display='';e.classList.add('on');}}
+function hd(id){const e=document.getElementById(id);if(e){e.classList.remove('on');setTimeout(()=>{if(!e.classList.contains('on'))e.style.display='none';},350);}}
+function sc(){window.scrollTo({top:document.getElementById('survey').offsetTop-80,behavior:'smooth'});}
+function nxt(q){hd('q'+q);if(q===3){sh('brk');sp(3,'Halfway there');}else{sh('q'+(q+1));sp(q+1);}sc();}
+function prv(q){hd('q'+q);if(q===4){sh('brk');sp(3,'Halfway there');}else{sh('q'+(q-1));sp(q-1);}sc();}
+function contBrk(){hd('brk');sh('q4');sp(4);sc();}
+function showCap(){hd('q6');document.getElementById('pf').style.width='100%';document.getElementById('pp').textContent='100%';document.getElementById('pl').textContent='One last step';sh('ec');sc();}
+function subEmail(){
+  const f=document.getElementById('ef').value.trim(),e=document.getElementById('ee').value.trim();
+  if(!f||!e){alert('Please enter your first name and email to claim your spot.');return;}
+  console.log('Survey:',ans,'Signup:',{first:f,last:document.getElementById('el').value.trim(),email:e,phone:document.getElementById('ep').value.trim()});
+  hd('ec');document.getElementById('tyn').textContent=f;sh('ty');sc();
+}
+function footerSub(){const e=document.getElementById('fe').value.trim();if(!e)return;document.getElementById('fe').value='';alert('You’re on the list. Head up the page to take the survey and share your voice.');}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:0.07,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*0.07+'s';obs.observe(el);});
+sp(1);
+</script>
+</body>
+</html>
